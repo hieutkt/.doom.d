@@ -192,6 +192,11 @@
    (lambda (fpath)
      (call-process "evince" nil 0 nil fpath))))
 
+(use-package! citeproc-org
+  :after org-ref
+  :config
+  (citeproc-org-setup))
+
 ;; (use-package! ox-ref-ox-hugo
 ;;   :after (ox-hugo org-ref)
 ;;   :config

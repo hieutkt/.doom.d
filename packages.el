@@ -13,3 +13,5 @@
   :recipe (:host github :repo "jethrokuan/company-org-roam"))
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
+(package! citeproc-org
+  :recipe (:host github :repo "andras-simonyi/citeproc-org"))

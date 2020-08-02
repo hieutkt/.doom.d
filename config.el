@@ -186,7 +186,7 @@
    bibtex-completion-display-formats
    '((t . "${title:46} ${author:20} ${year:4} ${=type=:3}${=has-pdf=:1}${=has-note=:1}"))
    bibtex-completion-notes-template-multiple-files
-   "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_tags: bibliography\n#+roam_key: cite:${=key=}"
+   "${author-or-editor} (${year}): ${title}\n#+roam_tags: bibliography\n#+roam_key: cite:${=key=}"
    ;; Open pdf in external tool instead of in Emacs
    bibtex-completion-pdf-open-function
    (lambda (fpath)

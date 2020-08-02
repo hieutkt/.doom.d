@@ -309,6 +309,36 @@
   ;; Make popup position similar to `ess'
   (set-popup-rules!
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))
+
+
+
+(use-package! sdcv
+  :commands sdcv-search sdcv-list-dictionary
+  :config
+  (map! :map sdcv-mode-map
+        :n "q" #'sdcv-return-from-sdcv
+        :nv "RET" #'sdcv-search-word-at-point
+        :n "a" #'outline-show-all
+        :n "h" (cmd! (outline-hide-sublevels 3))
+        :n "o" #'sdcv-toggle-entry
+        :n "n" #'sdcv-next-entry
+        :n "N" (cmd! (sdcv-next-entry t))
+        :n "p" #'sdcv-previous-entry
+        :n "P" (cmd! (sdcv-previous-entry t))
+        :n "b" #'sdcv-search-history-backwards
+        :n "f" #'sdcv-search-history-forwards
+        :n "/" (cmd! (call-interactively #'sdcv-search))))
+
+
+(defadvice! +lookup/dictionary-definition-cdcv (identifier &optional arg)
+  "Look up the definition of the word at point (or selection) using `sdcv-search'."
+  :override #'+lookup/dictionary-definition
+  (interactive
+   (list (or (doom-thing-at-point-or-region 'word)
+             (read-string "Look up in dictionary: "))
+         current-prefix-arg))
+  (sdcv-search identifier nil nil t))
+
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)
   :config

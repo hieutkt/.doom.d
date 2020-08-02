@@ -197,22 +197,6 @@
   :config
   (citeproc-org-setup))
 
-;; (use-package! ox-ref-ox-hugo
-;;   :after (ox-hugo org-ref)
-;;   :config
-;;   (add-to-list 'org-ref-formatted-citation-formats
-;;              '("md"
-;;                ("article" . "${author} (${year}), *${title}*, ${journal}, *${volume}(${number})*, ${pages}. ${doi}")
-;;                ("inproceedings" . "${author} (${year}), *${title}*, In ${editor}, ${booktitle} (pp. ${pages}). ${address}: ${publisher}.")
-;;                ("book" . "${author} (${year}), *${title}*, ${address}: ${publisher}.")
-;;                ("phdthesis" . "${author} (${year}), *${title}* (Doctoral dissertation). ${school}, ${address}.")
-;;                ("inbook" . "${author} (${year}), *${title}*, In ${editor} (Eds.), ${booktitle} (pp. ${pages}). ${address}: ${publisher}.")
-;;                ("incollection" . "${author} (${year}), *${title}*, In ${editor} (Eds.), ${booktitle} (pp. ${pages}). ${address}: ${publisher}.")
-;;                ("proceedings" . "${editor} (Eds.), _${booktitle}_ (${year}). ${address}: ${publisher}.")
-;;                ("unpublished" . "${author} (${year}), *${title}*. Unpublished manuscript.")
-;;                ("misc" . "${author} (${year}). *${title}*. Retrieved from [${howpublished}](${howpublished}). ${note}.")
-;;                (nil . "${author} (${year}), *${title}*."))))
-
 (use-package! org-roam
   :hook
   (after-init . org-roam-mode)

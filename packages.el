@@ -4,6 +4,7 @@
 (package! visual-fill-column)
 (package! org-ref)
 (package! lsp-julia)
+(package! lsp-treemacs)
 (package! org-fragtog)
 (package! org-super-agenda)
 (package! sdcv)

@@ -64,6 +64,13 @@
   :config
   (setq evil-esc-delay 0.25))
 
+(use-package! evil-goggles
+  :init
+  (setq evil-goggles-enable-delete t
+        evil-goggles-enable-change t)
+  :config
+  (evil-goggles-use-magit-faces))
+
 
 (use-package! org
   :init

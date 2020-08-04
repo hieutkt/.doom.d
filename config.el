@@ -169,7 +169,10 @@
                                   (:name "Due soon:"
                                    :deadline future)))
   (after! org-agenda
-    (org-super-agenda-mode)))
+    (org-super-agenda-mode))
+  ;; Make evil keymaps works on org-super-agenda headers
+  (after! evil-org-agenda
+    (setq org-super-agenda-header-map (copy-keymap evil-org-agenda-mode-map))))
 
 
 (use-package! org-ref

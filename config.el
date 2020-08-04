@@ -196,7 +196,12 @@
    ;; Open pdf in external tool instead of in Emacs
    bibtex-completion-pdf-open-function
    (lambda (fpath)
-     (call-process "evince" nil 0 nil fpath))))
+     (call-process "evince" nil 0 nil fpath)))
+
+  ;; Make org-ref-cite-face a bit less intrusive
+  (custom-set-faces!
+    `(org-ref-cite-face :weight unspecified :foreground unspecified
+                        :underline ,(doom-color 'grey))))
 
 (use-package! citeproc-org
   :after org-ref
@@ -207,7 +212,11 @@
   :hook
   (after-init . org-roam-mode)
   :init
-  (setq org-roam-directory "~/Dropbox/Notes/Org-roam/"))
+  (setq org-roam-directory "~/Dropbox/Notes/Org-roam/")
+  ;; Make org-roam faces less intrusive
+  (custom-set-faces!
+    `((org-roam-link org-roam-link-current)
+      :inherit unspecified :underline ,(doom-color 'grey))))
 
 (use-package! org-roam-db
   :config

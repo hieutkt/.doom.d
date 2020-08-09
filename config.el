@@ -86,10 +86,7 @@
         (plist-put org-format-latex-options :scale 1.8)
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
-        org-ellipsis " ⤵")
-
-  ;; org-open-file use Evince if possible
-  (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s")))
+        org-ellipsis " ⤵"))
 
 (use-package! org-superstar
   :config
@@ -298,10 +295,6 @@
 (use-package! org-fragtog
   :config (add-hook 'org-mode-hook 'org-fragtog-mode))
 
-;; (use-package! company-lsp
-;;   :after lsp-mode
-;;   :config
-;;   (push 'company-lsp company-backends))
 
 (use-package! visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
@@ -314,17 +307,23 @@
 
 (use-package! julia-repl
   :config
-  ;; Use `vterm' instead of `term', require specific branch
-  ;; (julia-repl-set-terminal-backend 'vterm)
   ;; Make popup position similar to `ess'
   (set-popup-rules!
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))
 
 
-
 (use-package! sdcv
   :commands sdcv-search sdcv-list-dictionary
   :config
+  (defadvice! +lookup/dictionary-definition-sdcv (identifier &optional arg)
+    "Look up the definition of the word at point (or selection) using `sdcv-search'."
+    :override #'+lookup/dictionary-definition
+    (interactive
+     (list (or (doom-thing-at-point-or-region 'word)
+               (read-string "Look up in dictionary: "))
+           current-prefix-arg))
+    (sdcv-search identifier nil nil t))
+  ;; Custon keys in sdcv buffer
   (map! :map sdcv-mode-map
         :n "q" #'sdcv-return-from-sdcv
         :nv "RET" #'sdcv-search-word-at-point
@@ -340,14 +339,9 @@
         :n "/" (cmd! (call-interactively #'sdcv-search))))
 
 
-(defadvice! +lookup/dictionary-definition-cdcv (identifier &optional arg)
-  "Look up the definition of the word at point (or selection) using `sdcv-search'."
-  :override #'+lookup/dictionary-definition
-  (interactive
-   (list (or (doom-thing-at-point-or-region 'word)
-             (read-string "Look up in dictionary: "))
-         current-prefix-arg))
-  (sdcv-search identifier nil nil t))
+(defun +lookup/dictionary-definition-sdcv ()
+  (interactive)
+  (sdcv-search))
 
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)

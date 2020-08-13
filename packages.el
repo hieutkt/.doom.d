@@ -11,8 +11,6 @@
   :recipe (:host github :repo "tecosaur/sdcv"))
 (package! org-roam
   :recipe (:host github :repo "jethrokuan/org-roam" :branch "master"))
-(package! company-org-roam
-  :recipe (:host github :repo "jethrokuan/company-org-roam"))
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
 (package! citeproc-org

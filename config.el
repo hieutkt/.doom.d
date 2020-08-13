@@ -265,10 +265,6 @@
            :file-name "journal_%<%Y-%m-%d>"
            :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: journal\n"))))
 
-(use-package! company-org-roam
-  :config
-  (push 'company-org-roam company-backends))
-
 (use-package! org-roam-server
   :config
   (setq org-roam-server-host "127.0.0.1"

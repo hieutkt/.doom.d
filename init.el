@@ -71,10 +71,8 @@
        vc                              ; version-control and Emacs, sitting in a tree
 
        :term
-       ;;eshell                        ; the elisp shell that works everywhere
-       ;;shell                         ; simple shell REPL for Emacs
-       ;;term                          ; basic terminal emulator for Emacs
-       vterm                           ; the best terminal emulation in Emacs
+       (:if IS-WINDOWS shell)          ; the elisp shell that works everywhere
+       (:if IS-LINUX vterm)            ; the best terminal emulation in Emacs
 
        :checkers
        syntax                          ; tasing you for every semicolon you forget
@@ -94,10 +92,10 @@
        (lookup +dictionary)            ; navigate your code and its documentation
        (lsp +peek)
        ;;macos                         ; MacOS-specific commands
-       (magit +forge)                  ; a git porcelain for Emacs
+       (magit (:if IS-LINUX +forge))   ; a git porcelain for Emacs
        ;;make                          ; run make tasks from Emacs
        ;;pass                          ; password manager for nerds
-       pdf                             ; pdf enhancements
+       (:if IS-LINUX pdf)                             ; pdf enhancements
        ;;prodigy                       ; FIXME managing external services & code builders
        ;;rgb                           ; creating color strings
        ;;taskrunner                    ; taskrunner for all your projects

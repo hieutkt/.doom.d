@@ -309,6 +309,7 @@
 
 
 (use-package! sdcv
+  :if (not IS-WINDOWS)
   :commands sdcv-search sdcv-list-dictionary
   :config
   (defadvice! +lookup/dictionary-definition-sdcv (identifier &optional arg)
@@ -334,10 +335,6 @@
         :n "f" #'sdcv-search-history-forwards
         :n "/" (cmd! (call-interactively #'sdcv-search))))
 
-
-(defun +lookup/dictionary-definition-sdcv ()
-  (interactive)
-  (sdcv-search))
 
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)

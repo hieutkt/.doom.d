@@ -7,8 +7,8 @@
 (package! lsp-treemacs)
 (package! org-fragtog)
 (package! org-super-agenda)
-(package! sdcv
-  :recipe (:host github :repo "tecosaur/sdcv"))
+
+(package! lexic :recipe (:host github :repo "tecosaur/lexic"))
 (package! org-roam
   :recipe (:host github :repo "jethrokuan/org-roam" :branch "master"))
 (package! org-roam-server

@@ -308,32 +308,33 @@
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))
 
 
-(use-package! sdcv
-  :if (not IS-WINDOWS)
-  :commands sdcv-search sdcv-list-dictionary
-  :config
-  (defadvice! +lookup/dictionary-definition-sdcv (identifier &optional arg)
-    "Look up the definition of the word at point (or selection) using `sdcv-search'."
+(use-package! lexic
+  :commands lexic-search lexic-list-dictionary
+  :init
+  (defadvice! +lookup/dictionary-definition-lexic (identifier &optional arg)
+    "Look up the definition of the word at point (or selection) using `lexic-search'."
     :override #'+lookup/dictionary-definition
     (interactive
      (list (or (doom-thing-at-point-or-region 'word)
                (read-string "Look up in dictionary: "))
            current-prefix-arg))
-    (sdcv-search identifier nil nil t))
-  ;; Custon keys in sdcv buffer
-  (map! :map sdcv-mode-map
-        :n "q" #'sdcv-return-from-sdcv
-        :nv "RET" #'sdcv-search-word-at-point
+    (lexic-search identifier nil nil t))
+  :config
+  (set-popup-rules!
+    '(("^\\*lexic\\*$" :size 1)))
+  (map! :map lexic-mode-map
+        :n "q" #'lexic-return-from-lexic
+        :nv "RET" #'lexic-search-word-at-point
         :n "a" #'outline-show-all
         :n "h" (cmd! (outline-hide-sublevels 3))
-        :n "o" #'sdcv-toggle-entry
-        :n "n" #'sdcv-next-entry
-        :n "N" (cmd! (sdcv-next-entry t))
-        :n "p" #'sdcv-previous-entry
-        :n "P" (cmd! (sdcv-previous-entry t))
-        :n "b" #'sdcv-search-history-backwards
-        :n "f" #'sdcv-search-history-forwards
-        :n "/" (cmd! (call-interactively #'sdcv-search))))
+        :n "o" #'lexic-toggle-entry
+        :n "n" #'lexic-next-entry
+        :n "N" (cmd! (lexic-next-entry t))
+        :n "p" #'lexic-previous-entry
+        :n "P" (cmd! (lexic-previous-entry t))
+        :n "b" #'lexic-search-history-backwards
+        :n "f" #'lexic-search-history-forwards
+        :n "/" (cmd! (call-interactively #'lexic-search))))
 
 
 (use-package! lsp-treemacs

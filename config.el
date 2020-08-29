@@ -63,8 +63,9 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-
+(use-package! doom-modeline
   :config
+  (setq doom-modeline-persp-name t))
 
 (use-package! evil-escape
   :config

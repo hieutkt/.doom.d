@@ -64,10 +64,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(use-package! company
   :config
-  ;; Company is more respondsive in the GccEmacs
-  (setq company-idle-delay 0))
 
 (use-package! evil-escape
   :config
@@ -287,35 +284,18 @@
         org-roam-server-network-label-wrap-length 20))
 
 
-(use-package! org-journal
-  :init
-  (setq org-journal-date-format "%A, %Y-%m-%d"
-        org-journal-date-prefix "* Daily Journal "
-        org-extend-today-until 4
-        org-journal-file-format "journal_%Y-%m-%d.org"
-        org-journal-dir "~/Dropbox/Notes/Org-roam/"
-        org-journal-file-header "#+title: %Y-%m-%d %a\n#+roam_tags: journal\n"
-        org-journal-enable-agenda-integration t))
-
-(use-package! org-fragtog
-  :config (add-hook 'org-mode-hook 'org-fragtog-mode))
-
-
 (use-package! visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
   :init
   (setq visual-fill-column-width 85))
 
-(use-package! lsp-julia
   :config
-  (setq lsp-julia-package-dir nil))
 
 (use-package! julia-repl
   :config
   ;; Make popup position similar to `ess'
   (set-popup-rules!
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))
-
 
 (use-package! lexic
   :commands lexic-search lexic-list-dictionary
@@ -344,7 +324,6 @@
         :n "b" #'lexic-search-history-backwards
         :n "f" #'lexic-search-history-forwards
         :n "/" (cmd! (call-interactively #'lexic-search))))
-
 
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)

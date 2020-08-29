@@ -92,7 +92,7 @@
        (lookup +dictionary)            ; navigate your code and its documentation
        (lsp +peek)
        ;;macos                         ; MacOS-specific commands
-       (magit (:if IS-LINUX +forge))   ; a git porcelain for Emacs
+       (magit +forge)   ; a git porcelain for Emacs
        ;;make                          ; run make tasks from Emacs
        ;;pass                          ; password manager for nerds
        (:if IS-LINUX pdf)                             ; pdf enhancements
@@ -140,7 +140,6 @@
        ;;nim                           ; python + lisp at the speed of c
        ;;nix                           ; I hereby declare "nix geht mehr!"
        ;;ocaml                         ; an objective camel
-       (org +roam +journal +jupyter +hugo +pretty)   ; organize your plain life in plain text
        ;;php                           ; perl's insecure younger brother
        ;;plantuml                      ; diagrams for confusing people more
        ;;purescript                    ; javascript, but functional

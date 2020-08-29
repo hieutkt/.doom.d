@@ -3,17 +3,14 @@
 
 (package! visual-fill-column)
 (package! org-ref)
-(package! lsp-julia)
 (package! lsp-treemacs)
-(package! org-fragtog)
 (package! org-super-agenda)
 
-(package! lexic :recipe (:host github :repo "tecosaur/lexic"))
+(package! lexic
+  :recipe (:host github :repo "tecosaur/lexic"))
 (package! org-roam
-  :recipe (:host github :repo "jethrokuan/org-roam" :branch "master"))
+  :recipe (:host github :repo "org-roam/org-roam"))
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
-(package! company-org-roam
-  :recipe (:host github :repo "org-roam/company-org-roam"))
 (package! citeproc-org
   :recipe (:host github :repo "andras-simonyi/citeproc-org"))

@@ -78,11 +78,12 @@
 (use-package! evil-goggles
   :init
   (setq evil-goggles-enable-delete t
-        evil-goggles-enable-change t)
+        evil-goggles-enable-change t
+        evil-goggles-duration      0.25)
   :config
   (evil-goggles-use-magit-faces)
   (custom-set-faces!
-    `(evil-goggles-yank-face :inherit hl-line :weight bold)
+    `(evil-goggles-yank-face :inherit magit-diff-added-highlight)
     `(evil-goggles-change-face :inherit magit-diff-base)
     `(evil-goggles-surround-face :inherit diff-refine-added)
     `(evil-goggles-indent-face :inherit diff-refine-changed)))

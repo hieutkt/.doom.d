@@ -210,6 +210,9 @@
   :init
   (map! :leader
         :desc "helm-bibtex" "]" #'helm-bibtex)
+  (map! :map helm-map
+        :g "C-j" #'helm-next-line
+        :g "C-k" #'helm-previous-line)
   :config
   (setq
    org-ref-default-bibliography     '("~/Dropbox/Notes/Research/papers.bib")

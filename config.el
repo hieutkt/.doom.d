@@ -367,7 +367,10 @@ it can be passed in POS."
   :init
   (setq visual-fill-column-width 85))
 
+(use-package! ess
   :config
+  (set-popup-rules!
+    '(("^\\*R:*\\*$" :side right :size 0.5 :ttl nil))))
 
 (use-package! julia-repl
   :config

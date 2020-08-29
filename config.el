@@ -8,7 +8,10 @@
 ;; clients, file templates and snippets.
 (setq user-full-name "Hieu Phay"
       user-mail-address "hieunguyen31371@gmail.com"
-      default-input-method 'vietnamese-telex)
+      default-input-method 'vietnamese-telex
+      +doom-dashboard-banner-dir doom-private-dir
+      +doom-dashboard-banner-file "favicon-pixel.png"
+      +doom-dashboard-banner-padding '(0 . 2))
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:

@@ -88,6 +88,7 @@
     `(evil-goggles-surround-face :inherit diff-refine-added)
     `(evil-goggles-indent-face :inherit diff-refine-changed)))
 
+
 (use-package! org
   :init
   :config
@@ -135,6 +136,7 @@
           ("" "rotating" nil)
           ("normalem" "ulem" t)
           ("" "amsmath" t)
+          ("" "mathrsfs" t)
           ("" "textcomp" t)
           ("" "amssymb" t)
           ("" "capt-of" nil)
@@ -167,10 +169,16 @@
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
-
 (use-package! org-agenda
   :config
-  (setq org-agenda-files '("~/Dropbox/Notes")))
+  (setq org-agenda-files '("~/Dropbox/Notes"))
+  (setq org-capture-templates
+        '(("t" "Personal Todo" entry
+           (file "~/Dropbox/Notes/todo.org" ) "* TODO %?\n  %i\n"))))
+
+(use-package! org-habit
+  :config
+  (setq org-habit-show-all-today t))
 
 (use-package! org-super-agenda
   :after org-agenda
@@ -212,12 +220,11 @@
    bibtex-completion-display-formats
    '((t . "${title:46} ${author:20} ${year:4} ${=type=:3}${=has-pdf=:1}${=has-note=:1}"))
    bibtex-completion-notes-template-multiple-files
-   "${author-or-editor} (${year}): ${title}\n#+roam_tags: bibliography\n#+roam_key: cite:${=key=}"
+   "${author-or-editor} (${year}): ${title}\n#+roam_tags: literature\n#+roam_key: cite:${=key=}i\n#+created: %U\n#+last_modified: %U\n\n"
    ;; Open pdf in external tool instead of in Emacs
    bibtex-completion-pdf-open-function
    (lambda (fpath)
      (call-process "evince" nil 0 nil fpath)))
-
   ;; Make org-ref-cite-face a bit less intrusive
   (custom-set-faces!
     `(org-ref-cite-face :weight unspecified :foreground unspecified
@@ -228,11 +235,13 @@
   :config
   (citeproc-org-setup))
 
+
 (use-package! org-roam
   :hook
   (after-init . org-roam-mode)
   :init
-  (setq org-roam-directory "~/Dropbox/Notes/Org-roam/")
+  (setq org-roam-directory "~/Dropbox/Notes/Org-roam/"
+        +org-roam-open-buffer-on-find-file nil)
   ;; Make org-roam faces less intrusive
   (custom-set-faces!
     `((org-roam-link org-roam-link-current)
@@ -262,20 +271,77 @@
         '(("d" "default" plain (function org-roam-capture--get-point)
            ""
            :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n#+roam_tags: %?\n#+roam_alias: \n"
+           :head "#+title: ${title}\n#+roam_tags: %?\n#+roam_alias: \n#+created: %U\n#+last_modified: %U\n\n"
            :unnarrowed t))
         org-roam-capture-ref-templates
         '(("r" "ref" plain (function org-roam-capture--get-point)
            "#+roam_key: ${ref}\n%?"
            :file-name "%<%Y%m%d%H%M%S>_web_${slug}"
-           :head "#+title: ${title}\n#+roam_tags: website\n"
+           :head "#+title: ${title}\n#+roam_tags: website\n#+created: %U\n#+last_modified: %U\n\n"
            :unnarrowed t))
         org-roam-dailies-capture-templates
         '(("d" "daily" plain (function org-roam-capture--get-point)
            ""
            :immediate-finish t
            :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: journal\n"))))
+           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: journal\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
+  ;; Update the `last-modified` field on save
+  (defun zp/org-find-time-file-property (property &optional anywhere)
+    "Return the position of the time file PROPERTY if it exists.
+When ANYWHERE is non-nil, search beyond the preamble."
+    (save-excursion
+      (goto-char (point-min))
+      (let ((first-heading
+             (save-excursion
+               (re-search-forward org-outline-regexp-bol nil t))))
+        (when (re-search-forward (format "^#\\+%s:" property)
+                                 (if anywhere nil first-heading)
+                                 t)
+          (point)))))
+
+  (defun zp/org-has-time-file-property-p (property &optional anywhere)
+    "Return the position of time file PROPERTY if it is defined.
+As a special case, return -1 if the time file PROPERTY exists but
+is not defined."
+    (when-let ((pos (zp/org-find-time-file-property property anywhere)))
+      (save-excursion
+        (goto-char pos)
+        (if (and (looking-at-p " ")
+                 (progn (forward-char)
+                        (org-at-timestamp-p 'lax)))
+            pos -1))))
+
+  (defun zp/org-set-time-file-property (property &optional anywhere pos)
+    "Set the time file PROPERTY in the preamble.
+When ANYWHERE is non-nil, search beyond the preamble.
+If the position of the file PROPERTY has already been computed,
+it can be passed in POS."
+    (when-let ((pos (or pos
+                        (zp/org-find-time-file-property property))))
+      (save-excursion
+        (goto-char pos)
+        (if (looking-at-p " ")
+            (forward-char)
+          (insert " "))
+        (delete-region (point) (line-end-position))
+        (let* ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
+          (insert now)))))
+
+  (defun zp/org-set-last-modified ()
+    "Update the LAST_MODIFIED file property in the preamble."
+    (when (derived-mode-p 'org-mode)
+      (zp/org-set-time-file-property "last_modified")))
+  :hook (before-save . zp/org-set-last-modified))
+
+(use-package! org-roam-dailies
+  :config
+  (map! :leader
+        :prefix "n"
+        (:prefix ("j" . "journal")
+          :desc "Arbitrary date" "d" #'org-roam-dailies-date
+          :desc "Today"          "j" #'org-roam-dailies-today
+          :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
+          :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
 
 (use-package! org-roam-server
   :config

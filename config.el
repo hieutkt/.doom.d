@@ -71,6 +71,10 @@
   :config
   (setq evil-esc-delay 0.25))
 
+(use-package! evil-vimish-fold
+  :config
+  (global-evil-vimish-fold-mode))
+
 (use-package! evil-goggles
   :init
   (setq evil-goggles-enable-delete t

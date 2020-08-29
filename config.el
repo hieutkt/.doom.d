@@ -388,7 +388,7 @@ it can be passed in POS."
     (lexic-search identifier nil nil t))
   :config
   (set-popup-rules!
-    '(("^\\*lexic\\*$" :size 1)))
+    '(("^\\*lexic\\*$" :size 0.4)))
   (map! :map lexic-mode-map
         :n "q" #'lexic-return-from-lexic
         :nv "RET" #'lexic-search-word-at-point

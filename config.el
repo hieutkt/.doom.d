@@ -67,6 +67,9 @@
   :config
   (setq doom-modeline-persp-name t))
 
+(use-package! hl-todo
+  :hook (text-mode . hl-todo-mode))
+
 (use-package! evil-escape
   :config
   (setq evil-esc-delay 0.25))

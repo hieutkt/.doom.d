@@ -92,6 +92,8 @@
     `(evil-goggles-surround-face :inherit diff-refine-added)
     `(evil-goggles-indent-face :inherit diff-refine-changed)))
 
+(map! :map (term-mode vterm-mode)
+      "C-c C-z" 'other-window)
 
 (use-package! org
   :init

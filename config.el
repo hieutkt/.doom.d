@@ -175,6 +175,10 @@
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
+(use-package! ox-hugo
+  :config
+  (setq org-hugo-use-code-for-kbd t))
+
 (use-package! org-agenda
   :config
   (setq org-agenda-files '("~/Dropbox/Notes"))

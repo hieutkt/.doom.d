@@ -183,10 +183,45 @@
 
 (use-package! org-agenda
   :config
-  (setq org-agenda-files '("~/Dropbox/Notes"))
+  ;; Agenda folder - .org files are found recursively
+  (setq org-agenda-files '("~/Dropbox/Notes/Agenda"))
+  ;; Also to make refiling easier
+  (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                   (org-agenda-files :maxlevel . 9))))
+  ;; Setting the TODO keywords
+  (setq org-todo-keywords
+        '((sequence
+           "TODO(t)"                    ;What needs to be done
+           "NEXT(n)"                    ;A project without NEXTs is stuck
+           "|"
+           "DONE(d)")
+          (sequence
+           "HOLD(h)"                    ;Task is on hold because of me
+           "PROJ(p)"                    ;Contains sub-tasks
+           "WAIT(w)"                    ;Tasks delegated to others
+           "|"
+           "STOP(c)"                    ;Stopped/cancelled
+           "MEETING(m)"                 ;Meetings
+           ))
+        org-todo-keyword-faces
+        '(("NEXT" . +org-todo-active)
+          ("WAIT" . +org-todo-active)
+          ("HOLD" . +org-todo-onhold)
+          ("PROJ" . +org-todo-project)))
+  ;; Tags triggers
+  ;; (setq org-todo-state-tags-triggers)
+  ;;
+  ;; Capture templates
   (setq org-capture-templates
-        '(("t" "Personal Todo" entry
-           (file "~/Dropbox/Notes/todo.org" ) "* TODO %?\n  %i\n"))))
+        '(("i" "Inbox" entry (file "~/Dropbox/Notes/Agenda/inbox.org")
+           "* TODO %?\n  %i\n")
+          ("m" "Meeting" entry (file "~/Dropbox/Notes/Agenda/inbox.org")
+           "* MEETING with %? :meeting:\n%t" :clock-in t :clock-resume t)))
+  ;; Clocking
+  (setq org-clock-persist 'history
+        org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+  (org-clock-persistence-insinuate)
+  )
 
 (use-package! org-habit
   :config
@@ -195,21 +230,11 @@
 (use-package! org-super-agenda
   :after org-agenda
   :config
-  (setq org-super-agenda-groups '((:name "Urgent tasks!!!"
-                                   :tag "urgent")
-                                  (:name "Important tasks:"
-                                   :priority "A")
-                                  (:name "Scheduled:"
-                                   :time-grid t
-                                   :scheduled today)
-                                  (:name "Due:"
-                                   :deadline today)
-                                  (:name "Overdue:"
-                                   :deadline past)
-                                  (:name "Due soon:"
-                                   :deadline future)))
-  (after! org-agenda
-    (org-super-agenda-mode))
+  ;; Enable org-super-agenda
+  (org-super-agenda-mode)
+  ;; Customise the agenda view
+  (setq org-super-agenda-groups
+        '((:auto-outline-path t :time-grid t)))
   ;; Make evil keymaps works on org-super-agenda headers
   (after! evil-org-agenda
     (setq org-super-agenda-header-map (copy-keymap evil-org-agenda-mode-map))))

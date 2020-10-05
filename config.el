@@ -44,6 +44,9 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Dropbox/Notes")
+(if (string-match-p "Windows" (getenv "PATH"))
+    (setq org-directory "/mnt/c/Users/X380/Dropbox/Notes")
+  (setq org-directory "~/Dropbox/Notes"))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -184,7 +187,7 @@
 (use-package! org-agenda
   :config
   ;; Agenda folder - .org files are found recursively
-  (setq org-agenda-files '("~/Dropbox/Notes/Agenda"))
+  (setq org-agenda-files (list (concat org-directory "/Agenda")))
   ;; Also to make refiling easier
   (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                    (org-agenda-files :maxlevel . 9))))
@@ -249,13 +252,13 @@
         :g "C-k" #'helm-previous-line)
   :config
   (setq
-   org-ref-default-bibliography     '("~/Dropbox/Notes/Research/papers.bib")
-   org-ref-pdf-directory             "~/Dropbox/Notes/Papers/"
+   org-ref-default-bibliography     '((concat org-directory "Research/papers.bib"))
+   org-ref-pdf-directory             (concat org-directory "Papers/")
    bibtex-dialect                    'biblatex
    bibtex-completion-notes-extension "_notes.org"
-   bibtex-completion-notes-path      "~/Dropbox/Notes/Org-roam/"
-   bibtex-completion-bibliography    "~/Dropbox/Notes/Research/papers.bib"
-   bibtex-completion-library-path    "~/Dropbox/Notes/Papers/"
+   bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
+   bibtex-completion-bibliography    (concat org-directory "/Research/papers.bib")
+   bibtex-completion-library-path    (concat org-directory "/Papers/")
    ;; Optimize for 80 character frame display
    bibtex-completion-display-formats
    '((t . "${title:46} ${author:20} ${year:4} ${=type=:3}${=has-pdf=:1}${=has-note=:1}"))
@@ -280,7 +283,7 @@
   :hook
   (after-init . org-roam-mode)
   :init
-  (setq org-roam-directory "~/Dropbox/Notes/Org-roam/"
+  (setq org-roam-directory (concat org-directory "/Org-roam/")
         +org-roam-open-buffer-on-find-file nil)
   ;; Make org-roam faces less intrusive
   (custom-set-faces!

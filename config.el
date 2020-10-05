@@ -36,6 +36,8 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-gruvbox
       doom-themes-treemacs-theme 'doom-colors)
+(custom-set-faces!
+  `(outline-3 :foreground ,(doom-color 'blue)))
 
 ;; Start Doom fullscreen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))

@@ -237,8 +237,15 @@
   ;; Enable org-super-agenda
   (org-super-agenda-mode)
   ;; Customise the agenda view
-  (setq org-super-agenda-groups
-        '((:auto-outline-path t :time-grid t)))
+  (setq org-agenda-custom-commands
+        '(("o" "Overview"
+           ((agenda "")
+            (todo "NEXT")
+            (tags-todo "INBOX")
+            (tags-todo "@work" ((org-super-agenda-groups
+                                 '((:auto-outline-path t)))))
+            (tags-todo "@home" ((org-super-agenda-groups
+                                 '((:auto-outline-path t)))))))))
   ;; Make evil keymaps works on org-super-agenda headers
   (after! evil-org-agenda
     (setq org-super-agenda-header-map (copy-keymap evil-org-agenda-mode-map))))

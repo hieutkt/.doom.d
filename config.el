@@ -253,8 +253,8 @@
         :g "C-k" #'helm-previous-line)
   :config
   (setq
-   org-ref-default-bibliography     '((concat org-directory "Research/papers.bib"))
-   org-ref-pdf-directory             (concat org-directory "Papers/")
+   org-ref-default-bibliography      (list (concat org-directory "/Research/papers.bib"))
+   org-ref-pdf-directory             (concat org-directory "/Papers/")
    bibtex-dialect                    'biblatex
    bibtex-completion-notes-extension "_notes.org"
    bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
@@ -263,8 +263,14 @@
    ;; Optimize for 80 character frame display
    bibtex-completion-display-formats
    '((t . "${title:46} ${author:20} ${year:4} ${=type=:3}${=has-pdf=:1}${=has-note=:1}"))
+   ;; Template for generated note for each entry
    bibtex-completion-notes-template-multiple-files
-   "${author-or-editor} (${year}): ${title}\n#+roam_tags: literature\n#+roam_key: cite:${=key=}i\n#+created: %U\n#+last_modified: %U\n\n"
+   (concat
+    "${author-or-editor} (${year}): ${title}\n"
+    "#+roam_tags: literature\n"
+    "#+roam_key: cite:${=key=}\n"
+    "#+created: %U\n"
+    "#+last_modified: %U \n\n")
    ;; Open pdf in external tool instead of in Emacs
    bibtex-completion-pdf-open-function
    (lambda (fpath)

@@ -223,7 +223,8 @@
            "* MEETING with %? :meeting:\n%t" :clock-in t :clock-resume t)))
   ;; Clocking
   (setq org-clock-persist 'history
-        org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+        org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA"
+        org-agenda-start-with-log-mode t)
   (org-clock-persistence-insinuate)
   )
 

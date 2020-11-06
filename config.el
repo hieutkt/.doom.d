@@ -44,10 +44,12 @@
 (add-to-list 'default-frame-alist '(alpha 97 100))
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Dropbox/Notes")
 (if (string-match-p "Windows" (getenv "PATH"))
-    (setq org-directory "/mnt/c/Users/X380/Dropbox/Notes")
-  (setq org-directory "~/Dropbox/Notes"))
+    (setq dropbox-directory "/mnt/c/Users/X380/Dropbox/")
+  (setq dropbox-directory "~/Dropbox/"))
+
+(setq org-directory (concat dropbox-directory "Notes/"))
+
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -223,9 +225,9 @@
   ;;
   ;; Capture templates
   (setq org-capture-templates
-        '(("i" "Inbox" entry (file "~/Dropbox/Notes/Agenda/inbox.org")
+        '(("i" "Inbox" entry (file (concat org-directory "/Agenda/inbox.org"))
            "* TODO %?\n  %i\n")
-          ("m" "Meeting" entry (file "~/Dropbox/Notes/Agenda/inbox.org")
+          ("m" "Meeting" entry (file (concat org-directory "/Agenda/inbox.org"))
            "* MEETING with %? :meeting:\n%t" :clock-in t :clock-resume t)))
   ;; Clocking
   (setq org-clock-persist 'history
@@ -471,4 +473,4 @@ it can be passed in POS."
 
 (use-package! org-gcal
   :config
-  (load-file "~/Dropbox/Auths/org-gcal-settings.el.gpg"))
+  (load-file (concat dropbox-directory "/Auths/org-gcal-settings.el.gpg")))

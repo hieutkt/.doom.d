@@ -101,6 +101,10 @@
 (map! :map (term-mode vterm-mode)
       "C-c C-z" 'other-window)
 
+(use-package! epa
+  :config
+  (epa-file-enable))
+
 (use-package! org
   :init
   :config
@@ -464,3 +468,7 @@ it can be passed in POS."
   :after (lsp-mode treemacs)
   :config
   (lsp-treemacs-sync-mode 1))
+
+(use-package! org-gcal
+  :config
+  (load-file "~/Dropbox/Auths/org-gcal-settings.el.gpg"))

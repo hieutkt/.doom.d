@@ -471,6 +471,16 @@ it can be passed in POS."
   :config
   (lsp-treemacs-sync-mode 1))
 
+(after! keycast
+  (define-minor-mode keycast-mode
+    "Show current command and its key binding in the mode line."
+    :global t
+    (if keycast-mode
+        (add-hook 'pre-command-hook 'keycast-mode-line-update t)
+      (remove-hook 'pre-command-hook 'keycast-mode-line-update))))
+(add-to-list 'global-mode-string '("" mode-line-keycast))
+;; (keycast-mode) ;; or run keycast-mode by demand
+
 (use-package! org-gcal
   :config
   (load-file (concat dropbox-directory "/Auths/org-gcal-settings.el.gpg")))

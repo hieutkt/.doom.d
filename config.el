@@ -225,9 +225,9 @@
   ;;
   ;; Capture templates
   (setq org-capture-templates
-        '(("i" "Inbox" entry (file (concat org-directory "/Agenda/inbox.org"))
+        `(("i" "Inbox" entry (file ,(concat org-directory "/Agenda/inbox.org"))
            "* TODO %?\n  %i\n")
-          ("m" "Meeting" entry (file (concat org-directory "/Agenda/inbox.org"))
+          ("m" "Meeting" entry (file ,(concat org-directory "/Agenda/inbox.org"))
            "* MEETING with %? :meeting:\n%t" :clock-in t :clock-resume t)))
   ;; Clocking
   (setq org-clock-persist 'history

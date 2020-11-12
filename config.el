@@ -431,6 +431,12 @@ it can be passed in POS."
   (set-popup-rules!
     '(("^\\*R:*\\*$" :side right :size 0.5 :ttl nil))))
 
+(use-package! python
+  :config
+  (set-popup-rules!
+    '(("^\\*Python:*\\*$" :side right :size 0.5 :ttl nil))))
+
+
 (use-package! julia-repl
   :config
   ;; Make popup position similar to `ess'

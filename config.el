@@ -350,7 +350,7 @@
            ""
            :immediate-finish t
            :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: journal\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
+           :head " %<%Y-%m-%d %a>\n#+roam_tags: journal\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
   ;; Update the `last-modified` field on save
   (defun zp/org-find-time-file-property (property &optional anywhere)
     "Return the position of the time file PROPERTY if it exists.
@@ -399,15 +399,15 @@ it can be passed in POS."
       (zp/org-set-time-file-property "last_modified")))
   :hook (before-save . zp/org-set-last-modified))
 
-(use-package! org-roam-dailies
-  :config
-  (map! :leader
-        :prefix "n"
-        (:prefix ("j" . "journal")
-          :desc "Arbitrary date" "d" #'org-roam-dailies-date
-          :desc "Today"          "j" #'org-roam-dailies-today
-          :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
-          :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
+;; (use-package! org-roam-dailies
+;;   :config
+;;   (map! :leader
+;;         :prefix "n"
+;;         (:prefix ("j" . "journal")
+;;           :desc "Arbitrary date" "d" #'org-roam-dailies-date
+;;           :desc "Today"          "j" #'org-roam-dailies-today
+;;           :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
+;;           :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
 
 (use-package! org-roam-server
   :config
@@ -420,7 +420,6 @@ it can be passed in POS."
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
-
 
 (use-package! visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)

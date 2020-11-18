@@ -40,8 +40,8 @@
   `(outline-3 :foreground ,(doom-color 'blue)))
 
 ;; Start Doom fullscreen
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(alpha 97 100))
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (if (string-match-p "Windows" (getenv "PATH"))

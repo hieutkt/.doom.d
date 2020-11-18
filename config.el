@@ -350,7 +350,7 @@
            ""
            :immediate-finish t
            :file-name "journal_%<%Y-%m-%d>"
-           :head " %<%Y-%m-%d %a>\n#+roam_tags: journal\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
+           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: journal\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
   ;; Update the `last-modified` field on save
   (defun zp/org-find-time-file-property (property &optional anywhere)
     "Return the position of the time file PROPERTY if it exists.

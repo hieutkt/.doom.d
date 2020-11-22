@@ -117,6 +117,7 @@
         (plist-put org-format-latex-options :scale 1.8)
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
+        org-highlight-latex-and-related nil
         org-ellipsis " ⤵")
   ;; Setup custom links
   (+org-init-custom-links-h))

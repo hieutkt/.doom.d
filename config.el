@@ -44,7 +44,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(if (string-match-p "Windows" (getenv "PATH"))
+(if (and (string-match-p "Windows" (getenv "PATH")) (not IS_WINDOWS))
     (setq dropbox-directory "/mnt/c/Users/X380/Dropbox/")
   (setq dropbox-directory "~/Dropbox/"))
 

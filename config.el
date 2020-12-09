@@ -44,7 +44,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(if (and (string-match-p "Windows" (getenv "PATH")) (not IS_WINDOWS))
+(if (and (string-match-p "Windows" (getenv "PATH")) (not IS-WINDOWS))
     (setq dropbox-directory "/mnt/c/Users/X380/Dropbox/")
   (setq dropbox-directory "~/Dropbox/"))
 
@@ -488,5 +488,6 @@ it can be passed in POS."
 ;; (keycast-mode) ;; or run keycast-mode by demand
 
 (use-package! org-gcal
+  :if IS-LINUX
   :config
   (load-file (concat dropbox-directory "/Auths/org-gcal-settings.el.gpg")))

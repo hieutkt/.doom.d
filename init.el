@@ -92,7 +92,7 @@
        (lookup +dictionary)            ; navigate your code and its documentation
        (lsp +peek)
        ;;macos                         ; MacOS-specific commands
-       (magit +forge)   ; a git porcelain for Emacs
+       (magit (:if IS-LINUX +forge))   ; a git porcelain for Emacs
        ;;make                          ; run make tasks from Emacs
        ;;pass                          ; password manager for nerds
        (:if IS-LINUX pdf)                             ; pdf enhancements
@@ -169,7 +169,7 @@
        ;;(wanderlust +gmail)
 
        :app
-       calendar
+       (:if IS-LINUX calendar)
        ;;irc                           ; how neckbeards socialize
        ;;(rss +org)                    ; emacs as an RSS reader
        ;;twitter                       ; twitter client https://twitter.com/vnought

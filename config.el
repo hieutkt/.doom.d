@@ -491,3 +491,10 @@ it can be passed in POS."
   :if IS-LINUX
   :config
   (load-file (concat dropbox-directory "/Auths/org-gcal-settings.el.gpg")))
+
+
+(use-package! org-transclusion
+  :commands org-transclusion-mode
+  :config
+  (setq org-transclusion-include-first-section t)
+  (add-to-list  'org-transclusion-exclude-elements 'keyword))

@@ -14,6 +14,8 @@
   :recipe (:host github :repo "org-roam/org-roam-server"))
 (package! citeproc-org
   :recipe (:host github :repo "andras-simonyi/citeproc-org"))
+(package! org-transclusion
+  :recipe (:host github :repo "nobiot/org-transclusion"))
 
 (package! keycast)
 

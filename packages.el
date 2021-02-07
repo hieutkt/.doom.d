@@ -5,9 +5,8 @@
 (package! org-ref)
 (package! lsp-treemacs)
 (package! org-super-agenda)
-(package! lsp-mode
-  :recipe (:host github :repo "emacs-lsp/lsp-mode"))
 
+(package! eglot-jl)
 (package! lexic
   :recipe (:host github :repo "tecosaur/lexic"))
 (package! org-roam-server

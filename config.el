@@ -212,6 +212,7 @@
            "HOLD(h)"                    ;Task is on hold because of me
            "PROJ(p)"                    ;Contains sub-tasks
            "WAIT(w)"                    ;Tasks delegated to others
+           "REVIEW(r)"                  ;Daily notes that need reviews
            "|"
            "STOP(c)"                    ;Stopped/cancelled
            "MEETING(m)"                 ;Meetings
@@ -220,7 +221,8 @@
         '(("NEXT" . +org-todo-active)
           ("WAIT" . +org-todo-active)
           ("HOLD" . +org-todo-onhold)
-          ("PROJ" . +org-todo-project)))
+          ("PROJ" . +org-todo-project)
+          ("REVIEW" . font-lock-keyword-face)))
   ;; Tags triggers
   ;; (setq org-todo-state-tags-triggers)
   ;;

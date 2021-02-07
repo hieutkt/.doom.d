@@ -36,8 +36,7 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-gruvbox
       doom-themes-treemacs-theme 'doom-colors)
-(custom-set-faces!
-  `(outline-3 :foreground ,(doom-color 'blue)))
+
 
 ;; Start Doom fullscreen
 (add-to-list 'default-frame-alist '(alpha 97 100))
@@ -89,16 +88,31 @@
 
 (use-package! evil-goggles
   :init
-  (setq evil-goggles-enable-delete t
-        evil-goggles-enable-change t
+  (setq evil-goggles-enable-change t
+        evil-goggles-enable-delete t
+        evil-goggles-pulse         t
         evil-goggles-duration      0.25)
   :config
-  (evil-goggles-use-magit-faces)
   (custom-set-faces!
-    `(evil-goggles-yank-face :inherit magit-diff-added-highlight)
-    `(evil-goggles-change-face :inherit magit-diff-base)
-    `(evil-goggles-surround-face :inherit diff-refine-added)
-    `(evil-goggles-indent-face :inherit diff-refine-changed)))
+    `((evil-goggles-yank-face evil-goggles-surround-face)
+      :background ,(doom-blend (doom-color 'blue) (doom-color 'bg-alt) 0.5)
+      :extend t)
+    `(evil-goggles-paste-face
+      :background ,(doom-blend (doom-color 'green) (doom-color 'bg-alt) 0.5)
+      :extend t)
+    `(evil-goggles-delete-face
+      :background ,(doom-blend (doom-color 'red) (doom-color 'bg-alt) 0.5)
+      :extend t)
+    `(evil-goggles-change-face
+      :background ,(doom-blend (doom-color 'orange) (doom-color 'bg-alt) 0.5)
+      :extend t)
+    `(evil-goggles-commentary-face
+      :background ,(doom-blend (doom-color 'grey) (doom-color 'bg-alt) 0.5)
+      :extend t)
+    `((evil-goggles-indent-face evil-goggles-join-face evil-goggles-shift-face)
+      :background ,(doom-blend (doom-color 'yellow) (doom-color 'bg-alt) 0.25)
+      :extend t)
+    ))
 
 (map! :map (term-mode vterm-mode)
       "C-c C-z" 'other-window)

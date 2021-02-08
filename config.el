@@ -451,6 +451,12 @@ it can be passed in POS."
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
 
+(use-package! org-appear
+  :hook
+  (org-mode . org-appear-mode)
+  :config
+  (setq org-hide-emphasis-markers t))
+
 (use-package! visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
   :init

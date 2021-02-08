@@ -506,7 +506,7 @@ it can be passed in POS."
 ;; (keycast-mode) ;; or run keycast-mode by demand
 
 (use-package! org-gcal
-  :if IS-LINUX
+  :commands org-gcal-fetch
   :config
   (load-file (concat dropbox-directory "/Auths/org-gcal-settings.el.gpg")))
 

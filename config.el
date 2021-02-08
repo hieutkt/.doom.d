@@ -143,6 +143,11 @@
     (setq org-superstar-headline-bullets-list '("⁖")))
   (setq org-superstar-cycle-headline-bullets nil))
 
+(use-package! org-fancy-priorities
+  :config
+  (setq org-fancy-priorities-list '("[❗❗]" "[-❗]" "[--]") ;High/Medium/Low priorities
+        org-default-priority 66.5))                       ;Bump Medium tasks higher
+
 (use-package! org-tempo)
 
 (use-package! ox-latex

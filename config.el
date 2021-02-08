@@ -25,11 +25,16 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font "Iosevka 12"
-      doom-variable-pitch-font "Iosevka Aile 12")
+(setq doom-font "Iosevka-12"
+      doom-variable-pitch-font (font-spec :name "Alegreya"))
 
 (when (member "Source Han Sans" (font-family-list))
   (set-fontset-font t 'han (font-spec :name "Source Han Sans")))
+
+(use-package! mixed-pitch
+  :hook (text-mode . mixed-pitch-mode)
+  :config
+  (set-face-attribute 'variable-pitch nil :height 1.2))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -139,7 +144,7 @@
 (use-package! org-superstar
   :config
   (if IS-WINDOWS
-      (setq org-superstar-headline-bullets-list '("◉" "○"))
+      (setq org-superstar-headline-bullets-list '("*"))
     (setq org-superstar-headline-bullets-list '("⁖")))
   (setq org-superstar-cycle-headline-bullets nil))
 

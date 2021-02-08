@@ -132,13 +132,15 @@
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil
-        org-ellipsis " ⤵")
+        org-ellipsis (all-the-icons-material "keyboard_arrow_down"))
   ;; Setup custom links
   (+org-init-custom-links-h))
 
 (use-package! org-superstar
   :config
-  (setq org-superstar-headline-bullets-list '("⁖")))
+  (if IS-WINDOWS
+      (setq org-superstar-headline-bullets-list '("◉"))
+    (setq org-superstar-headline-bullets-list '("⁖"))))
 
 (use-package! org-tempo)
 

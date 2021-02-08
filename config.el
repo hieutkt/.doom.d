@@ -139,8 +139,9 @@
 (use-package! org-superstar
   :config
   (if IS-WINDOWS
-      (setq org-superstar-headline-bullets-list '("◉"))
-    (setq org-superstar-headline-bullets-list '("⁖"))))
+      (setq org-superstar-headline-bullets-list '("◉" "○"))
+    (setq org-superstar-headline-bullets-list '("⁖")))
+  (setq org-superstar-cycle-headline-bullets nil))
 
 (use-package! org-tempo)
 

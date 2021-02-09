@@ -28,8 +28,11 @@
 (setq doom-font "Iosevka-12"
       doom-variable-pitch-font (font-spec :name "Alegreya"))
 
-(when (member "Source Han Sans" (font-family-list))
-  (set-fontset-font t 'han (font-spec :name "Source Han Sans")))
+(after! unicode-fonts
+  ;; CJK characters
+  (push "Source Han Sans"
+        (cadr (assoc "CJK Unified Ideographs" unicode-fonts-block-font-mapping)))
+  )
 
 (use-package! mixed-pitch
   :hook (text-mode . mixed-pitch-mode)

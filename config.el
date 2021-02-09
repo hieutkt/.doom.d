@@ -34,7 +34,8 @@
 (use-package! mixed-pitch
   :hook (text-mode . mixed-pitch-mode)
   :config
-  (set-face-attribute 'variable-pitch nil :height 1.2))
+  (setq mixed-pitch-set-height t)
+  (set-face-attribute 'variable-pitch nil :height 1.15))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the

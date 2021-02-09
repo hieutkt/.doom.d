@@ -531,6 +531,11 @@ it can be passed in POS."
   :config
   (load-file (concat dropbox-directory "/Auths/org-gcal-settings.el.gpg")))
 
+(use-package! org-download
+  :config
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  ;; Change how inline images are displayed
+  (setq org-image-actual-width nil))
 
 (use-package! org-transclusion
   :commands org-transclusion-mode

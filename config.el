@@ -141,7 +141,8 @@
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil
-        org-ellipsis (all-the-icons-material "keyboard_arrow_down"))
+        org-ellipsis ""
+        org-cycle-separator-lines -1)
   ;; Setup custom links
   (+org-init-custom-links-h))
 

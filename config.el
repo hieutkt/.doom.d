@@ -148,10 +148,8 @@
 
 (use-package! org-superstar
   :config
-  (if IS-WINDOWS
-      (setq org-superstar-headline-bullets-list '("*"))
-    (setq org-superstar-headline-bullets-list '("⁖")))
-  (setq org-superstar-cycle-headline-bullets nil))
+  (setq org-superstar-headline-bullets-list '("⁖")
+        org-superstar-cycle-headline-bullets nil))
 
 (use-package! org-fancy-priorities
   :config

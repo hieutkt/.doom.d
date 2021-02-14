@@ -385,7 +385,7 @@
            ""
            :immediate-finish t
            :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: journal\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
+           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
   ;; Update the `last-modified` field on save
   (defun zp/org-find-time-file-property (property &optional anywhere)
     "Return the position of the time file PROPERTY if it exists.
@@ -434,15 +434,22 @@ it can be passed in POS."
       (zp/org-set-time-file-property "last_modified")))
   :hook (before-save . zp/org-set-last-modified))
 
-;; (use-package! org-roam-dailies
-;;   :config
-;;   (map! :leader
-;;         :prefix "n"
-;;         (:prefix ("j" . "journal")
-;;           :desc "Arbitrary date" "d" #'org-roam-dailies-date
-;;           :desc "Today"          "j" #'org-roam-dailies-today
-;;           :desc "Tomorrow"       "m" #'org-roam-dailies-tomorrow
-;;           :desc "Yesterday"      "y" #'org-roam-dailies-yesterday)))
+(use-package! org-roam-dailies
+  :init
+  (defadvice! hp/open-today-dailies ()
+    "Overriding Doom's scratch buffer with Org-roam's daily notes"
+    :override #'doom/open-scratch-buffer
+    (interactive)
+    (org-roam-dailies-capture-today)
+    (pop-to-buffer (concat "journal_" (format-time-string "%Y-%m-%d") ".org")))
+  :config
+  (map! :leader
+        :prefix "n"
+        (:prefix ("j" . "journal")
+          :desc "Arbitrary date" "d" #'org-roam-dailies-find-date
+          :desc "Today"          "j" #'org-roam-dailies-find-today
+          :desc "Tomorrow"       "m" #'org-roam-dailies-find-tomorrow
+          :desc "Yesterday"      "y" #'org-roam-dailies-find-yesterday)))
 
 (use-package! org-roam-server
   :config

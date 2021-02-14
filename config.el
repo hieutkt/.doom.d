@@ -48,6 +48,8 @@
 
 
 ;; Start Doom fullscreen
+(add-to-list 'default-frame-alist '(width . 92))
+(add-to-list 'default-frame-alist '(height . 35))
 (add-to-list 'default-frame-alist '(alpha 97 100))
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -463,7 +465,8 @@ it can be passed in POS."
 (use-package! visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
   :init
-  (setq visual-fill-column-width 85))
+  (setq visual-fill-column-width 92
+        visual-fill-column-center-text t))
 
 (use-package! ess
   :config

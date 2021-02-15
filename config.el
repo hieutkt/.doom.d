@@ -155,7 +155,7 @@
 
 (use-package! org-fancy-priorities
   :config
-  (setq org-fancy-priorities-list '("[❗❗]" "[-❗]" "[--]") ;High/Medium/Low priorities
+  (setq org-fancy-priorities-list '("[!!]" "[-!]" "[--]") ;High/Medium/Low priorities
         org-default-priority 66.5))                       ;Bump Medium tasks higher
 
 (use-package! org-tempo)

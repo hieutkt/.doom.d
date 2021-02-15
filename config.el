@@ -437,12 +437,14 @@ it can be passed in POS."
 (use-package! org-roam-dailies
   :init
   (defadvice! hp/open-today-dailies ()
-    "Overriding Doom's scratch buffer with Org-roam's daily notes"
+    "Pop to Org-roam today daily notes"
     :override #'doom/open-scratch-buffer
     (interactive)
     (org-roam-dailies-capture-today)
-    (pop-to-buffer (concat "journal_" (format-time-string "%Y-%m-%d") ".org")))
+    (pop-to-buffer (format-time-string "journal_%Y-%m-%d.org")))
   :config
+  (set-popup-rules!
+    '(("^journal.*org$" :size 0.3)))
   (map! :leader
         :prefix "n"
         (:prefix ("j" . "journal")

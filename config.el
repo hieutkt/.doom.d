@@ -28,11 +28,11 @@
 (setq doom-font "Iosevka-12"
       doom-variable-pitch-font (font-spec :name "Alegreya"))
 
-(after! unicode-fonts
+(use-package! unicode-fonts
+  :config
   ;; CJK characters
   (push "Source Han Sans"
-        (cadr (assoc "CJK Unified Ideographs" unicode-fonts-block-font-mapping)))
-  )
+        (cadr (assoc "CJK Unified Ideographs" unicode-fonts-block-font-mapping))))
 
 (use-package! mixed-pitch
   :hook (text-mode . mixed-pitch-mode)
@@ -146,7 +146,13 @@
         org-ellipsis ""
         org-cycle-separator-lines -1)
   ;; Setup custom links
-  (+org-init-custom-links-h))
+  (+org-init-custom-links-h)
+  ;; Custom some face
+  (custom-set-faces!
+    '((org-block-begin-line org-block-end-line)
+      :slant italic)
+    '((org-document-title)
+      :height 1.5)))
 
 (use-package! org-superstar
   :config
@@ -443,8 +449,6 @@ it can be passed in POS."
     (org-roam-dailies-capture-today)
     (pop-to-buffer (format-time-string "journal_%Y-%m-%d.org")))
   :config
-  (set-popup-rules!
-    '(("^journal.*org$" :size 0.3)))
   (map! :leader
         :prefix "n"
         (:prefix ("j" . "journal")

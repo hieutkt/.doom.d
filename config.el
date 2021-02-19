@@ -377,13 +377,13 @@
   (setq org-roam-capture-templates
         '(("d" "default" plain (function org-roam-capture--get-point)
            ""
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :file-name "${slug}_%<%Y-%m-%d--%H-%M-%S>"
            :head "#+title: ${title}\n#+roam_tags: %?\n#+roam_alias: \n#+created: %U\n#+last_modified: %U\n\n"
            :unnarrowed t))
         org-roam-capture-ref-templates
         '(("r" "ref" plain (function org-roam-capture--get-point)
            "#+roam_key: ${ref}\n%?"
-           :file-name "%<%Y%m%d%H%M%S>_web_${slug}"
+           :file-name "web_${slug}_%<%Y-%m-%d--%H-%M-%S>"
            :head "#+title: ${title}\n#+roam_tags: website\n#+created: %U\n#+last_modified: %U\n\n"
            :unnarrowed t))
         org-roam-dailies-capture-templates
@@ -494,7 +494,6 @@ it can be passed in POS."
   :config
   (set-popup-rules!
     '(("^\\*Python:*\\*$" :side right :size 0.5 :ttl nil))))
-
 
 (use-package! julia-repl
   :config

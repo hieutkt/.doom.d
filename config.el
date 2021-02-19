@@ -310,12 +310,12 @@
         :g "C-k" #'helm-previous-line)
   :config
   (setq
-   org-ref-default-bibliography      (list (concat org-directory "/Research/papers.bib"))
+   org-ref-default-bibliography      (list (concat org-directory "/References/papers.bib"))
    org-ref-pdf-directory             (concat org-directory "/Papers/")
    bibtex-dialect                    'biblatex
    bibtex-completion-notes-extension "_notes.org"
    bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
-   bibtex-completion-bibliography    (concat org-directory "/Research/papers.bib")
+   bibtex-completion-bibliography    (concat org-directory "/References/zotero.bib")
    bibtex-completion-library-path    (concat org-directory "/Papers/")
    ;; Optimize for 80 character frame display
    bibtex-completion-display-formats
@@ -324,14 +324,24 @@
    bibtex-completion-notes-template-multiple-files
    (concat
     "${author-or-editor} (${year}): ${title}\n"
-    "#+roam_tags: literature\n"
+    "#+roam_tags: \"literature\"\n"
     "#+roam_key: cite:${=key=}\n"
     "#+created: %U\n"
-    "#+last_modified: %U \n\n")
-   ;; Open pdf in external tool instead of in Emacs
-   bibtex-completion-pdf-open-function
-   (lambda (fpath)
-     (call-process "evince" nil 0 nil fpath)))
+    "#+last_modified: %U\n"
+    "#+startup: overview\n"
+    "#+startup: hideblocks\n\n"
+    "* Org-noter\n"
+    ":PROPERTIES:\n"
+    ":Custom_ID: ${=key=}\n"
+    ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+    ":AUTHOR: ${author-abbrev}\n"
+    ":JOURNAL: ${journaltitle}\n"
+    ":DATE: ${date}\n"
+    ":YEAR: ${year}\n"
+    ":DOI: ${doi}\n"
+    ":URL: ${url}\n"
+    ":END:\n\n"
+    ))
   ;; Make org-ref-cite-face a bit less intrusive
   (custom-set-faces!
     `(org-ref-cite-face :weight unspecified :foreground unspecified
@@ -457,6 +467,12 @@ it can be passed in POS."
           :desc "Tomorrow"       "m" #'org-roam-dailies-find-tomorrow
           :desc "Yesterday"      "y" #'org-roam-dailies-find-yesterday)))
 
+;; HACK org-roam-bibtex is loaded but unused
+;;      so that the capture template is not overrided
+;; (use-package! org-roam-bibtex
+;;   :after org-roam
+;;   :hook (org-roam-mode . org-roam-bibtex-mode))
+
 (use-package! org-roam-server
   :config
   (setq org-roam-server-host "127.0.0.1"
@@ -468,6 +484,12 @@ it can be passed in POS."
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
+
+(use-package! org-noter
+  :config
+  (map! :map org-noter-doc-mode-map
+        :n "i" #'org-noter-insert-note
+        :n "Q" #'org-noter-kill-session))
 
 (use-package! org-appear
   :hook

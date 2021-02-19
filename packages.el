@@ -19,6 +19,8 @@
   :recipe (:host github :repo "tecosaur/lexic"))
 (package! org-roam-server
   :recipe (:host github :repo "org-roam/org-roam-server"))
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 (package! citeproc-org
   :recipe (:host github :repo "andras-simonyi/citeproc-org"))
 (package! org-transclusion

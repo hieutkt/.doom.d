@@ -475,6 +475,10 @@ it can be passed in POS."
   :config
   (setq org-hide-emphasis-markers t))
 
+(use-package! org-fragtog
+  :hook
+  (org-mode . org-fragtog-mode))
+
 (use-package! visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
   :init

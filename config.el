@@ -490,6 +490,11 @@ it can be passed in POS."
   (set-popup-rules!
     '(("^\\*R:*\\*$" :side right :size 0.5 :ttl nil))))
 
+(use-package! ess-stata-mode
+  :after ess
+  :config
+  (setq inferior-stata-start-args ""))
+
 (use-package! python
   :config
   (set-popup-rules!

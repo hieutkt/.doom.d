@@ -7,8 +7,9 @@
 (package! org-ref)
 (package! lsp-treemacs)
 (package! org-super-agenda)
-
 (package! eglot-jl)
+(package! keycast)
+
 
 (package! org-appear
   :recipe (:host github :repo "awth13/org-appear"))
@@ -22,6 +23,5 @@
   :recipe (:host github :repo "andras-simonyi/citeproc-org"))
 (package! org-transclusion
   :recipe (:host github :repo "nobiot/org-transclusion"))
-
-(package! keycast)
-
+(package! ess-stata-mode
+  :recipe (:host github :repo "emacs-ess/ess-stata-mode"))

@@ -133,8 +133,8 @@
   (epa-file-enable))
 
 (use-package! org
-  :init
   :config
+  (define-key! 'org-mode-map "C-c [" nil) ;org-agenda-file-to-front
   ;; ORG LATEX PREVIEW
   (setq org-startup-with-latex-preview t
         ;; Make latex preview with "C-c C-x C-l" slightly bigger

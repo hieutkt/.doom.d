@@ -487,9 +487,14 @@ it can be passed in POS."
 
 (use-package! org-noter
   :config
-  (map! :map org-noter-doc-mode-map
-        :n "i" #'org-noter-insert-note
-        :n "Q" #'org-noter-kill-session))
+  ;; Split fraction: (horizontal . vertical)
+  (setq org-noter-doc-split-fraction '(0.66 . 0.66))
+  ;; Correct some mappings
+  (after! pdf-tools
+    (map! :map pdf-view-mode-map
+          :n "i" #'org-noter-insert-note
+          :n "I" #'org-noter-insert-note-toggle-no-questions
+          :n "Q" #'org-noter-kill-session)))
 
 (use-package! org-appear
   :hook

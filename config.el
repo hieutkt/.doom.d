@@ -493,7 +493,8 @@ it can be passed in POS."
 (use-package! ess-stata-mode
   :after ess
   :config
-  (setq inferior-stata-start-args ""))
+  (setq inferior-STA-start-args ""
+        inferior-STA-program (executable-find "stata")))
 
 (use-package! python
   :config

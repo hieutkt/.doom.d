@@ -623,3 +623,9 @@ it can be passed in POS."
 (use-package! eglot-jl
   :config
   (setq eglot-connect-timeout 100))
+
+(use-package! ansi-color
+  :config
+  (defun hp/display-ansi-colors ()
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max))))

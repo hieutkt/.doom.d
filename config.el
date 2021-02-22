@@ -26,7 +26,7 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq doom-font (font-spec :name "Iosevka" :size 18)
-      doom-variable-pitch-font (font-spec :name "Alegreya"))
+      doom-variable-pitch-font (font-spec :name "Alegreya" :size 22))
 
 (use-package! unicode-fonts
   :config
@@ -38,7 +38,8 @@
   :hook (text-mode . mixed-pitch-mode)
   :config
   (setq mixed-pitch-set-height t)
-  (set-face-attribute 'variable-pitch nil :height 1.15))
+  ;; (set-face-attribute 'variable-pitch nil :height 1.15)
+  )
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the

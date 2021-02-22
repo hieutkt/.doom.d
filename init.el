@@ -90,7 +90,7 @@
        (eval +overlay)                 ; run code, run (also, repls)
        ;;gist                          ; interacting with github gists
        (lookup +dictionary)            ; navigate your code and its documentation
-       (lsp +eglot +peek)
+       (lsp +peek)
        ;;macos                         ; MacOS-specific commands
        (magit (:if IS-LINUX +forge))   ; a git porcelain for Emacs
        ;;make                          ; run make tasks from Emacs

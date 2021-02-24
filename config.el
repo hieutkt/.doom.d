@@ -319,6 +319,7 @@
   :config
   ;; Enable org-super-agenda
   (org-super-agenda-mode)
+  (setq org-agenda-block-separator ?_)
   ;; Customise the agenda view
   (setq org-agenda-custom-commands
         '(("o" "Overview"
@@ -331,7 +332,16 @@
                                  '((:auto-outline-path t)))))))))
   ;; Make evil keymaps works on org-super-agenda headers
   (after! evil-org-agenda
-    (setq org-super-agenda-header-map (copy-keymap evil-org-agenda-mode-map))))
+    (setq org-super-agenda-header-map (copy-keymap evil-org-agenda-mode-map)))
+  ;; Change header face to make it standout more
+  (custom-set-faces!
+    '(org-super-agenda-header
+      :inherit 'variable-pitch
+      :weight bold)
+    `(org-agenda-structure
+      :inherit 'variable-pitch
+      :weight bold :foreground ,(doom-color 'blue)))
+  )
 
 
 (use-package! org-ref

@@ -7,7 +7,6 @@
 (package! org-ref)
 (package! lsp-treemacs)
 (package! org-super-agenda)
-(package! eglot-jl)
 (package! keycast)
 
 

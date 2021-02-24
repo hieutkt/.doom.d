@@ -641,9 +641,6 @@ it can be passed in POS."
   (setq org-transclusion-include-first-section t)
   (add-to-list  'org-transclusion-exclude-elements 'keyword))
 
-(use-package! eglot-jl
-  :config
-  (setq eglot-connect-timeout 100))
 
 (use-package! ansi-color
   :config

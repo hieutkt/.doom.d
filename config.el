@@ -138,6 +138,27 @@
       :extend t)
     ))
 
+(use-package! yasnippet
+  :init
+  ;; It will test whether it can expand, if yes, change cursor color
+  (defun hp/change-cursor-color-if-yasnippet-can-fire (&optional field)
+    (interactive)
+    (setq yas--condition-cache-timestamp (current-time))
+    (let (templates-and-pos)
+      (unless (and yas-expand-only-for-last-commands
+                   (not (member last-command yas-expand-only-for-last-commands)))
+        (setq templates-and-pos (if field
+                                    (save-restriction
+                                      (narrow-to-region (yas--field-start field)
+                                                        (yas--field-end field))
+                                      (yas--templates-for-key-at-point))
+                                  (yas--templates-for-key-at-point))))
+      (set-cursor-color (if (and templates-and-pos (first templates-and-pos)
+                                 (eq evil-state 'insert))
+                            (doom-color 'red)
+                          (face-attribute 'default :foreground)))))
+  :hook (post-command . hp/change-cursor-color-if-yasnippet-can-fire))
+
 (map! :map (term-mode vterm-mode)
       "C-c C-z" 'other-window)
 

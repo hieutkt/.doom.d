@@ -211,6 +211,17 @@
         org-latex-pdf-process
         '("latexmk -pdflatex='%latex -shell-escape -bibtex -interaction=nonstopmode' -pdf -output-directory=%o -f %f"))
 
+  (add-to-list
+   'org-preview-latex-process-alist
+   '(dvipng :programs
+            ("latex" "dvipng")
+            :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
+            (1.0 . 1.0)
+            :latex-compiler
+            ("latex -shell-escape -interaction nonstopmode -output-directory %o %f")
+            :image-converter
+            ("dvipng -D %D -T tight -bg Transparent -o %O %f")))
+
   ;; Default packages
   (setq org-latex-default-packages-alist
         '(("AUTO" "inputenc" t ("pdflatex"))

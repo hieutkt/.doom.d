@@ -177,8 +177,7 @@
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil
-        org-ellipsis ""
-        org-cycle-separator-lines -1)
+        org-ellipsis " ")
   ;; Setup custom links
   (+org-init-custom-links-h)
   ;; Custom some face

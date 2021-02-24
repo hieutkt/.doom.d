@@ -173,7 +173,8 @@
   (setq org-startup-with-latex-preview t
         ;; Make latex preview with "C-c C-x C-l" slightly bigger
         org-format-latex-options
-        (plist-put org-format-latex-options :scale 1.8)
+        (plist-put org-format-latex-options
+                   :scale (if IS-WINDOWS 1.1 1.8))
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil

@@ -618,15 +618,6 @@ it can be passed in POS."
         :n "f" #'lexic-search-history-forwards
         :n "/" (cmd! (call-interactively #'lexic-search))))
 
-(use-package! lsp-mode
-  :config
-  (setq lsp-signature-function 'lsp-signature-posframe))
-
-(use-package! lsp-treemacs
-  :after (lsp-mode treemacs)
-  :config
-  (lsp-treemacs-sync-mode 1))
-
 
 (use-package! keycast
   :commands keycast-mode

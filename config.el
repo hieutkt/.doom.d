@@ -661,3 +661,10 @@ it can be passed in POS."
   (defun hp/display-ansi-colors ()
     (interactive)
     (ansi-color-apply-on-region (point-min) (point-max))))
+
+
+(use-package! tree-sitter
+  :config
+  (use-package! 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))

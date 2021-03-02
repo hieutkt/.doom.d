@@ -9,6 +9,8 @@
 (package! org-super-agenda)
 (package! keycast)
 
+(package! tree-sitter)
+(package! tree-sitter-langs)
 
 (package! org-appear
   :recipe (:host github :repo "awth13/org-appear"))

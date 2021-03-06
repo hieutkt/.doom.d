@@ -183,7 +183,7 @@
   (+org-init-custom-links-h)
   ;; Custom some face
   (custom-set-faces!
-    `((outline-3 :foreground ,(doom-color 'blue)))
+    `(outline-3 :foreground ,(doom-color 'blue))
     '((org-block-begin-line org-block-end-line)
       :slant italic)
     '((org-document-title)

@@ -2,7 +2,6 @@
 ;;; $DOOMDIR/packages.el
 (unpin! doom-themes)
 
-(package! mixed-pitch)
 (package! visual-fill-column)
 (package! org-ref)
 (package! lsp-treemacs)

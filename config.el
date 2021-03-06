@@ -183,6 +183,7 @@
   (+org-init-custom-links-h)
   ;; Custom some face
   (custom-set-faces!
+    `((outline-3 :foreground ,(doom-color 'blue)))
     '((org-block-begin-line org-block-end-line)
       :slant italic)
     '((org-document-title)
@@ -617,15 +618,6 @@ it can be passed in POS."
         :n "f" #'lexic-search-history-forwards
         :n "/" (cmd! (call-interactively #'lexic-search))))
 
-(use-package! lsp-mode
-  :config
-  (setq lsp-signature-function 'lsp-signature-posframe))
-
-(use-package! lsp-treemacs
-  :after (lsp-mode treemacs)
-  :config
-  (lsp-treemacs-sync-mode 1))
-
 
 (use-package! keycast
   :commands keycast-mode
@@ -669,3 +661,10 @@ it can be passed in POS."
   (defun hp/display-ansi-colors ()
     (interactive)
     (ansi-color-apply-on-region (point-min) (point-max))))
+
+
+(use-package! tree-sitter
+  :config
+  (use-package! tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))

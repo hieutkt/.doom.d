@@ -139,7 +139,7 @@
     ))
 
 (use-package! yasnippet
-  :init
+  :config
   ;; It will test whether it can expand, if yes, change cursor color
   (defun hp/change-cursor-color-if-yasnippet-can-fire (&optional field)
     (interactive)

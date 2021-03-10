@@ -26,7 +26,8 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq doom-font (font-spec :name "Iosevka" :size 18)
-      doom-variable-pitch-font (font-spec :name "Alegreya" :size 22))
+      doom-variable-pitch-font (font-spec :name "Alegreya" :size 22)
+      doom-unicode-font (font-spec :name "JuliaMono" :size 18))
 
 (use-package! unicode-fonts
   :config

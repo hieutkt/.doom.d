@@ -47,6 +47,14 @@
 (setq doom-theme 'doom-gruvbox
       doom-themes-treemacs-theme 'doom-colors)
 
+(add-hook! 'doom-load-theme-hook
+  (setq org-preview-latex-image-directory
+        (concat doom-cache-dir "org-latex/" (symbol-name doom-theme) "/"))
+  (dolist (buffer (doom-buffers-in-mode 'org-mode (buffer-list)))
+    (with-current-buffer buffer
+      (+org--toggle-inline-images-in-subtree (point-min) (point-max) 'refresh)
+      (org-clear-latex-preview (point-min) (point-max))
+      (org--latex-preview-region (point-min) (point-max)))))
 
 ;; Start Doom fullscreen
 (add-to-list 'default-frame-alist '(width . 92))

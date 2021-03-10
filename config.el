@@ -35,7 +35,7 @@
         (cadr (assoc "CJK Unified Ideographs" unicode-fonts-block-font-mapping))))
 
 (use-package! mixed-pitch
-  :hook (text-mode . mixed-pitch-mode)
+  :hook ((text-mode helpful-mode) . mixed-pitch-mode)
   :config
   (setq mixed-pitch-set-height t)
   ;; (set-face-attribute 'variable-pitch nil :height 1.15)

@@ -577,7 +577,9 @@ it can be passed in POS."
   :after ess
   :config
   (setq inferior-STA-start-args ""
-        inferior-STA-program (executable-find "stata")))
+        inferior-STA-program (executable-find "stata")
+        inferior-STA-program-name (executable-find "stata"))
+  (add-to-list 'org-src-lang-modes '("jupyter-stata" . stata)))
 
 (use-package! python
   :config

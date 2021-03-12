@@ -304,13 +304,15 @@
            "HOLD(h)"                    ;Task is on hold because of me
            "PROJ(p)"                    ;Contains sub-tasks
            "WAIT(w)"                    ;Tasks delegated to others
+           "REPEAT(e)"                    ;Repeating tasks
            "REVIEW(r)"                  ;Daily notes that need reviews
            "|"
            "STOP(c)"                    ;Stopped/cancelled
            "MEETING(m)"                 ;Meetings
            ))
         org-todo-keyword-faces
-        '(("NEXT" . +org-todo-active)
+        '(("REPEAT" . +org-todo-project)
+          ("NEXT" . +org-todo-active)
           ("WAIT" . +org-todo-active)
           ("HOLD" . +org-todo-onhold)
           ("PROJ" . +org-todo-project)

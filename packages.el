@@ -7,6 +7,7 @@
 (package! lsp-treemacs)
 (package! org-super-agenda)
 (package! keycast)
+(package! benchmark-init)
 
 (package! tree-sitter)
 (package! tree-sitter-langs)

@@ -680,3 +680,7 @@ it can be passed in POS."
   (use-package! tree-sitter-langs)
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+(use-package! emojify
+  :config
+  (setq emojify-emoji-set "twemoji-v2"))

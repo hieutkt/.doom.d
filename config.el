@@ -301,10 +301,13 @@
            "|"
            "DONE(d)")
           (sequence
+           "REPEAT(e)"                    ;Repeating tasks
+           "|"
+           "DONE")
+          (sequence
            "HOLD(h)"                    ;Task is on hold because of me
            "PROJ(p)"                    ;Contains sub-tasks
            "WAIT(w)"                    ;Tasks delegated to others
-           "REPEAT(e)"                    ;Repeating tasks
            "REVIEW(r)"                  ;Daily notes that need reviews
            "|"
            "STOP(c)"                    ;Stopped/cancelled

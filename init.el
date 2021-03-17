@@ -97,7 +97,7 @@
        (eval +overlay)                 ; run code, run (also, repls)
        ;;gist                          ; interacting with github gists
        (lookup +dictionary)            ; navigate your code and its documentation
-       (lsp +peek)
+       (lsp +peek +eglot)
        ;;macos                         ; MacOS-specific commands
        (magit (:if IS-LINUX +forge))   ; a git porcelain for Emacs
        ;;make                          ; run make tasks from Emacs
@@ -136,7 +136,7 @@
        ;;json                          ; At least it ain't XML
        ;;(java +meghanada)             ; the poster child for carpal tunnel syndrome
        ;;javascript                    ; all(hope(abandon(ye(who(enter(here))))))
-       (julia)                    ; a better, faster MATLAB
+       (julia +lsp)                    ; a better, faster MATLAB
        ;;kotlin                        ; a better, slicker Java(Script)
        (:if IS-LINUX
         (latex +latexmk +cdlatex +lsp)

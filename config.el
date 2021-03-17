@@ -595,9 +595,16 @@ it can be passed in POS."
 
 (use-package! julia-repl
   :config
+  ;; Use vterm instead of the defautl term
+  (julia-repl-set-terminal-backend 'vterm)
   ;; Make popup position similar to `ess'
   (set-popup-rules!
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))
+
+(use-package! eglot-jl
+  :config
+  (setq eglot-jl-language-server-project eglot-jl-base)
+  )
 
 (use-package! lexic
   :commands lexic-search lexic-list-dictionary

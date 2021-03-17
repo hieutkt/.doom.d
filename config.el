@@ -291,8 +291,8 @@
   ;; Agenda folder - .org files are found recursively
   (setq org-agenda-files (list (concat org-directory "/Agenda")))
   ;; Also to make refiling easier
-  (setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                   (org-agenda-files :maxlevel . 9))))
+  (setq org-refile-targets '((nil :maxlevel . 9)
+                             (org-agenda-files :maxlevel . 9)))
   ;; Setting the TODO keywords
   (setq org-todo-keywords
         '((sequence

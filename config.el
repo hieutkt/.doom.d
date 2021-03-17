@@ -429,7 +429,8 @@
 
 (use-package! org-roam-db
   :config
-  (setq org-roam-db-location "~/.emacs.d/org-roam.db"))
+  (setq org-roam-db-location "~/.emacs.d/org-roam.db"
+        org-roam-db-update-method 'immediate))
 
 (use-package! org-roam-graph
   :init

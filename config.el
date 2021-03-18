@@ -349,6 +349,7 @@
              "#+hugo_tags: %?\n"
              "#+startup: content\n"
              "#+options: toc:2 num:t\n\n")
+           :immediate-finish t
            :jump-to-captured t)
           ("bv" "Vietnamese" plain (file (lambda () (hp/capture-ox-hugo-post "vi")))
            ,(concat
@@ -360,6 +361,7 @@
              "#+hugo_tags: %?\n"
              "#+startup: content\n"
              "#+options: toc:2 num:t\n\n")
+           :immediate-finish t
            :jump-to-captured t)))
   ;; Clocking
   (setq org-clock-persist 'history

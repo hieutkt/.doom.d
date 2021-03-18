@@ -325,11 +325,11 @@
   ;;
   ;;CAPTURE TEMPLATES
   ;;Auxiliary functions
-  (defun hp/capture-ox-hugo-post ()
+  (defun hp/capture-ox-hugo-post (lang)
     (setq hp/ox-hugo-post--title (read-from-minibuffer "Post Title: ")
           hp/ox-hugo-post--fname (org-hugo-slug hp/ox-hugo-post--title)
           hp/ox-hugo-post--fdate (format-time-string "%Y-%m-%d"))
-    (expand-file-name (format "%s_%s.org" hp/ox-hugo-post--fdate hp/ox-hugo-post--fname)
+    (expand-file-name (format "%s_%s.%s.org" hp/ox-hugo-post--fdate hp/ox-hugo-post--fname lang)
                       (concat dropbox-directory "/Documents/Blogs/hieutkt/content-org/")))
   ;; Capture templates
   (setq org-capture-templates
@@ -338,16 +338,29 @@
           ("m" "Meeting" entry (file ,(concat org-directory "/Agenda/inbox.org"))
            "* MEETING with %? :meeting:\n%t" :clock-in t :clock-resume t)
           ;; Capture template for new blog posts
-          ("h" "Hugo post" plain (file hp/capture-ox-hugo-post)
-                 ,(concat
-                   "#+title: %(eval hp/ox-hugo-post--title)\n"
-                   "#+author: %n\n"
-                   "#+date: %(eval hp/ox-hugo-post--fdate)\n"
-                   "#+hugo_base_dir: ../\n"
-                   "#+hugo_section: ./posts/\n"
-                   "#+hugo_tags: %?\n"
-                   "#+startup: content\n"
-                   "#+options: toc:2 num:t\n\n"))))
+          ("b" "New blog post")
+          ("be" "English" plain (file (lambda () (hp/capture-ox-hugo-post "en")))
+           ,(concat
+             "#+title: %(eval hp/ox-hugo-post--title)\n"
+             "#+author: %n\n"
+             "#+date: %(eval hp/ox-hugo-post--fdate)\n"
+             "#+hugo_base_dir: ../\n"
+             "#+hugo_section: ./posts/\n"
+             "#+hugo_tags: %?\n"
+             "#+startup: content\n"
+             "#+options: toc:2 num:t\n\n")
+           :jump-to-captured t)
+          ("bv" "Vietnamese" plain (file (lambda () (hp/capture-ox-hugo-post "vi")))
+           ,(concat
+             "#+title: %(eval hp/ox-hugo-post--title)\n"
+             "#+author: %n\n"
+             "#+date: %(eval hp/ox-hugo-post--fdate)\n"
+             "#+hugo_base_dir: ../\n"
+             "#+hugo_section: ./posts/\n"
+             "#+hugo_tags: %?\n"
+             "#+startup: content\n"
+             "#+options: toc:2 num:t\n\n")
+           :jump-to-captured t)))
   ;; Clocking
   (setq org-clock-persist 'history
         org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA"

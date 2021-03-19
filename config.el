@@ -466,6 +466,8 @@
   ;; Make org-roam faces less intrusive
   (custom-set-faces!
     `((org-roam-link org-roam-link-current)
+      :inherit unspecified :underline ,(doom-color 'blue))
+    `((org-link)
       :inherit unspecified :underline ,(doom-color 'grey))))
 
 (use-package! org-roam-db

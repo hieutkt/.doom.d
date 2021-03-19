@@ -323,6 +323,15 @@
   ;; Tags triggers
   ;; (setq org-todo-state-tags-triggers)
   ;;
+  ;; Clocking
+  (setq org-clock-persist 'history
+        org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA"
+        org-agenda-start-with-log-mode t)
+  (org-clock-persistence-insinuate)
+  )
+
+(use-package! org-capture
+  :config
   ;;CAPTURE TEMPLATES
   ;;Auxiliary functions
   (defun hp/capture-ox-hugo-post (lang)
@@ -347,6 +356,8 @@
              "#+hugo_base_dir: ../\n"
              "#+hugo_section: ./posts/\n"
              "#+hugo_tags: %?\n"
+             "#+hugo_custom_front_matter:\n"
+             "#+hugo_draft: false\n"
              "#+startup: content\n"
              "#+options: toc:2 num:t\n\n")
            :immediate-finish t
@@ -359,16 +370,12 @@
              "#+hugo_base_dir: ../\n"
              "#+hugo_section: ./posts/\n"
              "#+hugo_tags: %?\n"
+             "#+hugo_custom_front_matter:\n"
+             "#+hugo_draft: false\n"
              "#+startup: content\n"
              "#+options: toc:2 num:t\n\n")
            :immediate-finish t
-           :jump-to-captured t)))
-  ;; Clocking
-  (setq org-clock-persist 'history
-        org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA"
-        org-agenda-start-with-log-mode t)
-  (org-clock-persistence-insinuate)
-  )
+           :jump-to-captured t))))
 
 (use-package! org-habit
   :config

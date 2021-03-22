@@ -643,7 +643,8 @@ it can be passed in POS."
 (use-package! julia-repl
   :config
   ;; Use vterm instead of the defautl term
-  (julia-repl-set-terminal-backend 'vterm)
+  (when (featurep 'vterm)
+    (julia-repl-set-terminal-backend 'vterm))
   ;; Make popup position similar to `ess'
   (set-popup-rules!
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))

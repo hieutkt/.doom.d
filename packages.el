@@ -2,6 +2,8 @@
 ;;; $DOOMDIR/packages.el
 (unpin! doom-themes)
 
+(package! auctex :pin "3a9705f141af1da221961b5d5a67288bc8e4bcbd")
+
 (package! visual-fill-column)
 (package! org-ref)
 (package! lsp-treemacs)

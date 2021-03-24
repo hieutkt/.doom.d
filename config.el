@@ -507,9 +507,15 @@
 
   (pushnew! org-roam-capture-ref-templates
             ;; Browser bookletmark template:
-            ;; javascript:location.href = 'org-protocol:/roam-ref?template=w&ref=' + encodeURIComponent(location.href) + '&title=' + encodeURIComponent(document.title)
+            ;; javascript:location.href =
+            ;; 'org-protocol://roam-ref?template=w&ref='
+            ;; + encodeURIComponent(location.href)
+            ;; + '&title='
+            ;; + encodeURIComponent(document.getElementsByTagName("h1")[0].innerText)
+            ;; + '&hostname='
+            ;; + encodeURIComponent(location.hostname)
             '("w" "webref" plain #'org-roam-capture--get-point
-              "* ${title} ([[${ref}][link]])\n%?"
+              "* ${title} ([[${ref}][${hostname}]])\n%?"
               :file-name "journal_%<%Y-%m-%d>"
               :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n"))
   ;; Update the `last-modified` field on save

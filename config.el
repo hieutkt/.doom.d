@@ -46,6 +46,8 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-gruvbox
       doom-themes-treemacs-theme 'doom-colors)
+(custom-set-faces!
+  `(outline-1 :foreground ,(doom-color 'cyan)))
 
 (add-hook! 'doom-load-theme-hook
   (setq org-preview-latex-image-directory
@@ -191,7 +193,6 @@
   (+org-init-custom-links-h)
   ;; Custom some face
   (custom-set-faces!
-    `(outline-1 :foreground ,(doom-color 'yellow))
     '((org-block-begin-line org-block-end-line)
       :slant italic)
     '((org-document-title)

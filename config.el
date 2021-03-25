@@ -502,7 +502,7 @@
            ""
            :immediate-finish t
            :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n"))
+           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n"))
         org-roam-capture-ref-templates
         '(("r" "ref" plain (function org-roam-capture--get-point)
            "#+roam_key: ${ref}\n%?"
@@ -520,7 +520,7 @@
           ("w" "webref" plain #'org-roam-capture--get-point
            "* ${title} ([[${ref}][${hostname}]])\n%?"
            :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
+           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n")))
 
   ;; Update the `last-modified` field on save
   (defun zp/org-find-time-file-property (property &optional anywhere)

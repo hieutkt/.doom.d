@@ -502,22 +502,26 @@
            ""
            :immediate-finish t
            :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")
-          ))
+           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n"))
+        org-roam-capture-ref-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           "#+roam_key: ${ref}\n%?"
+           :file-name "web_${slug}_%<%Y-%m-%d--%H-%M-%S>"
+           :head "#+title: ${title}\n#+roam_tags: website\n#+created: %U\n#+last_modified: %U\n"
+           :unnarrowed t)
+          ;; Browser bookletmark template:
+          ;; javascript:location.href =
+          ;; 'org-protocol://roam-ref?template=w&ref='
+          ;; + encodeURIComponent(location.href)
+          ;; + '&title='
+          ;; + encodeURIComponent(document.getElementsByTagName("h1")[0].innerText)
+          ;; + '&hostname='
+          ;; + encodeURIComponent(location.hostname)
+          ("w" "webref" plain #'org-roam-capture--get-point
+           "* ${title} ([[${ref}][${hostname}]])\n%?"
+           :file-name "journal_%<%Y-%m-%d>"
+           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n")))
 
-  (pushnew! org-roam-capture-ref-templates
-            ;; Browser bookletmark template:
-            ;; javascript:location.href =
-            ;; 'org-protocol://roam-ref?template=w&ref='
-            ;; + encodeURIComponent(location.href)
-            ;; + '&title='
-            ;; + encodeURIComponent(document.getElementsByTagName("h1")[0].innerText)
-            ;; + '&hostname='
-            ;; + encodeURIComponent(location.hostname)
-            '("w" "webref" plain #'org-roam-capture--get-point
-              "* ${title} ([[${ref}][${hostname}]])\n%?"
-              :file-name "journal_%<%Y-%m-%d>"
-              :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: content\n#+created: %U\n#+last_modified: %U\n\n"))
   ;; Update the `last-modified` field on save
   (defun zp/org-find-time-file-property (property &optional anywhere)
     "Return the position of the time file PROPERTY if it exists.

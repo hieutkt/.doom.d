@@ -747,3 +747,7 @@ it can be passed in POS."
 (use-package! emojify
   :config
   (setq emojify-emoji-set "twemoji-v2"))
+
+(use-package! page-break-lines
+  :config
+  (global-page-break-lines-mode))

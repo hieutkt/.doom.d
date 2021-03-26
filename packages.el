@@ -14,6 +14,8 @@
 (package! tree-sitter)
 (package! tree-sitter-langs)
 
+(package! page-break-lines
+  :recipe (:host github :repo "purcell/page-break-lines"))
 (package! org-appear
   :recipe (:host github :repo "awth13/org-appear"))
 (package! org-fragtog

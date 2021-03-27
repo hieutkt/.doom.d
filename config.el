@@ -321,6 +321,17 @@
           ("HOLD" . +org-todo-onhold)
           ("PROJ" . +org-todo-project)
           ("REVIEW" . font-lock-keyword-face)))
+  ;; Appearance
+  (setq org-agenda-category-icon-alist
+        `(("work" ,(list (all-the-icons-material "short_text")) nil nil :ascent center)
+          ("gcal" ,(list (all-the-icons-faicon "calendar")) nil nil :ascent center)
+          ("birthday" ,(list (all-the-icons-material "cake" :face 'all-the-icons-yellow)) nil nil :ascent center)
+          ("learn" ,(list (all-the-icons-material "create" :face 'all-the-icons-blue)) nil nil :ascent center)
+          ("blog" ,(list (all-the-icons-material "short_text" :face 'all-the-icons-green)) nil nil :ascent center)
+          ("life" ,(list (all-the-icons-material "healing" :face 'all-the-icons-red)) nil nil :ascent center)
+          ("code" ,(list (all-the-icons-material "code" :face 'all-the-icons-green)) nil nil :ascent center))
+        org-agenda-prefix-format       " %i %?-2 t%s"
+        org-agenda-todo-keyword-format "%-6s")
   ;; Tags triggers
   ;; (setq org-todo-state-tags-triggers)
   ;;

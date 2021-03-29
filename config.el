@@ -324,14 +324,24 @@
   ;; Appearance
   (setq org-agenda-category-icon-alist
         `(("work" ,(list (all-the-icons-material "short_text")) nil nil :ascent center)
-          ("gcal" ,(list (all-the-icons-faicon "calendar")) nil nil :ascent center)
-          ("birthday" ,(list (all-the-icons-material "cake" :face 'all-the-icons-yellow)) nil nil :ascent center)
-          ("learn" ,(list (all-the-icons-material "create" :face 'all-the-icons-blue)) nil nil :ascent center)
+          ("gcal" ,(list (all-the-icons-material "cloud")) nil nil :ascent center)
+          ("birthday" ,(list (all-the-icons-material "cake" :face 'all-the-icons-lpink)) nil nil :ascent center)
+          ("learn" ,(list (all-the-icons-material "library_books" :face 'all-the-icons-cyan)) nil nil :ascent center)
           ("blog" ,(list (all-the-icons-material "short_text" :face 'all-the-icons-green)) nil nil :ascent center)
-          ("life" ,(list (all-the-icons-material "healing" :face 'all-the-icons-red)) nil nil :ascent center)
-          ("code" ,(list (all-the-icons-material "code" :face 'all-the-icons-green)) nil nil :ascent center))
+          ("life" ,(list (all-the-icons-material "healing" :face 'all-the-icons-dred)) nil nil :ascent center)
+          ("code" ,(list (all-the-icons-material "code" :face 'all-the-icons-green)) nil nil :ascent center)
+          ("write" ,(list (all-the-icons-material "create" :face 'all-the-icons-yellow)) nil nil :ascent center)
+          )
         org-agenda-prefix-format       " %i %?-2 t%s"
-        org-agenda-todo-keyword-format "%-6s")
+        org-agenda-todo-keyword-format "%-6s"
+        org-agenda-current-time-string "ᐊ┈┈┈┈┈┈┈ Now"
+        org-agenda-time-grid '((today require-timed remove-match)
+                               (0900 1200 1400 1700 2100)
+                               "      "
+                               "┈┈┈┈┈┈┈┈┈┈┈┈┈")
+        org-agenda-scheduled-leaders '("" "")
+        org-agenda-deadline-leaders '("Deadline: " "Deadline: ")
+        )
   ;; Tags triggers
   ;; (setq org-todo-state-tags-triggers)
   ;;
@@ -403,7 +413,8 @@
   (setq org-agenda-custom-commands
         '(("o" "Overview"
            ((agenda "")
-            (todo "NEXT")
+            (todo "NEXT" ((org-super-agenda-groups
+                           '((:auto-outline-path t)))))
             (tags-todo "INBOX")
             (tags-todo "@work" ((org-super-agenda-groups
                                  '((:auto-outline-path t)))))

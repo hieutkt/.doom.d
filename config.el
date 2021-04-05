@@ -230,7 +230,7 @@ TODO abstract backend implementations."
           (case-fold-search nil))
       (when base-backend
         (replace-regexp-in-string
-         "[;\\\\]?\\b[A-Z][A-Z]+s?\\(?:[^A-Za-z]\\|\\b\\)\\|AM\\|PM"
+         "[;\\\\]?\\b[A-Z][A-Z]+s?\\(?:[^A-Za-z]\\|\\b\\)"
          (lambda (all-caps-str)
            (cond ((equal (aref all-caps-str 0) ?\\) all-caps-str)                ; don't format LaTeX commands
                  ((equal (aref all-caps-str 0) ?\;) (substring all-caps-str 1))  ; just remove not-acronym indicator char ";"

@@ -418,7 +418,7 @@ TODO abstract backend implementations."
           hp/ox-hugo-post--fname (org-hugo-slug hp/ox-hugo-post--title)
           hp/ox-hugo-post--fdate (format-time-string "%Y-%m-%d"))
     (expand-file-name (format "%s_%s.%s.org" hp/ox-hugo-post--fdate hp/ox-hugo-post--fname lang)
-                      (concat dropbox-directory "/Documents/Blogs/hieutkt/content-org/")))
+                      (concat dropbox-directory "/Blogs/hieutkt/content-org/")))
   ;; Capture templates
   (setq org-capture-templates
         `(("i" "Inbox" entry (file ,(concat org-directory "/Agenda/inbox.org"))

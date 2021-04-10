@@ -197,7 +197,10 @@
     '((org-block-begin-line org-block-end-line)
       :slant italic)
     '((org-document-title)
-      :height 1.5)))
+      :height 1.5))
+  ;; Custom keyword
+  (font-lock-add-keywords 'org-mode
+                          '(("^[A-Z]" . 'org-warning))))
 
 (use-package! org-superstar
   :config

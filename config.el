@@ -200,7 +200,7 @@
       :height 1.5))
   ;; Custom keyword
   (font-lock-add-keywords 'org-mode
-                          '(("^[A-Z]" . 'org-warning))))
+                          '(("^\\(?:\"\\)?\\(?:\\[.*\\[|\\)?[[:upper:]]" . 'org-warning))))
 
 (use-package! org-superstar
   :config

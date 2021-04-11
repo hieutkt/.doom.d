@@ -551,7 +551,25 @@ TODO abstract backend implementations."
     `((org-roam-link org-roam-link-current)
       :inherit unspecified :underline ,(doom-color 'violet))
     `((org-link)
-      :inherit unspecified :underline ,(doom-color 'blue))))
+      :inherit unspecified :underline ,(doom-color 'blue)))
+  ;; Custom functions
+  (defun hp/org-get-heading1-and-clean ()
+    "Get all first heading texts, remove links and concaternate"
+    (replace-regexp-in-string
+     org-link-any-re ""
+     (string-join
+      (org-map-entries (lambda () (org-element-property :title (org-element-at-point))))
+      ", ") nil nil 1))
+
+  (defun hp/update-title-with-headings ()
+    "Go to first line and append with first org headings"
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (end-of-line)
+      (insert " - ")
+      (insert (hp/org-get-heading1-and-clean))))
+  )
 
 (use-package! org-roam-db
   :config

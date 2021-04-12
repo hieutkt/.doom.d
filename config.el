@@ -200,7 +200,10 @@
       :height 1.5))
   ;; Custom keyword
   (font-lock-add-keywords 'org-mode
-                          '(("^\\(?:\"\\)?\\(?:\\[.*\\[|\\)?[[:upper:]]" . 'org-warning))))
+                          '(("^\\(?:\"\\)?\\(?:\\[.*\\[|\\)?[[:upper:]]" . 'org-warning)))
+  ;; Replace two consecutive hyphens with the em-dash
+  (add-hook 'org-mode-hook (lambda () (push '("--" . ?—) prettify-symbols-alist)))
+  )
 
 (use-package! org-superstar
   :config

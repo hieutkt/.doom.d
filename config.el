@@ -33,7 +33,10 @@
   :config
   ;; CJK characters
   (push "Source Han Sans"
-        (cadr (assoc "CJK Unified Ideographs" unicode-fonts-block-font-mapping))))
+        (cadr (assoc "CJK Unified Ideographs" unicode-fonts-block-font-mapping)))
+  ;; Japanese
+  (dolist (unicode-block '("Hiragana" "Katakana"))
+      (push "Source Han Sans JP" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
 
 (use-package! mixed-pitch
   :hook ((text-mode helpful-mode) . mixed-pitch-mode)

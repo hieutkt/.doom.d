@@ -234,7 +234,7 @@ TODO abstract backend implementations."
            (cond
             ((org-export-derived-backend-p backend 'latex) 'latex)
             ;; Markdown is derived from HTML, but we don't want to format it
-            ;; ((org-export-derived-backend-p backend 'md) nil)
+            ((org-export-derived-backend-p backend 'md) nil)
             ((org-export-derived-backend-p backend 'html) 'html)))
           (case-fold-search nil))
       (when base-backend
@@ -503,7 +503,7 @@ TODO abstract backend implementations."
 (use-package! org-ref
   :config
   (setq
-   org-ref-default-bibliography      (list (concat org-directory "/References/papers.bib"))
+   org-ref-default-bibliography      `(,(concat org-directory "/References/zotero.bib"))
    org-ref-pdf-directory             (concat org-directory "/Papers/")
    bibtex-dialect                    'biblatex
    bibtex-completion-notes-extension "_notes.org"
@@ -565,7 +565,7 @@ TODO abstract backend implementations."
      org-link-any-re ""
      (string-join
       (org-map-entries (lambda () (org-element-property :title (org-element-at-point))))
-      ", ") nil nil 1))
+      "; ") nil nil 1))
 
   (defun hp/update-title-with-headings ()
     "Go to first line and append with first org headings"

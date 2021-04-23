@@ -12,6 +12,12 @@
 (package! tree-sitter)
 (package! tree-sitter-langs)
 
+(package! ox-pandoc)
+(package! org-pandoc-import
+  :recipe (:host github
+           :repo "tecosaur/org-pandoc-import"
+           :files ("*.el" "filters" "preprocessors")))
+
 (package! page-break-lines
   :recipe (:host github :repo "purcell/page-break-lines"))
 (package! org-appear

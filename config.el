@@ -390,6 +390,7 @@ TODO abstract backend implementations."
   ;; Appearance
   (setq org-agenda-category-icon-alist
         `(("work" ,(list (all-the-icons-material "short_text")) nil nil :ascent center)
+          ("personal" ,(list (all-the-icons-material "short_text")) nil nil :ascent center)
           ("gcal" ,(list (all-the-icons-material "cloud")) nil nil :ascent center)
           ("birthday" ,(list (all-the-icons-material "cake" :face 'all-the-icons-lpink)) nil nil :ascent center)
           ("learn" ,(list (all-the-icons-material "library_books" :face 'all-the-icons-cyan)) nil nil :ascent center)

@@ -251,7 +251,7 @@ TODO abstract backend implementations."
                                   (substring all-caps-str 0 (+ (if trailing-s -1 (length all-caps-str)))))))
                       (pcase base-backend
                         ('latex (concat "\\acr{" (s-downcase acr) "}" (when trailing-s "\\acrs{}") final-char))
-                        ('html (concat "<span class='acr'>" (s-downcase acr) "</span>" (when trailing-s "<small>s</small>") final-char)))))))
+                        ('html (concat "<span class='smallcap'>" (s-downcase acr) "</span>" (when trailing-s "<small>s</small>") final-char)))))))
          text t t))))
 
   (add-to-list 'org-export-filter-plain-text-functions
@@ -515,23 +515,26 @@ TODO abstract backend implementations."
    '((t . "${title:46} ${author:20} ${year:4} ${=type=:3}${=has-pdf=:1}${=has-note=:1}"))
    ;; Template for generated note for each entry
    bibtex-completion-notes-template-multiple-files
-   (concat
-    "${author-or-editor} (${year}): ${title}\n"
-    "#+roam_tags: \"literature\"\n"
-    "#+roam_key: cite:${=key=}\n"
-    "#+created: %U\n"
-    "#+last_modified: %U\n"
-    "#+startup: overview\n"
-    "#+startup: hideblocks\n"
-    "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/\n"
-    "#+hugo_section: ./notes\n"
-    "#+hugo_custom_front_matter: :exclude true :katex true :doi \"${doi}\" :year ${year} :authorname ${authorname} :journal ${journal}\n"
-    "#+hugo_tags: \"literature\"\n"
-    "* What?\n"
-    "* Why?\n"
-    "* How?\n"
-    "* And?\n"
-    ))
+   (string-join
+    '(
+    "${author-or-editor} (${year}): ${title}"
+    "#+roam_tags: \"literature\""
+    "#+roam_key: cite:${=key=}"
+    "#+date: %U"
+    "#+last_modified: %U"
+    "#+startup: overview"
+    "#+startup: hideblocks"
+    "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
+    "#+hugo_section: ./notes"
+    "#+hugo_custom_front_matter: :exclude true :katex true"
+    "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
+    "#+hugo_tags: \"literature\""
+    ""
+    "* What?"
+    "* Why?"
+    "* How?"
+    "* And?"
+    ) "\n"))
   ;; Make org-ref-cite-face a bit less intrusive
   (custom-set-faces!
     `(org-ref-cite-face :weight unspecified :foreground unspecified

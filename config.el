@@ -234,8 +234,6 @@ TODO abstract backend implementations."
     (let ((base-backend
            (cond
             ((org-export-derived-backend-p backend 'latex) 'latex)
-            ;; Markdown is derived from HTML, but we don't want to format it
-            ((org-export-derived-backend-p backend 'md) nil)
             ((org-export-derived-backend-p backend 'html) 'html)))
           (case-fold-search nil))
       (when base-backend

@@ -48,7 +48,8 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-gruvbox
-      doom-themes-treemacs-theme 'doom-colors)
+      doom-themes-treemacs-theme 'doom-colors
+      doom-themes-treemacs-enable-variable-pitch nil)
 (custom-set-faces!
   `(outline-1 :foreground ,(doom-color 'cyan))
   `(outline-4 :foreground ,(doom-color 'dark-yellow)))
@@ -523,18 +524,15 @@ TODO abstract backend implementations."
     "#+created: %U\n"
     "#+last_modified: %U\n"
     "#+startup: overview\n"
-    "#+startup: hideblocks\n\n"
-    "* Org-noter\n"
-    ":PROPERTIES:\n"
-    ":Custom_ID: ${=key=}\n"
-    ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
-    ":AUTHOR: ${author-abbrev}\n"
-    ":JOURNAL: ${journaltitle}\n"
-    ":DATE: ${date}\n"
-    ":YEAR: ${year}\n"
-    ":DOI: ${doi}\n"
-    ":URL: ${url}\n"
-    ":END:\n\n"
+    "#+startup: hideblocks\n"
+    "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/\n"
+    "#+hugo_section: ./notes\n"
+    "#+hugo_custom_front_matter: :exclude true :katex true :doi \"${doi}\" :year ${year} :authorname ${authorname} :journal ${journal}\n"
+    "#+hugo_tags: \"literature\"\n"
+    "* What?\n"
+    "* Why?\n"
+    "* How?\n"
+    "* And?\n"
     ))
   ;; Make org-ref-cite-face a bit less intrusive
   (custom-set-faces!

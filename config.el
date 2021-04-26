@@ -828,7 +828,7 @@ it can be passed in POS."
   :config
   (add-hook 'dired-mode-hook 'org-download-enable)
   ;; Change how inline images are displayed
-  (setq org-image-actual-width nil))
+  (setq org-download-display-inline-images nil))
 
 (use-package! org-transclusion
   :commands org-transclusion-mode

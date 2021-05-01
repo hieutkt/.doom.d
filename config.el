@@ -39,7 +39,7 @@
       (push "Source Han Sans JP" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
 
 (use-package! mixed-pitch
-  :hook ((text-mode helpful-mode) . mixed-pitch-mode)
+  :hook ((org-mode helpful-mode) . mixed-pitch-mode)
   :config
   (pushnew! mixed-pitch-fixed-pitch-faces 'warning)
   (setq mixed-pitch-set-height t))

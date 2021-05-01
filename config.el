@@ -225,6 +225,16 @@
   :config
   ;; Auto export acronyms as small caps
   ;; Copied from tecosaur
+  (defun org-latex-substitute-verb-with-texttt (content)
+    "Replace instances of \\verb with \\texttt{}."
+    (replace-regexp-in-string
+     "\\\\verb\\(.\\).+?\\1"
+     (lambda (verb-string)
+       (replace-regexp-in-string
+        "\\\\" "\\\\\\\\" ; Why elisp, why?
+        (org-latex--text-markup (substring verb-string 6 -1) 'code '(:latex-text-markup-alist ((code . protectedtexttt))))))
+     content))
+
   (defun org-export-filter-text-acronym (text backend _info)
     "Wrap suspected acronyms in acronyms-specific formatting.
 Treat sequences of 2+ capital letters (optionally succeeded by \"s\") as an acronym.

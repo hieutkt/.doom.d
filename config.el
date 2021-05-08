@@ -25,18 +25,17 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :name "Iosevka" :size 18)
+(setq doom-font (font-spec :name "Sarasa Mono Slab J" :size 20)
       doom-variable-pitch-font (font-spec :name "Alegreya" :size 22)
-      doom-unicode-font (font-spec :name "JuliaMono" :size 18))
+      doom-unicode-font (font-spec :name "JuliaMono" :size 20))
 
 (use-package! unicode-fonts
   :config
   ;; CJK characters
-  (push "Source Han Sans"
-        (cadr (assoc "CJK Unified Ideographs" unicode-fonts-block-font-mapping)))
-  ;; Japanese
-  (dolist (unicode-block '("Hiragana" "Katakana"))
-      (push "Source Han Sans JP" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
+  (dolist (unicode-block '("CJK Unified Ideographs" "CJK Symbols and Punctuation" "CJK Radicals Supplement" "CJK Compatibility Ideographs"))
+      (push "Sarasa Mono Slab SC" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))
+  (dolist (unicode-block '("Hangul Syllables" "Hangul Jamo Extended-A" "Hangul Jamo Extended-B"))
+    (push "Sarasa Mono Slab K" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
 
 (use-package! mixed-pitch
   :hook ((org-mode helpful-mode) . mixed-pitch-mode)

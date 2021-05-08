@@ -519,9 +519,11 @@ TODO abstract backend implementations."
    bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
    bibtex-completion-bibliography    (concat org-directory "/References/zotero.bib")
    bibtex-completion-library-path    (concat org-directory "/Papers/")
+   bibtex-completion-pdf-symbol      (all-the-icons-octicon "file-pdf")
+   bibtex-completion-notes-symbol    (all-the-icons-octicon "file-text")
    ;; Optimize for 80 character frame display
    bibtex-completion-display-formats
-   '((t . "${title:46} ${author:20} ${year:4} ${=type=:3}${=has-pdf=:1}${=has-note=:1}"))
+   '((t . "${title:46} ${author:20} ${year:4} ${=type=:3} ${=has-pdf=:1} ${=has-note=:1}"))
    ;; Template for generated note for each entry
    bibtex-completion-notes-template-multiple-files
    (string-join
@@ -533,6 +535,7 @@ TODO abstract backend implementations."
     "#+last_modified: %U"
     "#+startup: overview"
     "#+startup: hideblocks"
+    "#+options: toc:2 num:t"
     "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
     "#+hugo_section: ./notes"
     "#+hugo_custom_front_matter: :exclude true :katex true"

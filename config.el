@@ -749,7 +749,8 @@ it can be passed in POS."
   :hook (visual-line-mode . visual-fill-column-mode)
   :init
   (setq visual-fill-column-width 92
-        visual-fill-column-center-text t))
+        visual-fill-column-center-text t
+        visual-fill-column-fringes-outside-margins nil))
 
 (use-package! ess
   :config

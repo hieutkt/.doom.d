@@ -284,14 +284,7 @@ TODO abstract backend implementations."
 
 (use-package! ox-latex
   :config
-  ;; Highlight code blocks in org-latex-export-to-pdf
-  ;; Minted options can be found in:
-  ;; http://mirror.kku.ac.th/CTAN/macros/latex/contrib/minted/minted.pdf
-  (setq org-latex-listings 'minted
-        org-latex-packages-alist '(("" "minted"))
-        org-latex-minted-options '(("fontsize" "\\footnotesize")
-                                   ("bgcolor" "yellow!5"))
-        org-latex-pdf-process
+  (setq org-latex-pdf-process
         '("latexmk -pdflatex='%latex -shell-escape -bibtex -interaction=nonstopmode' -pdf -output-directory=%o -f %f"))
 
   (add-to-list

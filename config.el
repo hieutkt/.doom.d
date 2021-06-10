@@ -716,6 +716,9 @@ it can be passed in POS."
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
 
+;; (use-package! nroam
+;;   :hook (org-mode . nroam-setup-maybe))
+
 (use-package! org-noter
   :config
   ;; Split fraction: (horizontal . vertical)
@@ -866,3 +869,11 @@ it can be passed in POS."
 (use-package! page-break-lines
   :config
   (global-page-break-lines-mode))
+
+
+(use-package! writegood
+  :hook (writegood-mode . writegood-passive-voice-turn-off))
+
+
+(use-package! clip2org)
+(use-package! org-ol-tree)

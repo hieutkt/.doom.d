@@ -33,5 +33,14 @@
   :recipe (:host github :repo "andras-simonyi/citeproc-org"))
 (package! org-transclusion
   :recipe (:host github :repo "nobiot/org-transclusion"))
+(package! nroam
+  :recipe (:host github :repo "NicolasPetton/nroam"))
+
+(package! org-ol-tree
+  :recipe (:host github :repo "Townk/org-ol-tree"))
+
 (package! ess-stata-mode
   :recipe (:host github :repo "emacs-ess/ess-stata-mode"))
+
+(package! clip2org
+  :recipe (:host github :repo "thamer/clip2org"))

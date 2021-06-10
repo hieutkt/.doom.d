@@ -190,6 +190,7 @@
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil
+        org-image-actual-width (/ (display-pixel-width) 3)
         org-ellipsis " ")
   ;; Setup custom links
   (+org-init-custom-links-h)

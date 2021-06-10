@@ -240,7 +240,7 @@ Ignore if preceeded by \";\" (for manual prevention) or \"\\\" (for LaTeX comman
 TODO abstract backend implementations."
     (let ((base-backend
            (cond
-            ((org-export-derived-backend-p backend 'latex) 'latex)
+            ;; ((org-export-derived-backend-p backend 'latex) 'latex)
             ((org-export-derived-backend-p backend 'html) 'html)))
           (case-fold-search nil))
       (when base-backend
@@ -273,12 +273,12 @@ TODO abstract backend implementations."
      todo todo-type priority (org-export-filter-text-acronym text 'html info) tags info))
   (setq org-html-format-headline-function #'org-html-format-headline-acronymised)
 
-  (defun org-latex-format-headline-acronymised (todo todo-type priority text tags info)
-    "Like `org-latex-format-headline-default-function', but with acronym formatting."
-    (org-latex-format-headline-default-function
-     todo todo-type priority (org-latex-substitute-verb-with-texttt
-                              (org-export-filter-text-acronym text 'latex info)) tags info))
-  (setq org-latex-format-headline-function #'org-latex-format-headline-acronymised)
+  ;; (defun org-latex-format-headline-acronymised (todo todo-type priority text tags info)
+  ;;   "Like `org-latex-format-headline-default-function', but with acronym formatting."
+  ;;   (org-latex-format-headline-default-function
+  ;;    todo todo-type priority (org-latex-substitute-verb-with-texttt
+  ;;                             (org-export-filter-text-acronym text 'latex info)) tags info))
+  ;; (setq org-latex-format-headline-function #'org-latex-format-headline-acronymised)
   )
 
 

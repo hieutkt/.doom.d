@@ -1,6 +1,5 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
-(unpin! doom-themes)
 
 (package! visual-fill-column)
 (package! org-ref)

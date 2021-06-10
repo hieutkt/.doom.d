@@ -49,9 +49,7 @@
 (setq doom-theme 'doom-gruvbox
       doom-themes-treemacs-theme 'doom-colors
       doom-themes-treemacs-enable-variable-pitch nil)
-(custom-set-faces!
-  `(outline-1 :foreground ,(doom-color 'cyan))
-  `(outline-4 :foreground ,(doom-color 'dark-yellow)))
+
 
 (add-hook! 'doom-load-theme-hook
   (setq org-preview-latex-image-directory

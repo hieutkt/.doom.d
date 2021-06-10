@@ -771,10 +771,14 @@ it can be passed in POS."
   (set-popup-rules!
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))
 
-(use-package! eglot-jl
-  :config
-  (setq eglot-jl-language-server-project eglot-jl-base)
-  )
+;; lsp-mode seems to serve an invalid response to the Julia server.
+;; The pseudo-fix is rather simple at least.
+(after! julia-mode
+  (add-hook! 'julia-mode-hook
+    (setq-local lsp-enable-folding t
+                lsp-folding-range-limit 100)))
+
+
 
 (use-package! lexic
   :commands lexic-search lexic-list-dictionary

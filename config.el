@@ -565,11 +565,14 @@ TODO abstract backend implementations."
   ;; Custom functions
   (defun hp/org-get-heading1-and-clean ()
     "Get all first heading texts, remove links and concaternate"
+    (require 'org-ql)
     (replace-regexp-in-string
-     org-link-any-re ""
-     (string-join
-      (org-map-entries (lambda () (org-element-property :title (org-element-at-point))))
-      "; ") nil nil 1))
+     "\(\)" ""
+     (replace-regexp-in-string
+      org-link-any-re ""
+      (string-join
+       (org-ql-select (current-buffer) '(level 1) :action #'org-get-heading)
+       "; ") nil nil 1)))
 
   (defun hp/update-title-with-headings ()
     "Go to first line and append with first org headings"

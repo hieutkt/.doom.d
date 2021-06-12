@@ -7,6 +7,7 @@
 (package! org-super-agenda)
 (package! keycast)
 (package! benchmark-init)
+(package! org-ql)
 
 (package! tree-sitter)
 (package! tree-sitter-langs)

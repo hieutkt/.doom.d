@@ -567,7 +567,7 @@ TODO abstract backend implementations."
     "Get all first heading texts, remove links and concaternate"
     (require 'org-ql)
     (replace-regexp-in-string
-     "\(\)" ""
+     " \(\)" ""
      (replace-regexp-in-string
       org-link-any-re ""
       (string-join
@@ -575,13 +575,21 @@ TODO abstract backend implementations."
        "; ") nil nil 1)))
 
   (defun hp/update-title-with-headings ()
-    "Go to first line and append with first org headings"
-    (interactive)
-    (save-excursion
-      (goto-char (point-min))
-      (end-of-line)
-      (insert " - ")
-      (insert (hp/org-get-heading1-and-clean))))
+  "Go to first line and append with first org headings"
+  (interactive)
+  (when (derived-mode-p 'org-mode)
+    (if (member "journal" (org-roam--extract-tags))
+        (save-excursion
+          (goto-char (point-min))
+          (when (re-search-forward "^#\\+title:" nil t)
+            (goto-char (match-beginning 0))
+            (forward-char 23)
+            (delete-region (point) (line-end-position))
+            (end-of-line)
+            (insert " - ")
+            (insert (hp/org-get-heading1-and-clean)))))))
+
+  :hook (before-save . hp/update-title-with-headings)
   )
 
 (use-package! org-roam-db

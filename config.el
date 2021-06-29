@@ -440,8 +440,10 @@ TODO abstract backend implementations."
           ("be" "English" plain (file (lambda () (hp/capture-ox-hugo-post "en")))
            ,(concat
              "#+title: %(eval hp/ox-hugo-post--title)\n"
+             "#+subtitle:"
              "#+author: %n\n"
              "#+date: %(eval hp/ox-hugo-post--fdate)\n"
+             "#+export_file_name: "
              "#+hugo_base_dir: ../\n"
              "#+hugo_section: ./posts/\n"
              "#+hugo_tags: %?\n"
@@ -454,8 +456,10 @@ TODO abstract backend implementations."
           ("bv" "Vietnamese" plain (file (lambda () (hp/capture-ox-hugo-post "vi")))
            ,(concat
              "#+title: %(eval hp/ox-hugo-post--title)\n"
+             "#+subtitle:"
              "#+author: %n\n"
              "#+date: %(eval hp/ox-hugo-post--fdate)\n"
+             "#+export_file_name: "
              "#+hugo_base_dir: ../\n"
              "#+hugo_section: ./posts/\n"
              "#+hugo_tags: %?\n"
@@ -532,7 +536,8 @@ TODO abstract backend implementations."
     "#+hugo_section: ./notes"
     "#+hugo_custom_front_matter: :exclude true :math true"
     "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
-    "#+hugo_tags: \"literature\""
+    "#+hugo_tags:"
+    "#+hugo_series:  \"Reading notes\""
     ""
     "* What?"
     "* Why?"
@@ -565,14 +570,13 @@ TODO abstract backend implementations."
   ;; Custom functions
   (defun hp/org-get-heading1-and-clean ()
     "Get all first heading texts, remove links and concaternate"
-    (require 'org-ql)
     (replace-regexp-in-string
      " \(\)" ""
      (replace-regexp-in-string
       org-link-any-re ""
       (string-join
        (org-ql-select (current-buffer) '(level 1) :action #'org-get-heading)
-       "; ") nil nil 1)))
+       "」「") nil nil 1)))
 
   (defun hp/update-title-with-headings ()
   "Go to first line and append with first org headings"
@@ -586,8 +590,9 @@ TODO abstract backend implementations."
             (forward-char 23)
             (delete-region (point) (line-end-position))
             (end-of-line)
-            (insert " - ")
-            (insert (hp/org-get-heading1-and-clean)))))))
+            (insert "「")
+            (insert (hp/org-get-heading1-and-clean))
+            (insert "」"))))))
 
   :hook (before-save . hp/update-title-with-headings)
   )
@@ -883,3 +888,4 @@ it can be passed in POS."
 
 (use-package! clip2org)
 (use-package! org-ol-tree)
+(use-package! org-ql)

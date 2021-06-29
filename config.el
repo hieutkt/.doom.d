@@ -204,7 +204,33 @@
   (font-lock-add-keywords 'org-mode
                           '(("^\\(?:\"\\)?\\(?:\\[.*\\[|\\)?[[:upper:]]" . 'org-warning)))
   ;; Replace two consecutive hyphens with the em-dash
-  (add-hook 'org-mode-hook (lambda () (push '("--" . ?—) prettify-symbols-alist)))
+  (defun hp/org-mode-load-prettify-symbols ()
+    (interactive)
+    (setq prettify-symbols-alist
+          (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                  `(("#+begin_src" . "")
+                    ("#+end_src" . "⎺")
+                    ("#+begin_quote" . "")
+                    ("#+end_quote" . "⎺")
+                    ("#+begin_verse" . "")
+                    ("#+end_verse" . "⎺")
+                    (":properties:" . "")
+                    (":end:" . "⎺")
+                    (":attach:" . "")
+                    ("#+results:" . ""))))
+    (pushnew! prettify-symbols-alist
+              '("--" . "—")
+              '("TODO" . "")
+              '("HOLD" . "")
+              '("WAIT" . "")
+              '("NEXT" . "")
+              '("STOP" . "")
+              '("DONE" . "")
+              '("PROJ" . "")
+              '("REPEAT" . "")
+              '("REVIEW" . ""))
+    (prettify-symbols-mode 1))
+  (add-hook 'org-mode-hook 'hp/org-mode-load-prettify-symbols)
   )
 
 (use-package! org-superstar

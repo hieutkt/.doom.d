@@ -881,10 +881,5 @@ it can be passed in POS."
   :config
   (global-page-break-lines-mode))
 
-
-(use-package! writegood
-  :hook (writegood-mode . writegood-passive-voice-turn-off))
-
-
 (use-package! clip2org)
 (use-package! org-ol-tree)

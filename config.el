@@ -464,35 +464,41 @@ TODO abstract backend implementations."
           ;; Capture template for new blog posts
           ("b" "New blog post")
           ("be" "English" plain (file (lambda () (hp/capture-ox-hugo-post "en")))
-           ,(concat
-             "#+title: %(eval hp/ox-hugo-post--title)\n"
-             "#+subtitle:"
-             "#+author: %n\n"
-             "#+date: %(eval hp/ox-hugo-post--fdate)\n"
-             "#+export_file_name: "
-             "#+hugo_base_dir: ../\n"
-             "#+hugo_section: ./posts/\n"
-             "#+hugo_tags: %?\n"
-             "#+hugo_custom_front_matter:\n"
-             "#+hugo_draft: false\n"
-             "#+startup: content\n"
-             "#+options: toc:2 num:t\n\n")
+           ,(string-join
+             '("#+title: %(eval hp/ox-hugo-post--title)"
+               "#+subtitle:"
+               "#+author: %n"
+               "#+date: %(eval hp/ox-hugo-post--fdate)"
+               "#+export_file_name: %(concat hp/ox-hugo-post--fname \".en.md\")"
+               "#+hugo_paired_shortcodes: <notice notice"
+               "#+macro: sidenote {{< sidenote >}}$1{{< /sidenote >}}"
+               "#+hugo_base_dir: ../"
+               "#+hugo_section: ./posts/"
+               "#+hugo_tags: %?"
+               "#+hugo_custom_front_matter:"
+               "#+hugo_draft: false"
+               "#+startup: content"
+               "#+options: toc:2 num:t\n")
+             "\n")
            :immediate-finish t
            :jump-to-captured t)
           ("bv" "Vietnamese" plain (file (lambda () (hp/capture-ox-hugo-post "vi")))
-           ,(concat
-             "#+title: %(eval hp/ox-hugo-post--title)\n"
-             "#+subtitle:"
-             "#+author: %n\n"
-             "#+date: %(eval hp/ox-hugo-post--fdate)\n"
-             "#+export_file_name: "
-             "#+hugo_base_dir: ../\n"
-             "#+hugo_section: ./posts/\n"
-             "#+hugo_tags: %?\n"
-             "#+hugo_custom_front_matter:\n"
-             "#+hugo_draft: false\n"
-             "#+startup: content\n"
-             "#+options: toc:2 num:t\n\n")
+           ,(string-join
+             '("#+title: %(eval hp/ox-hugo-post--title)"
+               "#+subtitle:"
+               "#+author: %n"
+               "#+date: %(eval hp/ox-hugo-post--fdate)"
+               "#+export_file_name: %(concat hp/ox-hugo-post--fname \".vi.md\")"
+               "#+hugo_paired_shortcodes: <notice notice"
+               "#+macro: sidenote {{< sidenote >}}$1{{< /sidenote >}}"
+               "#+hugo_base_dir: ../"
+               "#+hugo_section: ./posts/"
+               "#+hugo_tags: %?"
+               "#+hugo_custom_front_matter:"
+               "#+hugo_draft: false"
+               "#+startup: content"
+               "#+options: toc:2 num:t\n")
+             "\n")
            :immediate-finish t
            :jump-to-captured t))))
 

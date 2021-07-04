@@ -243,7 +243,27 @@
   (setq org-fancy-priorities-list '("[!!]" "[-!]" "[--]") ;High/Medium/Low priorities
         org-default-priority 66.5))                       ;Bump Medium tasks higher
 
-(use-package! org-tempo)
+(use-package! org-tempo
+  :config
+  (tempo-define-template
+   "Hugo info" '("#+attr_shortcode info\n#+begin_notice\n" p "\n#+end_notice">)
+   "<info")
+  (tempo-define-template
+   "Hugo tip" '("#+attr_shortcode tip\n#+begin_notice\n" p "\n#+end_notice">)
+   "<tip")
+  (tempo-define-template
+   "Hugo warning" '("#+attr_shortcode warning\n#+begin_notice\n" p "\n#+end_notice">)
+   "<warning")
+  (tempo-define-template
+   "Hugo error" '("#+attr_shortcode error\n#+begin_notice\n" p "\n#+end_notice">)
+   "<error")
+  (tempo-define-template
+   "Hugo example" '("#+attr_shortcode example\n#+begin_notice\n" p "\n#+end_notice">)
+   "<example")
+  (tempo-define-template
+   "Hugo question" '("#+attr_shortcode question\n#+begin_notice\n" p "\n#+end_notice">)
+   "<question")
+  )
 
 (use-package! ox
   :config
@@ -566,6 +586,8 @@ TODO abstract backend implementations."
     "#+options: toc:2 num:t"
     "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
     "#+hugo_section: ./notes"
+    "#+hugo_paired_shortcodes: <notice notice"
+    "#+macro: sidenote {{< sidenote >}}$1{{< /sidenote >}}"
     "#+hugo_custom_front_matter: :exclude true :math true"
     "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
     "#+hugo_tags:"

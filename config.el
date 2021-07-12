@@ -191,7 +191,8 @@
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil
         org-image-actual-width (/ (display-pixel-width) 3)
-        org-ellipsis " ")
+        org-ellipsis " "
+        org-hidden-keywords '(title))
   ;; Setup custom links
   (+org-init-custom-links-h)
   ;; Custom some face

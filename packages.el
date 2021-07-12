@@ -2,7 +2,6 @@
 ;;; $DOOMDIR/packages.el
 
 (package! visual-fill-column)
-(package! org-ref)
 (package! lsp-treemacs)
 (package! org-super-agenda)
 (package! keycast)

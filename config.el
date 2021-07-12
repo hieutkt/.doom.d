@@ -40,7 +40,7 @@
 (use-package! mixed-pitch
   :hook ((org-mode helpful-mode) . mixed-pitch-mode)
   :config
-  (pushnew! mixed-pitch-fixed-pitch-faces 'warning)
+  (pushnew! mixed-pitch-fixed-pitch-faces 'warning 'org-cite-key)
   (setq mixed-pitch-set-height t))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
@@ -266,6 +266,27 @@
    "<question")
   )
 
+(use-package! oc
+  :config
+  (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.bib"))
+        org-cite-export-processors '((latex biblatex)
+                                     (t csl)))
+  (custom-set-faces!
+    `(org-cite-key :foreground ,(face-attribute 'org-formula :foreground)))
+  )
+
+
+(use-package! oc-biblatex
+  :after oc
+  :config
+  (setq org-cite-biblatex-options "backend=biber,style=alphabetic,citestyle=authoryear"))
+
+(use-package! oc-csl
+  :after oc
+  :init
+  (setq org-cite-csl-styles-dir (concat dropbox-directory "Assets/CSL")
+        org-cite-csl-locales-dir org-cite-csl-styles-dir))
+
 (use-package! ox
   :config
   ;; Auto export acronyms as small caps
@@ -328,7 +349,6 @@ TODO abstract backend implementations."
   ;;                             (org-export-filter-text-acronym text 'latex info)) tags info))
   ;; (setq org-latex-format-headline-function #'org-latex-format-headline-acronymised)
   )
-
 
 (use-package! ox-latex
   :config
@@ -557,58 +577,81 @@ TODO abstract backend implementations."
       :weight bold :foreground ,(doom-color 'blue)))
   )
 
+(use-package! bibtex-completion
+  :config
+  (setq
+   bibtex-dialect                    'biblatex
+   bibtex-completion-notes-extension "_notes.org"
+   bibtex-completion-bibliography    (concat org-directory "/References/zotero.bib")
+   ;; Template for generated note for each entry
+   bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
+   bibtex-completion-notes-template-multiple-files
+   (string-join
+    '(
+      "${author-or-editor} (${year}): ${title}"
+      "#+roam_tags: \"literature\""
+      "#+roam_key: cite:${=key=}"
+      "#+date: %U"
+      "#+last_modified: %U"
+      "#+startup: overview"
+      "#+startup: hideblocks"
+      "#+options: toc:2 num:t"
+      "#+cite_export: csl chicago-author-date.csl"
+      "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
+      "#+hugo_section: ./notes"
+      "#+hugo_paired_shortcodes: <notice notice"
+      "#+macro: sidenote {{< sidenote >}}%(string (char-from-name \"DOLLAR SIGN\"))1{{< /sidenote >}}"
+      "#+hugo_custom_front_matter: :exclude true :math true"
+      "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
+      "#+hugo_tags:"
+      "#+hugo_series: \"Reading notes\""
+      ""
+      "* What?"
+      "* Why?"
+      "* How?"
+      "* And?"
+      ) "\n")
+   ))
+
+(use-package! bibtex-actions
+  :init
+  (setq bibtex-actions-template-suffix '((t . "          ${=key=:15}    ${=type=:12}    ${keywords:*}")))
+  :config
+  (dolist (field '(url doi keywords))
+    (add-to-list 'bibtex-completion-additional-search-fields field))
+  (setq bibtex-actions-symbols
+        `((pdf . (,(all-the-icons-faicon "file-pdf-o" :v-adjust 0.02 :face 'all-the-icons-dred) .
+                  ,(all-the-icons-faicon "file-pdf-o" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))
+          (note . (,(all-the-icons-faicon "file-text-o" :v-adjust 0.02 :face 'all-the-icons-dblue) .
+                   ,(all-the-icons-faicon "file-text-o" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))
+          (link .
+                (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
+                 ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
+  ;; Here we define a face to dim non 'active' icons, but preserve alignment
+  (defface bibtex-actions-icon-dim
+    '((((background dark)) :foreground "#282c34")
+      (((background light)) :foreground "#fafafa"))
+    "Face for obscuring/dimming icons"
+    :group 'all-the-icons-faces)
+  ;; Bibtex-actions uses a cache to speed up library display.
+  ;; This is great for performance, but means the data can become stale if you modify it.
+  (file-notify-add-watch bibtex-completion-bibliography '(change) 'bibtex-actions-refresh))
 
 (use-package! org-ref
   :config
   (setq
    org-ref-default-bibliography      `(,(concat org-directory "/References/zotero.bib"))
-   org-ref-pdf-directory             (concat org-directory "/Papers/")
-   bibtex-dialect                    'biblatex
-   bibtex-completion-notes-extension "_notes.org"
-   bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
-   bibtex-completion-bibliography    (concat org-directory "/References/zotero.bib")
-   bibtex-completion-library-path    (concat org-directory "/Papers/")
-   bibtex-completion-pdf-symbol      (all-the-icons-octicon "file-pdf")
-   bibtex-completion-notes-symbol    (all-the-icons-octicon "file-text")
-   ;; Optimize for 80 character frame display
-   bibtex-completion-display-formats
-   '((t . "${title:46} ${author:20} ${year:4} ${=type=:3} ${=has-pdf=:1} ${=has-note=:1}"))
-   ;; Template for generated note for each entry
-   bibtex-completion-notes-template-multiple-files
-   (string-join
-    '(
-    "${author-or-editor} (${year}): ${title}"
-    "#+roam_tags: \"literature\""
-    "#+roam_key: cite:${=key=}"
-    "#+date: %U"
-    "#+last_modified: %U"
-    "#+startup: overview"
-    "#+startup: hideblocks"
-    "#+options: toc:2 num:t"
-    "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
-    "#+hugo_section: ./notes"
-    "#+hugo_paired_shortcodes: <notice notice"
-    "#+macro: sidenote {{< sidenote >}}$1{{< /sidenote >}}"
-    "#+hugo_custom_front_matter: :exclude true :math true"
-    "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
-    "#+hugo_tags:"
-    "#+hugo_series:  \"Reading notes\""
-    ""
-    "* What?"
-    "* Why?"
-    "* How?"
-    "* And?"
-    ) "\n"))
-  ;; Make org-ref-cite-face a bit less intrusive
+   org-ref-pdf-directory             (concat org-directory "/papers/"))
+  ;; make org-ref-cite-face a bit less intrusive
   (custom-set-faces!
     `(org-ref-cite-face :weight unspecified :foreground unspecified
                         :underline ,(doom-color 'grey))))
 
-(use-package! citeproc-org
-  :after org-ref
-  :config
-  (citeproc-org-setup))
-
+;; (use-package! citeproc-org
+;;   :after org-ref
+;;   :config
+;;   (setq org-ref-default-bibliography (list bibtex-completion-bibliography))
+;;   (citeproc-org-setup))
 
 (use-package! org-roam
   :hook

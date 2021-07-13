@@ -1,12 +1,13 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
+(unpin! doom-themes)
+
 (package! visual-fill-column)
 (package! lsp-treemacs)
 (package! org-super-agenda)
 (package! keycast)
 (package! benchmark-init)
-(package! org-ql)
 
 (package! tree-sitter)
 (package! tree-sitter-langs)
@@ -44,3 +45,6 @@
 
 (package! clip2org
   :recipe (:host github :repo "thamer/clip2org"))
+
+(package! bibtex-actions
+  :recipe (:host github :repo "bdarcus/bibtex-actions"))

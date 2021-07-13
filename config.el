@@ -669,7 +669,9 @@ TODO abstract backend implementations."
   (defun hp/org-get-heading1-and-clean ()
     "Get all first heading texts, remove links and concaternate"
       (string-join
-       (org-ql-select (current-buffer) '(level 1) :action #'org-get-heading)
+       (remove nil
+        (org-map-entries (lambda () (when (eq (org-element-property :level (org-element-at-point)) 1)
+                                (org-element-property :title (org-element-at-point))))))
        "」「"))
 
   (defun hp/update-title-with-headings ()
@@ -982,4 +984,3 @@ it can be passed in POS."
 
 (use-package! clip2org)
 (use-package! org-ol-tree)
-(use-package! org-ql)

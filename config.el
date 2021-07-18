@@ -694,22 +694,24 @@ TODO abstract backend implementations."
 
   (cl-defmethod org-roam-node-firsttag ((node org-roam-node))
     "The first tag of notes are used to denote note type"
-    (let* ((tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
-           (firsttag (nth 0 tags)))
+    (let* ((specialtags '("journal" "concept" "data" "bio" "literature" "compilation" "argument"))
+           (tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
+           (firsttag (seq-intersection specialtags tags 'string=)))
       (concat
        (if firsttag
            (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02)
          (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02))
-       firsttag)))
+       (string-join firsttag ", "))))
 
   (cl-defmethod org-roam-node-cleantags ((node org-roam-node))
     "Return the file TITLE for the node."
     (let* ((tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
-           (othertags (if (length> tags 0) (cl-subseq tags 1))))
+           (specialtags '("journal" "concept" "data" "bio" "literature" "compilation" "argument"))
+           (othertags (seq-difference tags specialtags 'string=)))
       (concat
        (if othertags
-           (all-the-icons-octicon "tag" :face 'all-the-icons-red :v-adjust 0.02))
-                  (string-join othertags ", "))))
+           (all-the-icons-faicon "tags" :face 'all-the-icons-dgreen :v-adjust 0.02)) " "
+                   (propertize (string-join othertags ", ") 'face 'all-the-icons-dgreen))))
 
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
     "Return the hierarchy for the node."
@@ -722,7 +724,7 @@ TODO abstract backend implementations."
       (cond
        ((= level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-green :v-adjust 0.02) " "
                             (propertize shortentitle 'face 'org-roam-dim) separator title))
-       ((> level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-dgreen :v-adjust 0.02) " "
+       ((> level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-dpurple :v-adjust 0.02) " "
                              (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim)
                              separator title))
        (t (concat (all-the-icons-faicon "file-text-o" :face 'all-the-icons-yellow :v-adjust 0.02) " " title)))

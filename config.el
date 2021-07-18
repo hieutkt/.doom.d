@@ -1033,3 +1033,7 @@ it can be passed in POS."
 
 (use-package! clip2org)
 (use-package! org-ol-tree)
+
+(use-package! orderless
+  :config
+  (add-to-list 'orderless-matching-styles 'char-fold-to-regexp))

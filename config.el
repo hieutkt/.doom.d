@@ -266,6 +266,7 @@
   )
 
 (use-package! oc
+  :init
   :config
   (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.bib"))
         org-cite-export-processors '((latex biblatex)
@@ -281,9 +282,10 @@
 
 (use-package! oc-csl
   :after oc
-  :init
-  (setq org-cite-csl-styles-dir (concat dropbox-directory "Assets/CSL")
-        org-cite-csl-locales-dir org-cite-csl-styles-dir))
+  ;; :init
+  ;; (setq org-cite-csl-styles-dir (concat dropbox-directory "Assets/CSL")
+  ;;       org-cite-csl-locales-dir org-cite-csl-styles-dir)
+  )
 
 (use-package! ox
   :config
@@ -594,7 +596,6 @@ TODO abstract backend implementations."
       "#+startup: overview"
       "#+startup: hideblocks"
       "#+options: toc:2 num:t"
-      "#+cite_export: csl chicago-author-date.csl"
       "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
       "#+hugo_section: ./notes"
       "#+hugo_paired_shortcodes: <notice notice"
@@ -633,7 +634,26 @@ TODO abstract backend implementations."
     :group 'all-the-icons-faces)
   ;; Bibtex-actions uses a cache to speed up library display.
   ;; This is great for performance, but means the data can become stale if you modify it.
-  (file-notify-add-watch bibtex-completion-bibliography '(change) 'bibtex-actions-refresh))
+  (file-notify-add-watch bibtex-completion-bibliography '(change) 'bibtex-actions-refresh)
+  ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
+  (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+  (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))
+  (add-to-list 'embark-keymap-alist '(citation . bibtex-actions-map-buffer))
+  )
+
+(use-package! bibtex-actions-org-cite
+  :bind (("C-c b" . org-cite-insert)
+         ("M-o" . org-open-at-point)
+         :map minibuffer-local-map
+         ("M-b" . bibtex-actions-insert-preset))
+  :after (embark org oc bibtex-actions)
+  :config
+  ;; Make the 'bibtex-actions' org-cite target and bindings available to `embark'.
+  (add-to-list 'embark-target-finders 'bibtex-actions-org-cite-citation-finder)
+  ;; Specify the org-cite processors to use.
+  (setq org-cite-follow-processor 'bibtex-actions-org-cite
+        org-cite-insert-processor 'bibtex-actions-org-cite))
+
 
 (use-package! org-ref
   :config

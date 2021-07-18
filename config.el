@@ -746,12 +746,16 @@ TODO abstract backend implementations."
   ;; Keys binding
   (map! :leader
         :prefix "n"
-        (:prefix ("r" . "roam")
+        (:prefix ("r" . "Org-roam")
          :desc "Org Roam Capture"              "c" #'org-roam-capture
          :desc "Find node"                     "f" #'org-roam-node-find
          :desc "Show graph"                    "g" #'org-roam-graph
          :desc "Insert"                        "i" #'org-roam-node-insert
-         :desc "Toggle roam buffer"            "r" #'org-roam-buffer-toggle))
+         :desc "Toggle roam buffer"            "r" #'org-roam-buffer-toggle
+         :desc "Refile"                        "w" #'org-roam-refile
+         (:prefix ("a" . "Roam Alias")
+          :desc "Add alias"                    "a" #'org-roam-alias-add
+          :desc "Remove alias"                 "d" #'org-roam-alias-remove)))
   (map! :map org-roam-mode-map
         :n "<return>" #'org-roam-visit-thing
         :n "<tab>" #'magit-section-toggle)
@@ -852,10 +856,10 @@ it can be passed in POS."
   (map! :leader
         :prefix "n"
         (:prefix ("j" . "journal")
-          :desc "Arbitrary date" "d" #'org-roam-dailies-find-date
-          :desc "Today"          "j" #'org-roam-dailies-find-today
-          :desc "Tomorrow"       "m" #'org-roam-dailies-find-tomorrow
-          :desc "Yesterday"      "y" #'org-roam-dailies-find-yesterday)))
+          :desc "Arbitrary date" "d" #'org-roam-dailies-goto-date
+          :desc "Today"          "j" #'org-roam-dailies-goto-today
+          :desc "Tomorrow"       "m" #'org-roam-dailies-goto-tomorrow
+          :desc "Yesterday"      "y" #'org-roam-dailies-goto-yesterday)))
 
 ;; HACK org-roam-bibtex is loaded but unused
 ;;      so that the capture template is not overrided

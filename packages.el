@@ -26,16 +26,10 @@
   :recipe (:host github :repo "io12/org-fragtog"))
 (package! lexic
   :recipe (:host github :repo "tecosaur/lexic"))
-(package! org-roam-server
-  :recipe (:host github :repo "org-roam/org-roam-server"))
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 (package! citeproc-org
   :recipe (:host github :repo "andras-simonyi/citeproc-org"))
 (package! org-transclusion
   :recipe (:host github :repo "nobiot/org-transclusion"))
-(package! nroam
-  :recipe (:host github :repo "NicolasPetton/nroam"))
 
 (package! org-ol-tree
   :recipe (:host github :repo "Townk/org-ol-tree"))
@@ -46,5 +40,12 @@
 (package! clip2org
   :recipe (:host github :repo "thamer/clip2org"))
 
+;; Citations
 (package! bibtex-actions
   :recipe (:host github :repo "bdarcus/bibtex-actions"))
+
+;; Org-roam
+(package! org-roam
+  :recipe (:host github :repo "org-roam/org-roam"))
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex"))

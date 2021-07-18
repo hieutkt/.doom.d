@@ -241,8 +241,7 @@
 
 (use-package! org-fancy-priorities
   :config
-  (setq org-fancy-priorities-list '("[!!]" "[-!]" "[--]") ;High/Medium/Low priorities
-        org-default-priority 66.5))                       ;Bump Medium tasks higher
+  (setq org-fancy-priorities-list '("[!!]" "[-!]" "[--]")))
 
 (use-package! org-tempo
   :config
@@ -274,7 +273,6 @@
   (custom-set-faces!
     `(org-cite-key :foreground ,(face-attribute 'org-formula :foreground)))
   )
-
 
 (use-package! oc-biblatex
   :after oc
@@ -654,83 +652,114 @@ TODO abstract backend implementations."
 ;;   (citeproc-org-setup))
 
 (use-package! org-roam
-  :hook
-  (after-init . org-roam-mode)
+  :after org
   :init
   (setq org-roam-directory (concat org-directory "/Org-roam/")
-        +org-roam-open-buffer-on-find-file nil)
+        org-roam-v2-ack t
+        ;; These are org-related config
+        org-id-track-globally t
+        org-id-link-to-org-use-id t)
+  :config
+  (org-roam-setup)
   ;; Make org-roam faces less intrusive
   (custom-set-faces!
     `((org-roam-link org-roam-link-current)
       :inherit unspecified :underline ,(doom-color 'violet))
     `((org-link)
       :inherit unspecified :underline ,(doom-color 'blue)))
-  ;; Custom functions
-  (defun hp/org-get-heading1-and-clean ()
-    "Get all first heading texts, remove links and concaternate"
-      (string-join
-       (remove nil
-        (org-map-entries (lambda () (when (eq (org-element-property :level (org-element-at-point)) 1)
-                                (org-element-property :title (org-element-at-point))))))
-       "」「"))
+  ;; how the hierarchy of a node relative to the file it is in
+  (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+    "Return the file TITLE for the node."
+    (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
 
-  (defun hp/update-title-with-headings ()
-  "Go to first line and append with first org headings"
-  (interactive)
-  (when (derived-mode-p 'org-mode)
-    (if (member "journal" (org-roam--extract-tags))
-        (save-excursion
-          (goto-char (point-min))
-          (when (re-search-forward "^#\\+title:" nil t)
-            (goto-char (match-beginning 0))
-            (forward-char 23)
-            (delete-region (point) (line-end-position))
-            (end-of-line)
-            (insert "「")
-            (insert (hp/org-get-heading1-and-clean))
-            (insert "」"))))))
+  (cl-defmethod org-roam-node-firsttag ((node org-roam-node))
+    "The first tag of notes are used to denote note type"
+    (let* ((tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
+           (firsttag (nth 0 tags)))
+      (concat
+       (if firsttag
+           (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02)
+         (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02))
+       firsttag)))
 
-  :hook (before-save . hp/update-title-with-headings)
-  )
+  (cl-defmethod org-roam-node-cleantags ((node org-roam-node))
+    "Return the file TITLE for the node."
+    (let* ((tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
+           (othertags (if (length> tags 0) (cl-subseq tags 1))))
+      (concat
+       (if othertags
+           (all-the-icons-octicon "tag" :face 'all-the-icons-red :v-adjust 0.02))
+                  (string-join othertags ", "))))
+
+  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+    "Return the hierarchy for the node."
+    (let* ((title (org-roam-node-title node))
+          (olp (mapcar (lambda (s) (if (> (length s) 10) (concat (substring s 0 10)  "...") s)) (org-roam-node-olp node)))
+          (level (org-roam-node-level node))
+          (filetitle (org-roam-node-filetitle node))
+          (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
+          (separator (concat " " (all-the-icons-material "chevron_right") " ")))
+      (cond
+       ((= level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-green :v-adjust 0.02) " "
+                            (propertize shortentitle 'face 'org-roam-dim) separator title))
+       ((> level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-dgreen :v-adjust 0.02) " "
+                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim)
+                             separator title))
+       (t (concat (all-the-icons-faicon "file-text-o" :face 'all-the-icons-yellow :v-adjust 0.02) " " title)))
+      ))
+
+  (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+    (let* ((count (caar (org-roam-db-query
+                         [:select (funcall count source)
+                          :from links
+                          :where (= dest $s1)
+                          :and (= type "id")]
+                         (org-roam-node-id node)))))
+      (if (> count 0)
+        (concat (all-the-icons-material "link" :face 'all-the-icons-dblue) (format "%d" count))
+        (concat (all-the-icons-material "link" :face 'org-roam-dim) " "))))
+
+  (setq org-roam-node-display-template
+        (concat  "${backlinkscount:3} ${firsttag:13} ${hierarchy} ${cleantags}"))
+  ;; Keys binding
+  (map! :leader
+        :prefix "n"
+        (:prefix ("r" . "roam")
+         :desc "Org Roam Capture"              "c" #'org-roam-capture
+         :desc "Find node"                     "f" #'org-roam-node-find
+         :desc "Show graph"                    "g" #'org-roam-graph
+         :desc "Insert"                        "i" #'org-roam-node-insert
+         :desc "Toggle roam buffer"            "r" #'org-roam-buffer-toggle))
+  (map! :map org-roam-mode-map
+        :n "<return>" #'org-roam-visit-thing
+        :n "<tab>" #'magit-section-toggle)
+
+  ;; Custom popup rule
+  (set-popup-rules!
+    '(("^\\*org-roam\\*$" :side right :size 0.25 :ttl nil))))
 
 (use-package! org-roam-db
   :config
-  (setq org-roam-db-location "~/.emacs.d/org-roam.db"
-        org-roam-db-update-method 'immediate))
-
-(use-package! org-roam-graph
-  :init
-  (setq org-roam-graph-executable           (executable-find "dot")
-        org-roam-graph-extra-config        '(("overlap" . "false")
-                                             ("concentrate" . "true")
-                                             ("bgcolor" . "lightblue"))
-        org-roam-graph-edge-cites-extra-config
-        '(("color" . "gray")
-          ("style" . "dashed")
-          ("sep" . "20"))
-        org-roam-graph-shorten-titles      'wrap
-        org-roam-graph-max-title-length    50
-        org-roam-graph-exclude-matcher     '("journal")))
+  (setq org-roam-db-location "~/.emacs.d/org-roam.db"))
 
 (use-package! org-roam-capture
   :config
   (setq org-roam-capture-templates
-        '(("d" "default" plain #'org-roam-capture--get-point
-           ""
-           :file-name "${slug}_%<%Y-%m-%d--%H-%M-%S>"
-           :head "#+title: ${title}\n#+roam_tags: %?\n#+roam_alias: \n#+created: %U\n#+last_modified: %U\n\n"
-           :unnarrowed t))
+        '((("d" "default" plain "%?"
+            :if-new
+            (file+head "${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
+                       "#+title: ${title}\n#+filetags: %?\n#+created: %U\n#+last_modified: %U\n\n")
+            :unnarrowed t)))
         org-roam-dailies-capture-templates
-        '(("d" "daily" plain #'org-roam-capture--get-point
-           ""
-           :immediate-finish t
-           :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n"))
+        '(("d" "daily" entry
+           "* %?"
+           :if-new (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n")
+           :immediate-finish t))
         org-roam-capture-ref-templates
-        '(("r" "ref" plain (function org-roam-capture--get-point)
-           "#+roam_key: ${ref}\n%?"
-           :file-name "web_${slug}_%<%Y-%m-%d--%H-%M-%S>"
-           :head "#+title: ${title}\n#+roam_tags: website\n#+created: %U\n#+last_modified: %U\n"
+        '(("r" "ref" plain "%?" :if-new
+           (file+head "web_${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
+                      "#+title: ${title}\n#+filetags: website\n#+created: %U\n#+last_modified: %U\n")
            :unnarrowed t)
           ;; Browser bookletmark template:
           ;; javascript:location.href =
@@ -740,10 +769,12 @@ TODO abstract backend implementations."
           ;; + encodeURIComponent(document.getElementsByTagName("h1")[0].innerText)
           ;; + '&hostname='
           ;; + encodeURIComponent(location.hostname)
-          ("w" "webref" plain #'org-roam-capture--get-point
-           "* ${title} ([[${ref}][${hostname}]])\n%?"
-           :file-name "journal_%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d %a>\n#+roam_tags: \"journal\"\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n")))
+          ("w" "webref" entry "* ${title} ([[${ref}][${hostname}]])\n%?"
+           :if-new
+           (file+head "%<%Y-%m-%d>.org"
+                      "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n")
+           :unnarrowed t)
+          ))
 
   ;; Update the `last-modified` field on save
   (defun zp/org-find-time-file-property (property &optional anywhere)
@@ -794,14 +825,8 @@ it can be passed in POS."
   :hook (before-save . zp/org-set-last-modified))
 
 (use-package! org-roam-dailies
-  :init
-  (defadvice! hp/open-today-dailies ()
-    "Pop to Org-roam today daily notes"
-    :override #'doom/open-scratch-buffer
-    (interactive)
-    (org-roam-dailies-capture-today)
-    (pop-to-buffer (format-time-string "journal_%Y-%m-%d.org")))
   :config
+  (setq org-roam-dailies-directory "journal/")
   (map! :leader
         :prefix "n"
         (:prefix ("j" . "journal")
@@ -816,20 +841,18 @@ it can be passed in POS."
 ;;   :after org-roam
 ;;   :hook (org-roam-mode . org-roam-bibtex-mode))
 
-(use-package! org-roam-server
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8080
-        org-roam-server-export-inline-images t
-        org-roam-server-authenticate nil
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
+;; (use-package! org-roam-server
+;;   :config
+;;   (setq org-roam-server-host "127.0.0.1"
+;;         org-roam-server-port 8080
+;;         org-roam-server-export-inline-images t
+;;         org-roam-server-authenticate nil
+;;         org-roam-server-network-poll t
+;;         org-roam-server-network-arrows nil
+;;         org-roam-server-network-label-truncate t
+;;         org-roam-server-network-label-truncate-length 60
+;;         org-roam-server-network-label-wrap-length 20))
 
-;; (use-package! nroam
-;;   :hook (org-mode . nroam-setup-maybe))
 
 (use-package! org-noter
   :config

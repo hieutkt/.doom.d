@@ -589,10 +589,9 @@ TODO abstract backend implementations."
    (string-join
     '(
       "${author-or-editor} (${year}): ${title}"
-      "#+roam_tags: \"literature\""
-      "#+roam_key: cite:${=key=}"
+      "#+filetags: literature"
+      "#+roam_key: cite:@${=key=}"
       "#+date: %U"
-      "#+last_modified: %U"
       "#+startup: overview"
       "#+startup: hideblocks"
       "#+options: toc:2 num:t"
@@ -715,7 +714,7 @@ TODO abstract backend implementations."
        (if functiontag
            (propertize "=has:functions=" 'display (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02))
          (propertize "=not-functions=" 'display (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02)))
-       (string-join functiontag ", "))))
+       " " (string-join functiontag ", "))))
 
   (cl-defmethod org-roam-node-othertags ((node org-roam-node))
     "Return the OTHER TAGS of each notes."
@@ -739,7 +738,7 @@ TODO abstract backend implementations."
         (concat (propertize "=not-backlinks=" 'display (all-the-icons-material "link" :face 'org-roam-dim))  " "))))
 
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:16} ${functiontag:26} ${hierarchy} ${othertags}"))
+        (concat  "${backlinkscount:16} ${functiontag:27} ${hierarchy} ${othertags}"))
   ;; Keys binding
   (map! :leader
         :prefix "n"
@@ -768,21 +767,25 @@ TODO abstract backend implementations."
 (use-package! org-roam-capture
   :config
   (setq org-roam-capture-templates
-        '((("d" "default" plain "%?"
+        '(("d" "default" plain "#+filetags: %?\n"
             :if-new
             (file+head "${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
-                       "#+title: ${title}\n#+filetags: %?\n#+created: %U\n#+last_modified: %U\n\n")
-            :unnarrowed t)))
+                       "#+title: ${title}\n#+created: %U\n\n")
+            :unnarrowed t))
         org-roam-dailies-capture-templates
         '(("d" "daily" entry
            "* %?"
            :if-new (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n")
-           :immediate-finish t))
-        org-roam-capture-ref-templates
+                              "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
+           :immediate-finish t))))
+
+(use-package! org-roam-protocol
+  :after org-roam
+  :config
+  (setq org-roam-capture-ref-templates
         '(("r" "ref" plain "%?" :if-new
            (file+head "web_${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
-                      "#+title: ${title}\n#+filetags: website\n#+created: %U\n#+last_modified: %U\n")
+                      "#+title: ${title}\n#+filetags: website\n#+created: %U\n")
            :unnarrowed t)
           ;; Browser bookletmark template:
           ;; javascript:location.href =
@@ -794,58 +797,9 @@ TODO abstract backend implementations."
           ;; + encodeURIComponent(location.hostname)
           ("w" "webref" entry "* ${title} ([[${ref}][${hostname}]])\n%?"
            :if-new
-           (file+head "%<%Y-%m-%d>.org"
-                      "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n#+last_modified: %U\n\n")
-           :unnarrowed t)
-          ))
-
-  ;; Update the `last-modified` field on save
-  (defun zp/org-find-time-file-property (property &optional anywhere)
-    "Return the position of the time file PROPERTY if it exists.
-When ANYWHERE is non-nil, search beyond the preamble."
-    (save-excursion
-      (goto-char (point-min))
-      (let ((first-heading
-             (save-excursion
-               (re-search-forward org-outline-regexp-bol nil t))))
-        (when (re-search-forward (format "^#\\+%s:" property)
-                                 (if anywhere nil first-heading)
-                                 t)
-          (point)))))
-
-  (defun zp/org-has-time-file-property-p (property &optional anywhere)
-    "Return the position of time file PROPERTY if it is defined.
-As a special case, return -1 if the time file PROPERTY exists but
-is not defined."
-    (when-let ((pos (zp/org-find-time-file-property property anywhere)))
-      (save-excursion
-        (goto-char pos)
-        (if (and (looking-at-p " ")
-                 (progn (forward-char)
-                        (org-at-timestamp-p 'lax)))
-            pos -1))))
-
-  (defun zp/org-set-time-file-property (property &optional anywhere pos)
-    "Set the time file PROPERTY in the preamble.
-When ANYWHERE is non-nil, search beyond the preamble.
-If the position of the file PROPERTY has already been computed,
-it can be passed in POS."
-    (when-let ((pos (or pos
-                        (zp/org-find-time-file-property property))))
-      (save-excursion
-        (goto-char pos)
-        (if (looking-at-p " ")
-            (forward-char)
-          (insert " "))
-        (delete-region (point) (line-end-position))
-        (let* ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
-          (insert now)))))
-
-  (defun zp/org-set-last-modified ()
-    "Update the LAST_MODIFIED file property in the preamble."
-    (when (derived-mode-p 'org-mode)
-      (zp/org-set-time-file-property "last_modified")))
-  :hook (before-save . zp/org-set-last-modified))
+           (file+head (concat org-roam-dailies-directory "%<%Y-%m-%d>.org")
+                      "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
+           :unnarrowed t))))
 
 (use-package! org-roam-dailies
   :config

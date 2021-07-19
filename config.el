@@ -687,24 +687,38 @@ TODO abstract backend implementations."
       :inherit unspecified :underline ,(doom-color 'violet))
     `((org-link)
       :inherit unspecified :underline ,(doom-color 'blue)))
-  ;; how the hierarchy of a node relative to the file it is in
-  (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
-    "Return the file TITLE for the node."
-    (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
 
-  (cl-defmethod org-roam-node-firsttag ((node org-roam-node))
-    "The first tag of notes are used to denote note type"
+  ;; Org-roam interface
+  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+    "Return the node's TITLE, as well as it's HIERACHY."
+    (let* ((title (org-roam-node-title node))
+          (olp (mapcar (lambda (s) (if (> (length s) 10) (concat (substring s 0 10)  "...") s)) (org-roam-node-olp node)))
+          (level (org-roam-node-level node))
+          (filetitle (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
+          (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
+          (separator (concat " " (all-the-icons-material "chevron_right") " ")))
+      (cond
+       ((= level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-green) " "
+                            (propertize shortentitle 'face 'org-roam-dim) separator title))
+       ((= level 2) (concat (all-the-icons-material "list" :face 'all-the-icons-dpurple) " "
+                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
+       ((> level 2) (concat (all-the-icons-material "list" :face 'all-the-icons-dsilver) " "
+                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
+       (t (concat (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow) " " title)))))
+
+  (cl-defmethod org-roam-node-functiontag ((node org-roam-node))
+    "Return the FUNCTION TAG for each node. These tags are intended to be unique to each file, and represent the note's function."
     (let* ((specialtags '("journal" "concept" "data" "bio" "literature" "compilation" "argument"))
            (tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
-           (firsttag (seq-intersection specialtags tags 'string=)))
+           (functiontag (seq-intersection specialtags tags 'string=)))
       (concat
-       (if firsttag
+       (if functiontag
            (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02)
          (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02))
-       (string-join firsttag ", "))))
+       (string-join functiontag ", "))))
 
-  (cl-defmethod org-roam-node-cleantags ((node org-roam-node))
-    "Return the file TITLE for the node."
+  (cl-defmethod org-roam-node-othertags ((node org-roam-node))
+    "Return the OTHER TAGS of each notes."
     (let* ((tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
            (specialtags '("journal" "concept" "data" "bio" "literature" "compilation" "argument"))
            (othertags (seq-difference tags specialtags 'string=)))
@@ -712,23 +726,6 @@ TODO abstract backend implementations."
        (if othertags
            (all-the-icons-faicon "tags" :face 'all-the-icons-dgreen :v-adjust 0.02)) " "
                    (propertize (string-join othertags ", ") 'face 'all-the-icons-dgreen))))
-
-  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
-    "Return the hierarchy for the node."
-    (let* ((title (org-roam-node-title node))
-          (olp (mapcar (lambda (s) (if (> (length s) 10) (concat (substring s 0 10)  "...") s)) (org-roam-node-olp node)))
-          (level (org-roam-node-level node))
-          (filetitle (org-roam-node-filetitle node))
-          (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
-          (separator (concat " " (all-the-icons-material "chevron_right") " ")))
-      (cond
-       ((= level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-green :v-adjust 0.02) " "
-                            (propertize shortentitle 'face 'org-roam-dim) separator title))
-       ((> level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-dpurple :v-adjust 0.02) " "
-                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim)
-                             separator title))
-       (t (concat (all-the-icons-faicon "file-text-o" :face 'all-the-icons-yellow :v-adjust 0.02) " " title)))
-      ))
 
   (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
     (let* ((count (caar (org-roam-db-query
@@ -742,7 +739,7 @@ TODO abstract backend implementations."
         (concat (all-the-icons-material "link" :face 'org-roam-dim) " "))))
 
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:3} ${firsttag:13} ${hierarchy} ${cleantags}"))
+        (concat  "${backlinkscount:3} ${functiontag:13} ${hierarchy} ${othertags}"))
   ;; Keys binding
   (map! :leader
         :prefix "n"

@@ -698,13 +698,13 @@ TODO abstract backend implementations."
           (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
           (separator (concat " " (all-the-icons-material "chevron_right") " ")))
       (cond
-       ((= level 1) (concat (all-the-icons-material "list" :face 'all-the-icons-green) " "
+       ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-green)) " "
                             (propertize shortentitle 'face 'org-roam-dim) separator title))
-       ((= level 2) (concat (all-the-icons-material "list" :face 'all-the-icons-dpurple) " "
+       ((= level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dpurple)) " "
                              (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
-       ((> level 2) (concat (all-the-icons-material "list" :face 'all-the-icons-dsilver) " "
+       ((> level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dsilver)) " "
                              (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
-       (t (concat (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow) " " title)))))
+       (t (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow)) " " title)))))
 
   (cl-defmethod org-roam-node-functiontag ((node org-roam-node))
     "Return the FUNCTION TAG for each node. These tags are intended to be unique to each file, and represent the note's function."
@@ -713,8 +713,8 @@ TODO abstract backend implementations."
            (functiontag (seq-intersection specialtags tags 'string=)))
       (concat
        (if functiontag
-           (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02)
-         (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02))
+           (propertize "=has:functions=" 'display (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02))
+         (propertize "=not-functions=" 'display (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02)))
        (string-join functiontag ", "))))
 
   (cl-defmethod org-roam-node-othertags ((node org-roam-node))
@@ -724,7 +724,7 @@ TODO abstract backend implementations."
            (othertags (seq-difference tags specialtags 'string=)))
       (concat
        (if othertags
-           (all-the-icons-faicon "tags" :face 'all-the-icons-dgreen :v-adjust 0.02)) " "
+           (propertize "=has:tags=" 'display (all-the-icons-faicon "tags" :face 'all-the-icons-dgreen :v-adjust 0.02))) " "
                    (propertize (string-join othertags ", ") 'face 'all-the-icons-dgreen))))
 
   (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
@@ -735,11 +735,11 @@ TODO abstract backend implementations."
                           :and (= type "id")]
                          (org-roam-node-id node)))))
       (if (> count 0)
-        (concat (all-the-icons-material "link" :face 'all-the-icons-dblue) (format "%d" count))
-        (concat (all-the-icons-material "link" :face 'org-roam-dim) " "))))
+        (concat (propertize "=has:backlinks=" 'display (all-the-icons-material "link" :face 'all-the-icons-dblue)) (format "%d" count))
+        (concat (propertize "=not-backlinks=" 'display (all-the-icons-material "link" :face 'org-roam-dim))  " "))))
 
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:3} ${functiontag:13} ${hierarchy} ${othertags}"))
+        (concat  "${backlinkscount:16} ${functiontag:26} ${hierarchy} ${othertags}"))
   ;; Keys binding
   (map! :leader
         :prefix "n"

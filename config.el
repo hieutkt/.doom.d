@@ -775,8 +775,8 @@ TODO abstract backend implementations."
         org-roam-dailies-capture-templates
         '(("d" "daily" entry
            "* %?"
-           :if-new (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
+           :if-new (file+head "%<%Y-%m>.org"
+                              "#+title: %<%Y-%m>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
            :immediate-finish t))))
 
 (use-package! org-roam-protocol
@@ -797,8 +797,8 @@ TODO abstract backend implementations."
           ;; + encodeURIComponent(location.hostname)
           ("w" "webref" entry "* ${title} ([[${ref}][${hostname}]])\n%?"
            :if-new
-           (file+head (concat org-roam-dailies-directory "%<%Y-%m-%d>.org")
-                      "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
+           (file+head (concat org-roam-dailies-directory "%<%Y-%m>.org")
+                      "#+title: %<%Y-%m>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
            :unnarrowed t))))
 
 (use-package! org-roam-dailies

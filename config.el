@@ -191,8 +191,7 @@
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil
         org-image-actual-width (/ (display-pixel-width) 3)
-        org-ellipsis " "
-        org-hidden-keywords '(title))
+        org-ellipsis "")
   ;; Setup custom links
   (+org-init-custom-links-h)
   ;; Custom some face
@@ -209,7 +208,8 @@
     (interactive)
     (setq prettify-symbols-alist
           (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                  `(("#+begin_src" . "")
+                  `(("#+title:" . ,(all-the-icons-material "insert_drive_file" :v-adjust -0.01))
+                    ("#+begin_src" . "")
                     ("#+end_src" . "⎺")
                     ("#+begin_quote" . "")
                     ("#+end_quote" . "⎺")

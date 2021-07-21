@@ -737,8 +737,14 @@ TODO abstract backend implementations."
         (concat (propertize "=has:backlinks=" 'display (all-the-icons-material "link" :face 'all-the-icons-dblue)) (format "%d" count))
         (concat (propertize "=not-backlinks=" 'display (all-the-icons-material "link" :face 'org-roam-dim))  " "))))
 
+  (cl-defmethod org-roam-node-directories ((node org-roam-node))
+    (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+        (concat (all-the-icons-material "folder") " "
+                (propertize (string-join (f-split dirs) "/") 'face 'org-roam-dim))
+      ""))
+
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:16} ${functiontag:27} ${hierarchy} ${othertags}"))
+        (concat  "${backlinkscount:16} ${functiontag:27} ${directories}${hierarchy} ${othertags}"))
   ;; Keys binding
   (map! :leader
         :prefix "n"

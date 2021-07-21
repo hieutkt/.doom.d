@@ -33,7 +33,7 @@
   :config
   ;; CJK characters
   (dolist (unicode-block '("CJK Unified Ideographs" "CJK Symbols and Punctuation" "CJK Radicals Supplement" "CJK Compatibility Ideographs"))
-      (push "Sarasa Mono Slab SC" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))
+    (push "Sarasa Mono Slab SC" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))
   (dolist (unicode-block '("Hangul Syllables" "Hangul Jamo Extended-A" "Hangul Jamo Extended-B"))
     (push "Sarasa Mono Slab K" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
 
@@ -691,18 +691,18 @@ TODO abstract backend implementations."
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
     "Return the node's TITLE, as well as it's HIERACHY."
     (let* ((title (org-roam-node-title node))
-          (olp (mapcar (lambda (s) (if (> (length s) 10) (concat (substring s 0 10)  "...") s)) (org-roam-node-olp node)))
-          (level (org-roam-node-level node))
-          (filetitle (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
-          (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
-          (separator (concat " " (all-the-icons-material "chevron_right") " ")))
+           (olp (mapcar (lambda (s) (if (> (length s) 10) (concat (substring s 0 10)  "...") s)) (org-roam-node-olp node)))
+           (level (org-roam-node-level node))
+           (filetitle (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
+           (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
+           (separator (concat " " (all-the-icons-material "chevron_right") " ")))
       (cond
        ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-green)) " "
                             (propertize shortentitle 'face 'org-roam-dim) separator title))
        ((= level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dpurple)) " "
-                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
+                            (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
        ((> level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dsilver)) " "
-                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
+                            (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
        (t (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow)) " " title)))))
 
   (cl-defmethod org-roam-node-functiontag ((node org-roam-node))
@@ -724,7 +724,7 @@ TODO abstract backend implementations."
       (concat
        (if othertags
            (propertize "=has:tags=" 'display (all-the-icons-faicon "tags" :face 'all-the-icons-dgreen :v-adjust 0.02))) " "
-                   (propertize (string-join othertags ", ") 'face 'all-the-icons-dgreen))))
+       (propertize (string-join othertags ", ") 'face 'all-the-icons-dgreen))))
 
   (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
     (let* ((count (caar (org-roam-db-query
@@ -734,7 +734,7 @@ TODO abstract backend implementations."
                           :and (= type "id")]
                          (org-roam-node-id node)))))
       (if (> count 0)
-        (concat (propertize "=has:backlinks=" 'display (all-the-icons-material "link" :face 'all-the-icons-dblue)) (format "%d" count))
+          (concat (propertize "=has:backlinks=" 'display (all-the-icons-material "link" :face 'all-the-icons-dblue)) (format "%d" count))
         (concat (propertize "=not-backlinks=" 'display (all-the-icons-material "link" :face 'org-roam-dim))  " "))))
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
@@ -774,10 +774,10 @@ TODO abstract backend implementations."
   :config
   (setq org-roam-capture-templates
         '(("d" "default" plain "#+filetags: %?\n"
-            :if-new
-            (file+head "${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
-                       "#+title: ${title}\n#+created: %U\n\n")
-            :unnarrowed t))
+           :if-new
+           (file+head "${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
+                      "#+title: ${title}\n#+created: %U\n\n")
+           :unnarrowed t))
         org-roam-dailies-capture-templates
         '(("d" "daily" entry
            "* %?"
@@ -813,10 +813,10 @@ TODO abstract backend implementations."
   (map! :leader
         :prefix "n"
         (:prefix ("j" . "journal")
-          :desc "Arbitrary date" "d" #'org-roam-dailies-goto-date
-          :desc "Today"          "j" #'org-roam-dailies-goto-today
-          :desc "Tomorrow"       "m" #'org-roam-dailies-goto-tomorrow
-          :desc "Yesterday"      "y" #'org-roam-dailies-goto-yesterday)))
+         :desc "Arbitrary date" "d" #'org-roam-dailies-goto-date
+         :desc "Today"          "j" #'org-roam-dailies-goto-today
+         :desc "Tomorrow"       "m" #'org-roam-dailies-goto-tomorrow
+         :desc "Yesterday"      "y" #'org-roam-dailies-goto-yesterday)))
 
 ;; HACK org-roam-bibtex is loaded but unused
 ;;      so that the capture template is not overrided

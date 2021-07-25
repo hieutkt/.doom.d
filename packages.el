@@ -43,9 +43,3 @@
 ;; Citations
 (package! bibtex-actions
   :recipe (:host github :repo "bdarcus/bibtex-actions"))
-
-;; Org-roam
-(package! org-roam
-  :recipe (:host github :repo "org-roam/org-roam"))
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex"))

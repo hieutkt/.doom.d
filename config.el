@@ -635,9 +635,10 @@ TODO abstract backend implementations."
   ;; This is great for performance, but means the data can become stale if you modify it.
   (file-notify-add-watch bibtex-completion-bibliography '(change) 'bibtex-actions-refresh)
   ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
-  (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
-  (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))
-  (add-to-list 'embark-keymap-alist '(citation . bibtex-actions-map-buffer))
+  (after! embark
+   (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+   (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))
+   (add-to-list 'embark-keymap-alist '(citation . bibtex-actions-map-buffer)))
   )
 
 (use-package! bibtex-actions-org-cite
@@ -673,11 +674,7 @@ TODO abstract backend implementations."
 (use-package! org-roam
   :after org
   :init
-  (setq org-roam-directory (concat org-directory "/Org-roam/")
-        org-roam-v2-ack t
-        ;; These are org-related config
-        org-id-track-globally t
-        org-id-link-to-org-use-id t)
+  (setq org-roam-directory (concat org-directory "/Org-roam/"))
   :config
   (org-roam-setup)
   ;; Make org-roam faces less intrusive
@@ -744,27 +741,7 @@ TODO abstract backend implementations."
       ""))
 
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:16} ${functiontag:27} ${directories}${hierarchy} ${othertags}"))
-  ;; Keys binding
-  (map! :leader
-        :prefix "n"
-        (:prefix ("r" . "Org-roam")
-         :desc "Org Roam Capture"              "c" #'org-roam-capture
-         :desc "Find node"                     "f" #'org-roam-node-find
-         :desc "Show graph"                    "g" #'org-roam-graph
-         :desc "Insert"                        "i" #'org-roam-node-insert
-         :desc "Toggle roam buffer"            "r" #'org-roam-buffer-toggle
-         :desc "Refile"                        "w" #'org-roam-refile
-         (:prefix ("a" . "Roam Alias")
-          :desc "Add alias"                    "a" #'org-roam-alias-add
-          :desc "Remove alias"                 "d" #'org-roam-alias-remove)))
-  (map! :map org-roam-mode-map
-        :n "<return>" #'org-roam-visit-thing
-        :n "<tab>" #'magit-section-toggle)
-
-  ;; Custom popup rule
-  (set-popup-rules!
-    '(("^\\*org-roam\\*$" :side right :size 0.25 :ttl nil))))
+        (concat  "${backlinkscount:16} ${functiontag:27} ${directories}${hierarchy} ${othertags}")))
 
 (use-package! org-roam-db
   :config
@@ -778,12 +755,7 @@ TODO abstract backend implementations."
            (file+head "${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
                       "#+title: ${title}\n#+created: %U\n\n")
            :unnarrowed t))
-        org-roam-dailies-capture-templates
-        '(("d" "daily" entry
-           "* %?"
-           :if-new (file+head "%<%Y-%m>.org"
-                              "#+title: %<%Y-%m>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
-           :immediate-finish t))))
+))
 
 (use-package! org-roam-protocol
   :after org-roam
@@ -809,7 +781,13 @@ TODO abstract backend implementations."
 
 (use-package! org-roam-dailies
   :config
-  (setq org-roam-dailies-directory "journal/")
+  (setq org-roam-dailies-directory "journal/"
+        org-roam-dailies-capture-templates
+        '(("d" "daily" entry "* %?"
+           :if-new
+           (file+head "%<%Y-%m>.org"
+                      "#+title: %<%Y-%m>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
+           :immediate-finish t)))
   (map! :leader
         :prefix "n"
         (:prefix ("j" . "journal")
@@ -817,24 +795,6 @@ TODO abstract backend implementations."
          :desc "Today"          "j" #'org-roam-dailies-goto-today
          :desc "Tomorrow"       "m" #'org-roam-dailies-goto-tomorrow
          :desc "Yesterday"      "y" #'org-roam-dailies-goto-yesterday)))
-
-;; HACK org-roam-bibtex is loaded but unused
-;;      so that the capture template is not overrided
-;; (use-package! org-roam-bibtex
-;;   :after org-roam
-;;   :hook (org-roam-mode . org-roam-bibtex-mode))
-
-;; (use-package! org-roam-server
-;;   :config
-;;   (setq org-roam-server-host "127.0.0.1"
-;;         org-roam-server-port 8080
-;;         org-roam-server-export-inline-images t
-;;         org-roam-server-authenticate nil
-;;         org-roam-server-network-poll t
-;;         org-roam-server-network-arrows nil
-;;         org-roam-server-network-label-truncate t
-;;         org-roam-server-network-label-truncate-length 60
-;;         org-roam-server-network-label-wrap-length 20))
 
 
 (use-package! org-noter
@@ -990,7 +950,7 @@ TODO abstract backend implementations."
 
 (use-package! page-break-lines
   :config
-  (global-page-break-lines-mode))
+  (add-hook 'prog-mode-hook (lambda () (page-break-lines-mode 1))))
 
 (use-package! clip2org)
 (use-package! org-ol-tree)

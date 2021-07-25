@@ -215,7 +215,7 @@
                     ("#+end_quote" . "⎺")
                     ("#+begin_verse" . "")
                     ("#+end_verse" . "⎺")
-                    (":properties:" . "")
+                    (":properties:" . "")
                     (":end:" . "⎺")
                     (":attach:" . "")
                     ("#+results:" . ""))))

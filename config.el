@@ -679,16 +679,12 @@ TODO abstract backend implementations."
 (use-package! org-roam
   :after org
   :init
-  (setq org-roam-directory (concat org-directory "/Org-roam/"))
+  (setq org-roam-directory (concat org-directory "/Org-roam/")
+        org-roam-mode-section-functions
+        (list #'org-roam-backlinks-section
+              #'org-roam-reflinks-section
+              #'org-roam-unlinked-references-section))
   :config
-  (org-roam-setup)
-  ;; Make org-roam faces less intrusive
-  (custom-set-faces!
-    `((org-roam-link org-roam-link-current)
-      :inherit unspecified :underline ,(doom-color 'violet))
-    `((org-link)
-      :inherit unspecified :underline ,(doom-color 'blue)))
-
   ;; Org-roam interface
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
     "Return the node's TITLE, as well as it's HIERACHY."
@@ -699,13 +695,13 @@ TODO abstract backend implementations."
            (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
            (separator (concat " " (all-the-icons-material "chevron_right") " ")))
       (cond
-       ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-green)) " "
-                            (propertize shortentitle 'face 'org-roam-dim) separator title))
-       ((= level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dpurple)) " "
-                            (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
-       ((> level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dsilver)) " "
-                            (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-dim) separator title))
-       (t (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow)) " " title)))))
+       ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-green))
+                            (propertize shortentitle 'face 'org-roam-olp) separator title))
+       ((= level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dpurple))
+                            (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-olp) separator title))
+       ((> level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dsilver))
+                            (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-olp) separator title))
+       (t (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow)) title)))))
 
   (cl-defmethod org-roam-node-functiontag ((node org-roam-node))
     "Return the FUNCTION TAG for each node. These tags are intended to be unique to each file, and represent the note's function."
@@ -716,7 +712,7 @@ TODO abstract backend implementations."
        (if functiontag
            (propertize "=has:functions=" 'display (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02))
          (propertize "=not-functions=" 'display (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02)))
-       " " (string-join functiontag ", "))))
+        (string-join functiontag ", "))))
 
   (cl-defmethod org-roam-node-othertags ((node org-roam-node))
     "Return the OTHER TAGS of each notes."
@@ -741,12 +737,12 @@ TODO abstract backend implementations."
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-        (concat (all-the-icons-material "folder") " "
-                (propertize (string-join (f-split dirs) "/") 'face 'org-roam-dim))
+        (concat (all-the-icons-material "folder")
+                (propertize (string-join (f-split dirs) "/") 'face 'org-roam-dim) " ")
       ""))
 
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:16} ${functiontag:27} ${directories}${hierarchy} ${othertags}")))
+        (concat  "${backlinkscount:16} ${functiontag:26} ${directories}${hierarchy} ${othertags}")))
 
 (use-package! org-roam-db
   :config

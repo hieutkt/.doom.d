@@ -863,37 +863,6 @@ TODO abstract backend implementations."
     (setq-local lsp-enable-folding t
                 lsp-folding-range-limit 100)))
 
-
-
-(use-package! lexic
-  :commands lexic-search lexic-list-dictionary
-  :init
-  (defadvice! +lookup/dictionary-definition-lexic (identifier &optional arg)
-    "Look up the definition of the word at point (or selection) using `lexic-search'."
-    :override #'+lookup/dictionary-definition
-    (interactive
-     (list (or (doom-thing-at-point-or-region 'word)
-               (read-string "Look up in dictionary: "))
-           current-prefix-arg))
-    (lexic-search identifier nil nil t))
-  :config
-  (set-popup-rules!
-    '(("^\\*lexic\\*$" :size 0.4)))
-  (map! :map lexic-mode-map
-        :n "q" #'lexic-return-from-lexic
-        :nv "RET" #'lexic-search-word-at-point
-        :n "a" #'outline-show-all
-        :n "h" (cmd! (outline-hide-sublevels 3))
-        :n "o" #'lexic-toggle-entry
-        :n "n" #'lexic-next-entry
-        :n "N" (cmd! (lexic-next-entry t))
-        :n "p" #'lexic-previous-entry
-        :n "P" (cmd! (lexic-previous-entry t))
-        :n "b" #'lexic-search-history-backwards
-        :n "f" #'lexic-search-history-forwards
-        :n "/" (cmd! (call-interactively #'lexic-search))))
-
-
 (use-package! keycast
   :commands keycast-mode
   :config

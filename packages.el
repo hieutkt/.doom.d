@@ -22,8 +22,6 @@
   :recipe (:host github :repo "awth13/org-appear"))
 (package! org-fragtog
   :recipe (:host github :repo "io12/org-fragtog"))
-(package! lexic
-  :recipe (:host github :repo "tecosaur/lexic"))
 (package! citeproc-org
   :recipe (:host github :repo "andras-simonyi/citeproc-org"))
 (package! org-transclusion

@@ -25,7 +25,7 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :name "Sarasa Mono Slab J" :size 20)
+(setq doom-font (font-spec :name "Sarasa Mono CL" :size 20)
       doom-variable-pitch-font (font-spec :name "Alegreya" :size 22)
       doom-unicode-font (font-spec :name "JuliaMono" :size 20))
 
@@ -33,9 +33,9 @@
   :config
   ;; CJK characters
   (dolist (unicode-block '("CJK Unified Ideographs" "CJK Symbols and Punctuation" "CJK Radicals Supplement" "CJK Compatibility Ideographs"))
-    (push "Sarasa Mono Slab SC" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))
+    (push "Sarasa Mono SC" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))
   (dolist (unicode-block '("Hangul Syllables" "Hangul Jamo Extended-A" "Hangul Jamo Extended-B"))
-    (push "Sarasa Mono Slab K" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
+    (push "Sarasa Mono K" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
 
 (use-package! mixed-pitch
   :hook ((org-mode helpful-mode) . mixed-pitch-mode)
@@ -47,7 +47,6 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-gruvbox
-      doom-themes-treemacs-theme 'doom-colors
       doom-themes-treemacs-enable-variable-pitch nil)
 
 

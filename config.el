@@ -591,8 +591,7 @@ TODO abstract backend implementations."
    bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
    bibtex-completion-notes-template-multiple-files
    (string-join
-    '(
-      "${author-or-editor} (${year}): ${title}"
+    '("${author-or-editor} (${year}): ${title}"
       "#+filetags: literature"
       "#+roam_key: cite:@${=key=}"
       "#+date: %U"
@@ -605,8 +604,8 @@ TODO abstract backend implementations."
       "#+macro: sidenote {{< sidenote >}}%(string (char-from-name \"DOLLAR SIGN\"))1{{< /sidenote >}}"
       "#+hugo_custom_front_matter: :exclude true :math true"
       "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
-      "#+hugo_tags:"
       "#+hugo_series: \"Reading notes\""
+      "#+hugo_tags:"
       ""
       "* What?"
       "* Why?"
@@ -678,11 +677,13 @@ TODO abstract backend implementations."
 (use-package! org-roam
   :after org
   :init
-  (setq org-roam-directory (concat org-directory "/Org-roam/")
+  (setq +org-roam-open-buffer-on-find-file nil
+        org-roam-directory (concat org-directory "/Org-roam/")
         org-roam-mode-section-functions
         (list #'org-roam-backlinks-section
               #'org-roam-reflinks-section
-              #'org-roam-unlinked-references-section))
+              #'org-roam-unlinked-references-section)
+        hp/org-roam-function-tags '("compilation" "argument" "journal" "concept" "data" "bio" "literature" "event"))
   :config
   ;; Org-roam interface
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
@@ -691,7 +692,7 @@ TODO abstract backend implementations."
            (olp (mapcar (lambda (s) (if (> (length s) 10) (concat (substring s 0 10)  "...") s)) (org-roam-node-olp node)))
            (level (org-roam-node-level node))
            (filetitle (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
-           (shortentitle (if (> (length filetitle) 10) (concat (substring filetitle 0 10)  "...") filetitle))
+           (shortentitle (if (> (length filetitle) 20) (concat (substring filetitle 0 20)  "...") filetitle))
            (separator (concat " " (all-the-icons-material "chevron_right") " ")))
       (cond
        ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-green))
@@ -704,7 +705,7 @@ TODO abstract backend implementations."
 
   (cl-defmethod org-roam-node-functiontag ((node org-roam-node))
     "Return the FUNCTION TAG for each node. These tags are intended to be unique to each file, and represent the note's function."
-    (let* ((specialtags '("journal" "concept" "data" "bio" "literature" "compilation" "argument"))
+    (let* ((specialtags hp/org-roam-function-tags)
            (tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
            (functiontag (seq-intersection specialtags tags 'string=)))
       (concat
@@ -716,7 +717,7 @@ TODO abstract backend implementations."
   (cl-defmethod org-roam-node-othertags ((node org-roam-node))
     "Return the OTHER TAGS of each notes."
     (let* ((tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
-           (specialtags '("journal" "concept" "data" "bio" "literature" "compilation" "argument"))
+           (specialtags hp/org-roam-function-tags)
            (othertags (seq-difference tags specialtags 'string=)))
       (concat
        (if othertags
@@ -731,17 +732,49 @@ TODO abstract backend implementations."
                           :and (= type "id")]
                          (org-roam-node-id node)))))
       (if (> count 0)
-          (concat (propertize "=has:backlinks=" 'display (all-the-icons-material "link" :face 'all-the-icons-dblue)) (format "%d" count))
+          (concat (propertize "=has:backlinks=" 'display (all-the-icons-material "link" :face 'all-the-icons-blue)) (format "%d" count))
         (concat (propertize "=not-backlinks=" 'display (all-the-icons-material "link" :face 'org-roam-dim))  " "))))
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-        (concat (all-the-icons-material "folder")
+        (concat (all-the-icons-material "folder" :face 'all-the-icons-dorange)
                 (propertize (string-join (f-split dirs) "/") 'face 'org-roam-dim) " ")
       ""))
 
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:16} ${functiontag:26} ${directories}${hierarchy} ${othertags}")))
+        (concat  "${backlinkscount:16} ${functiontag:26} ${directories}${hierarchy} ${othertags}"))
+  ;; HACK A patch for org-html exports to properly handles org-roam links
+  ;;   (defun org-html--reference (datum info &optional named-only)
+  ;;   "Return an appropriate reference for DATUM.
+  ;; DATUM is an element or a `target' type object.  INFO is the
+  ;; current export state, as a plist.
+  ;; When NAMED-ONLY is non-nil and DATUM has no NAME keyword, return
+  ;; nil.  This doesn't apply to headlines, inline tasks, radio
+  ;; targets and targets."
+  ;;   (let* ((type (org-element-type datum))
+  ;; 	 (user-label
+  ;; 	  (org-element-property
+  ;; 	   (pcase type
+  ;; 	     ((or `headline `inlinetask) :CUSTOM_ID)
+  ;; 	     ((or `radio-target `target) :value)
+  ;; 	     (_ :name))
+  ;; 	   datum))
+  ;;          (user-label (or user-label
+  ;;                          (when-let ((path (org-element-property :ID datum)))
+  ;;                            (concat "ID-" path)))))
+  ;;     (cond
+  ;;      ((and user-label
+  ;; 	   (or (plist-get info :html-prefer-user-labels)
+  ;; 	       ;; Used CUSTOM_ID property unconditionally.
+  ;; 	       (memq type '(headline inlinetask))))
+  ;;       user-label)
+  ;;      ((and named-only
+  ;; 	   (not (memq type '(headline inlinetask radio-target target)))
+  ;; 	   (not user-label))
+  ;;       nil)
+  ;;      (t
+  ;;       (org-export-get-reference datum info)))))
+  )
 
 (use-package! org-roam-db
   :config
@@ -760,24 +793,30 @@ TODO abstract backend implementations."
 (use-package! org-roam-protocol
   :after org-roam
   :config
-  (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain "%?" :if-new
-           (file+head "web_${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
-                      "#+title: ${title}\n#+filetags: website\n#+created: %U\n")
-           :unnarrowed t)
-          ;; Browser bookletmark template:
-          ;; javascript:location.href =
-          ;; 'org-protocol://roam-ref?template=w&ref='
-          ;; + encodeURIComponent(location.href)
-          ;; + '&title='
-          ;; + encodeURIComponent(document.getElementsByTagName("h1")[0].innerText)
-          ;; + '&hostname='
-          ;; + encodeURIComponent(location.hostname)
-          ("w" "webref" entry "* ${title} ([[${ref}][${hostname}]])\n%?"
-           :if-new
-           (file+head (concat org-roam-dailies-directory "%<%Y-%m>.org")
-                      "#+title: %<%Y-%m>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
-           :unnarrowed t))))
+  (add-to-list
+   'org-roam-capture-ref-templates
+   `(;; Browser bookletmark template:
+     ;; javascript:location.href =
+     ;; 'org-protocol://roam-ref?template=w&ref='
+     ;; + encodeURIComponent(location.href)
+     ;; + '&title='
+     ;; + encodeURIComponent(document.getElementsByTagName("h1")[0].innerText)
+     ;; + '&hostname='
+     ;; + encodeURIComponent(location.hostname)
+     ("w" "webref" entry "* ${title} ([[${ref}][${hostname}]])\n%?"
+      :if-new
+      (file+head
+       ,(concat org-roam-dailies-directory "%<%Y-%m>.org")
+       ,(string-join
+         '(":properties:"
+           ":roam_refs: %^{Key}"
+           ":end:"
+           "#+title: %<%Y-%m>"
+           "#+filetags: journal"
+           "#+startup: overview"
+           "#+created: %U"
+           "") "\n"))
+      :unnarrowed t))))
 
 (use-package! org-roam-dailies
   :config

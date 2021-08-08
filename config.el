@@ -837,6 +837,12 @@ TODO abstract backend implementations."
          :desc "Tomorrow"       "m" #'org-roam-dailies-goto-tomorrow
          :desc "Yesterday"      "y" #'org-roam-dailies-goto-yesterday)))
 
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam
+    :commands (org-roam-ui-mode))
 
 (use-package! org-noter
   :config

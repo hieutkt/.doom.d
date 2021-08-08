@@ -38,7 +38,7 @@
     (push "Sarasa Mono K" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
 
 (use-package! mixed-pitch
-  :hook ((org-mode helpful-mode) . mixed-pitch-mode)
+  :hook (org-mode . mixed-pitch-mode)
   :config
   (pushnew! mixed-pitch-fixed-pitch-faces 'warning 'org-cite-key)
   (setq mixed-pitch-set-height t))
@@ -48,16 +48,6 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-gruvbox
       doom-themes-treemacs-enable-variable-pitch nil)
-
-
-(add-hook! 'doom-load-theme-hook
-  (setq org-preview-latex-image-directory
-        (concat doom-cache-dir "org-latex/" (symbol-name doom-theme) "/"))
-  (dolist (buffer (doom-buffers-in-mode 'org-mode (buffer-list)))
-    (with-current-buffer buffer
-      (+org--toggle-inline-images-in-subtree (point-min) (point-max) 'refresh)
-      (org-clear-latex-preview (point-min) (point-max))
-      (org--latex-preview-region (point-min) (point-max)))))
 
 ;; Start Doom fullscreen
 (add-to-list 'default-frame-alist '(width . 92))
@@ -273,11 +263,10 @@
     `(org-cite-key :foreground ,(face-attribute 'org-formula :foreground)))
   (after! ox-hugo
     ;; Use json file when export to website
-    (defun hp/org-hugo-export-to-md-using-json ()
-      (interactive)
-      (let ((org-cite-global-bibliography (list (concat org-directory "/References/zotero.json"))))
-        (org-hugo-export-to-md))))
-    )
+    (defadvice! hp/org-hugo-export-to-md-using-json ()
+      :before #'org-hugo-export-to-md
+      (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.json"))))
+  ))
 
 (use-package! oc-biblatex
   :after oc
@@ -827,7 +816,7 @@ TODO abstract backend implementations."
         '(("d" "daily" entry "* %?"
            :if-new
            (file+head "%<%Y-%m>.org"
-                      "#+title: %<%Y-%m>\n#+filetags: journal\n#+startup: overview\n#+created: %U\n\n")
+                      "#+title: %<%Y-%m>\n#+filetags: journal\n##+startup: overview\n+startup: hideblocks\n#+created: %U\n\n")
            :immediate-finish t)))
   (map! :leader
         :prefix "n"

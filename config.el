@@ -692,7 +692,8 @@ TODO abstract backend implementations."
            (olp (mapcar (lambda (s) (if (> (length s) 10) (concat (substring s 0 10)  "...") s)) (org-roam-node-olp node)))
            (level (org-roam-node-level node))
            (filetitle (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
-           (shortentitle (if (> (length filetitle) 20) (concat (substring filetitle 0 20)  "...") filetitle))
+           (filetitle-or-name (if filetitle filetitle (file-name-nondirectory (org-roam-node-file node))))
+           (shortentitle (if (> (length filetitle-or-name) 20) (concat (substring filetitle-or-name 0 20)  "...") filetitle-or-name))
            (separator (concat " " (all-the-icons-material "chevron_right") " ")))
       (cond
        ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-green))
@@ -701,7 +702,8 @@ TODO abstract backend implementations."
                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-olp) separator title))
        ((> level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dsilver))
                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-olp) separator title))
-       (t (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow)) title)))))
+       (t (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow))
+                  (if filetitle title (propertize filetitle-or-name 'face 'all-the-icons-dyellow)))))))
 
   (cl-defmethod org-roam-node-functiontag ((node org-roam-node))
     "Return the FUNCTION TAG for each node. These tags are intended to be unique to each file, and represent the note's function."

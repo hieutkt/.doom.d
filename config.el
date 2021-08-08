@@ -739,8 +739,8 @@ TODO abstract backend implementations."
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-        (concat (all-the-icons-material "folder" :face 'all-the-icons-dorange)
-                (propertize (string-join (f-split dirs) "/") 'face 'org-roam-dim) " ")
+        (concat (all-the-icons-material "folder" :face 'all-the-icons-orange)
+                (propertize (string-join (f-split dirs) "/") 'face 'all-the-icons-dorange) " ")
       ""))
 
   (setq org-roam-node-display-template

@@ -42,3 +42,7 @@
 ;;Org-roam
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
+
+;;Graphviz
+(package! graphviz-dot-mode
+  :recipe (:host github :repo "ppareit/graphviz-dot-mode"))

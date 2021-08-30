@@ -963,3 +963,9 @@ TODO abstract backend implementations."
 (use-package! orderless
   :config
   (add-to-list 'orderless-matching-styles 'char-fold-to-regexp))
+
+(use-package graphviz-dot-mode
+  :config
+  (setq graphviz-dot-indent-width 4))
+
+(use-package company-graphviz-dot)

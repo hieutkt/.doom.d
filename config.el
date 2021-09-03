@@ -266,6 +266,9 @@
     (defadvice! hp/org-hugo-export-to-md-using-json ()
       :before #'org-hugo-export-to-md
       (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.json"))))
+    (defadvice! hp/org-hugo-export-to-md-using-json ()
+      :after #'org-hugo-export-to-md
+      (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.bib"))))
   ))
 
 (use-package! oc-biblatex
@@ -582,7 +585,6 @@ TODO abstract backend implementations."
    (string-join
     '("${author-or-editor} (${year}): ${title}"
       "#+filetags: literature"
-      "#+roam_key: cite:@${=key=}"
       "#+date: %U"
       "#+startup: overview"
       "#+startup: hideblocks"
@@ -672,7 +674,9 @@ TODO abstract backend implementations."
         (list #'org-roam-backlinks-section
               #'org-roam-reflinks-section
               #'org-roam-unlinked-references-section)
-        hp/org-roam-function-tags '("compilation" "argument" "journal" "concept" "data" "bio" "literature" "event"))
+        hp/org-roam-function-tags '("compilation" "argument" "journal" "concept" "data" "bio" "literature" "event" "website"))
+  (add-to-list 'magit-section-initial-visibility-alist
+               '(org-roam-unlinked-references-section . hide))
   :config
   ;; Org-roam interface
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
@@ -695,15 +699,37 @@ TODO abstract backend implementations."
                   (if filetitle title (propertize filetitle-or-name 'face 'all-the-icons-dyellow)))))))
 
   (cl-defmethod org-roam-node-functiontag ((node org-roam-node))
-    "Return the FUNCTION TAG for each node. These tags are intended to be unique to each file, and represent the note's function."
-    (let* ((specialtags hp/org-roam-function-tags)
-           (tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node)))
-           (functiontag (seq-intersection specialtags tags 'string=)))
+    "Return the FUNCTION TAG for each node. These tags are intended to be unique to each file, and represent the note's function.
+        journal data literature"
+    (let* ((tags (seq-filter (lambda (tag) (not (string= tag "ATTACH"))) (org-roam-node-tags node))))
       (concat
-       (if functiontag
-           (propertize "=has:functions=" 'display (all-the-icons-octicon "gear" :face 'all-the-icons-silver :v-adjust 0.02))
-         (propertize "=not-functions=" 'display (all-the-icons-octicon "gear" :face 'org-roam-dim :v-adjust 0.02)))
-        (string-join functiontag ", "))))
+       ;; Argument or compilation
+       (cond
+        ((member "argument" tags)
+         (propertize "=f:argument=" 'display (all-the-icons-material "forum" :face 'all-the-icons-dred)))
+        ((member "compilation" tags)
+         (propertize "=f:compilation=" 'display (all-the-icons-material "collections" :face 'all-the-icons-dyellow)))
+        (t (propertize "=f:empty=" 'display (all-the-icons-material "remove" :face 'org-hide))))
+       ;; concept, bio, data or event
+       (cond
+        ((member "concept" tags)
+         (propertize "=f:concept=" 'display (all-the-icons-material "format_shapes" :face 'all-the-icons-dblue)))
+        ((member "bio" tags)
+         (propertize "=f:bio=" 'display (all-the-icons-material "people" :face 'all-the-icons-dblue)))
+        ((member "event" tags)
+         (propertize "=f:event=" 'display (all-the-icons-material "event" :face 'all-the-icons-dblue)))
+        ((member "data" tags)
+         (propertize "=f:data=" 'display (all-the-icons-material "data_usage" :face 'all-the-icons-dblue)))
+        (t (propertize "=f:nothing=" 'display (all-the-icons-material "format_shapes" :face 'org-hide))))
+       ;; literature
+       (cond
+        ((member "literature" tags)
+         (propertize "=f:literature=" 'display (all-the-icons-material "book" :face 'all-the-icons-dcyan)))
+        ((member "website" tags)
+         (propertize "=f:website=" 'display (all-the-icons-material "move_to_inbox" :face 'all-the-icons-dsilver)))
+        (t (propertize "=f:nothing=" 'display (all-the-icons-material "book" :face 'org-hide))))
+       ;; journal
+       )))
 
   (cl-defmethod org-roam-node-othertags ((node org-roam-node))
     "Return the OTHER TAGS of each notes."
@@ -728,12 +754,12 @@ TODO abstract backend implementations."
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-        (concat (all-the-icons-material "folder" :face 'all-the-icons-orange)
+        (concat (all-the-icons-material "folder" :face 'all-the-icons-dorange)
                 (propertize (string-join (f-split dirs) "/") 'face 'all-the-icons-dorange) " ")
       ""))
 
   (setq org-roam-node-display-template
-        (concat  "${backlinkscount:16} ${functiontag:26} ${directories}${hierarchy} ${othertags}"))
+        (concat  "${backlinkscount:16} ${functiontag} ${directories}${hierarchy} ${othertags}"))
   ;; HACK A patch for org-html exports to properly handles org-roam links
   ;;   (defun org-html--reference (datum info &optional named-only)
   ;;   "Return an appropriate reference for DATUM.
@@ -774,15 +800,19 @@ TODO abstract backend implementations."
 (use-package! org-roam-capture
   :config
   (setq org-roam-capture-templates
-        '(("d" "default" plain "#+filetags: %?\n"
+        `(("d" "default" plain "%?"
            :if-new
            (file+head "${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
-                      "#+title: ${title}\n#+created: %U\n\n")
-           :unnarrowed t))
-))
+                      ,(string-join
+                        '("#+title: ${title}"
+                         "#+created: %U"
+                         "#+filetags: %(completing-read \"Function tags: \" hp/org-roam-function-tags)"
+                         "#+startup: overview hideblocks"
+                         "") "\n"))
+           :unnarrowed t))))
 
 (use-package! org-roam-protocol
-  :after org-roam
+  :after (org-roam org-roam-dailies)
   :config
   (add-to-list
    'org-roam-capture-ref-templates
@@ -815,8 +845,8 @@ TODO abstract backend implementations."
         org-roam-dailies-capture-templates
         '(("d" "daily" entry "* %?"
            :if-new
-           (file+head "%<%Y-%m>.org"
-                      "#+title: %<%Y-%m>\n#+filetags: journal\n##+startup: overview\n+startup: hideblocks\n#+created: %U\n\n")
+           (file+head "%<%Y-%m-%d>.org"
+                      "#+title: %<%Y-%m-%d %a>\n#+filetags: journal\n#+startup: overview hideblocks\n#+created: %U\n\n")
            :immediate-finish t)))
   (map! :leader
         :prefix "n"

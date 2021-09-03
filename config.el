@@ -900,10 +900,6 @@ TODO abstract backend implementations."
   (set-popup-rules!
     '(("^\\*julia.*\\*$" :side right :size 0.5 :ttl nil))))
 
-(use-package! lsp-mode
-  :config
-  (setq lsp-signature-auto-activate nil))
-
 ;; lsp-mode seems to serve an invalid response to the Julia server.
 ;; The pseudo-fix is rather simple at least.
 (after! julia-mode

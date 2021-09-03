@@ -606,6 +606,10 @@ TODO abstract backend implementations."
    ))
 
 (use-package! bibtex-actions
+  :bind (("C-c b" . org-cite-insert)
+         ("M-o" . org-open-at-point)
+         :map minibuffer-local-map
+         ("M-b" . bibtex-actions-insert-preset))
   :init
   (setq bibtex-actions-template-suffix '((t . "          ${=key=:15}    ${=type=:12}    ${keywords:*}")))
   :config
@@ -632,38 +636,16 @@ TODO abstract backend implementations."
   (after! embark
    (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
    (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))
-   (add-to-list 'embark-keymap-alist '(citation . bibtex-actions-map-buffer)))
+   (add-to-list 'embark-keymap-alist '(citation . bibtex-actions-map-buffer))
+   (setq bibtex-actions-at-point-function 'embark-act))
   )
-
-(use-package! bibtex-actions-org-cite
-  :bind (("C-c b" . org-cite-insert)
-         ("M-o" . org-open-at-point)
-         :map minibuffer-local-map
-         ("M-b" . bibtex-actions-insert-preset))
-  :after (embark org oc bibtex-actions)
-  :config
-  ;; Make the 'bibtex-actions' org-cite target and bindings available to `embark'.
-  (add-to-list 'embark-target-finders 'bibtex-actions-org-cite-citation-finder)
-  ;; Specify the org-cite processors to use.
-  (setq org-cite-follow-processor 'bibtex-actions-org-cite
-        org-cite-insert-processor 'bibtex-actions-org-cite))
 
 
 (use-package! org-ref
   :config
   (setq
-   org-ref-default-bibliography      `(,(concat org-directory "/References/zotero.bib"))
-   org-ref-pdf-directory             (concat org-directory "/papers/"))
-  ;; make org-ref-cite-face a bit less intrusive
-  (custom-set-faces!
-    `(org-ref-cite-face :weight unspecified :foreground unspecified
-                        :underline ,(doom-color 'grey))))
+   org-ref-default-bibliography (list (concat org-directory "/References/zotero.bib"))))
 
-;; (use-package! citeproc-org
-;;   :after org-ref
-;;   :config
-;;   (setq org-ref-default-bibliography (list bibtex-completion-bibliography))
-;;   (citeproc-org-setup))
 
 (use-package! org-roam
   :after org

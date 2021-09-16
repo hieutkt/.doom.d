@@ -485,13 +485,18 @@ TODO abstract backend implementations."
 (use-package! org-capture
   :config
   ;;CAPTURE TEMPLATES
+  ;;Create IDs on certain capture
+  (defun hp/org-capture-maybe-create-id ()
+    (when (org-capture-get :create-id)
+      (org-id-get-create)))
+  (add-hook 'org-capture-mode-hook #'hp/org-capture-maybe-create-id)
   ;;Auxiliary functions
   (defun hp/capture-ox-hugo-post (lang)
     (setq hp/ox-hugo-post--title (read-from-minibuffer "Post Title: ")
           hp/ox-hugo-post--fname (org-hugo-slug hp/ox-hugo-post--title)
           hp/ox-hugo-post--fdate (format-time-string "%Y-%m-%d"))
     (expand-file-name (format "%s_%s.%s.org" hp/ox-hugo-post--fdate hp/ox-hugo-post--fname lang)
-                      (concat dropbox-directory "/Blogs/hieutkt/content-org/")))
+                      (concat dropbox-directory "/Notes/Org-roam/writings/")))
   ;; Capture templates
   (setq org-capture-templates
         `(("i" "Inbox" entry (file ,(concat org-directory "/Agenda/inbox.org"))
@@ -505,11 +510,12 @@ TODO abstract backend implementations."
              '("#+title: %(eval hp/ox-hugo-post--title)"
                "#+subtitle:"
                "#+author: %n"
+               "#+filetags: blog"
                "#+date: %(eval hp/ox-hugo-post--fdate)"
                "#+export_file_name: %(concat hp/ox-hugo-post--fname \".en.md\")"
                "#+hugo_paired_shortcodes: <notice notice"
                "#+macro: sidenote {{< sidenote >}}$1{{< /sidenote >}}"
-               "#+hugo_base_dir: ../"
+               "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/content-org/"
                "#+hugo_section: ./posts/"
                "#+hugo_tags: %?"
                "#+hugo_custom_front_matter:"
@@ -517,6 +523,7 @@ TODO abstract backend implementations."
                "#+startup: content"
                "#+options: toc:2 num:t\n")
              "\n")
+           :create-id t
            :immediate-finish t
            :jump-to-captured t)
           ("bv" "Vietnamese" plain (file (lambda () (hp/capture-ox-hugo-post "vi")))
@@ -524,11 +531,12 @@ TODO abstract backend implementations."
              '("#+title: %(eval hp/ox-hugo-post--title)"
                "#+subtitle:"
                "#+author: %n"
+               "#+filetags: blog"
                "#+date: %(eval hp/ox-hugo-post--fdate)"
                "#+export_file_name: %(concat hp/ox-hugo-post--fname \".vi.md\")"
                "#+hugo_paired_shortcodes: <notice notice"
                "#+macro: sidenote {{< sidenote >}}$1{{< /sidenote >}}"
-               "#+hugo_base_dir: ../"
+               "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/content-org/"
                "#+hugo_section: ./posts/"
                "#+hugo_tags: %?"
                "#+hugo_custom_front_matter:"
@@ -536,6 +544,7 @@ TODO abstract backend implementations."
                "#+startup: content"
                "#+options: toc:2 num:t\n")
              "\n")
+           :create-id t
            :immediate-finish t
            :jump-to-captured t))))
 

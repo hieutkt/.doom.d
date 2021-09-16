@@ -266,7 +266,7 @@
     (defadvice! hp/org-hugo-export-to-md-using-json ()
       :before #'org-hugo-export-to-md
       (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.json"))))
-    (defadvice! hp/org-hugo-export-to-md-using-json ()
+    (defadvice! hp/org-hugo-export-to-md-using-json-revert ()
       :after #'org-hugo-export-to-md
       (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.bib"))))
   ))

@@ -665,7 +665,7 @@ TODO abstract backend implementations."
         (list #'org-roam-backlinks-section
               #'org-roam-reflinks-section
               #'org-roam-unlinked-references-section)
-        hp/org-roam-function-tags '("compilation" "argument" "journal" "concept" "data" "bio" "literature" "event" "website"))
+        hp/org-roam-function-tags '("compilation" "argument" "journal" "concept" "tool" "data" "bio" "literature" "event" "website"))
   (add-to-list 'magit-section-initial-visibility-alist
                '(org-roam-unlinked-references-section . hide))
   :config
@@ -680,11 +680,11 @@ TODO abstract backend implementations."
            (shortentitle (if (> (length filetitle-or-name) 20) (concat (substring filetitle-or-name 0 20)  "...") filetitle-or-name))
            (separator (concat " " (all-the-icons-material "chevron_right") " ")))
       (cond
-       ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-green))
+       ((= level 1) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-dyellow))
                             (propertize shortentitle 'face 'org-roam-olp) separator title))
-       ((= level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dpurple))
+       ((= level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-dsilver))
                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-olp) separator title))
-       ((> level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "list" :face 'all-the-icons-dsilver))
+       ((> level 2) (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'org-roam-olp))
                             (propertize (concat shortentitle separator (string-join olp separator)) 'face 'org-roam-olp) separator title))
        (t (concat (propertize (format "=level:%d=" level) 'display (all-the-icons-material "insert_drive_file" :face 'all-the-icons-yellow))
                   (if filetitle title (propertize filetitle-or-name 'face 'all-the-icons-dyellow)))))))
@@ -704,7 +704,9 @@ TODO abstract backend implementations."
        ;; concept, bio, data or event
        (cond
         ((member "concept" tags)
-         (propertize "=f:concept=" 'display (all-the-icons-material "format_shapes" :face 'all-the-icons-dblue)))
+         (propertize "=f:concept=" 'display (all-the-icons-material "blur_on" :face 'all-the-icons-dblue)))
+        ((member "tool" tags)
+         (propertize "=f:tool=" 'display (all-the-icons-material "build" :face 'all-the-icons-dblue)))
         ((member "bio" tags)
          (propertize "=f:bio=" 'display (all-the-icons-material "people" :face 'all-the-icons-dblue)))
         ((member "event" tags)
@@ -745,8 +747,11 @@ TODO abstract backend implementations."
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-        (concat (all-the-icons-material "folder" :face 'all-the-icons-dorange)
-                (propertize (string-join (f-split dirs) "/") 'face 'all-the-icons-dorange) " ")
+        (concat
+         (if (string= "journal/" dirs)
+             (all-the-icons-material "edit" :face 'all-the-icons-dsilver)
+          (all-the-icons-material "folder" :face 'all-the-icons-dsilver))
+         (propertize (string-join (f-split dirs) "/") 'face 'all-the-icons-dsilver) " ")
       ""))
 
   (setq org-roam-node-display-template

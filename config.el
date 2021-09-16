@@ -952,11 +952,11 @@ TODO abstract backend implementations."
   (setq org-download-display-inline-images nil))
 
 (use-package! org-transclusion
-  :commands org-transclusion-mode
+  :after org
   :config
   (setq org-transclusion-include-first-section t)
-  (add-to-list  'org-transclusion-exclude-elements 'keyword))
-
+  (add-to-list 'org-transclusion-exclude-elements 'keyword)
+  (map! :map global-map "<f9>" #'org-transclusion-mode))
 
 (use-package! ansi-color
   :config

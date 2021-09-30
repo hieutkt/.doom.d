@@ -179,8 +179,7 @@
         ;; Cache the preview images elsewhere
         org-preview-latex-image-directory "~/.cache/ltximg/"
         org-highlight-latex-and-related nil
-        org-image-actual-width (/ (display-pixel-width) 3)
-        org-ellipsis "")
+        org-image-actual-width (/ (display-pixel-width) 3))
   ;; Setup custom links
   (+org-init-custom-links-h)
   ;; Custom some face
@@ -208,6 +207,7 @@
                     (":end:" . "⎺")
                     (":attach:" . "")
                     ("#+results:" . ""))))
+    (setq org-ellipsis "")
     (pushnew! prettify-symbols-alist
               '("--" . "—")
               '("TODO" . "")
@@ -220,7 +220,8 @@
               '("REPEAT" . "")
               '("REVIEW" . ""))
     (prettify-symbols-mode 1))
-  (add-hook 'org-mode-hook 'hp/org-mode-load-prettify-symbols)
+  (when (not IS-WINDOWS)
+    (add-hook 'org-mode-hook 'hp/org-mode-load-prettify-symbols))
   )
 
 (use-package! org-superstar

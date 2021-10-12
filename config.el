@@ -260,8 +260,6 @@
   (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.bib"))
         org-cite-export-processors '((latex biblatex)
                                      (t csl)))
-  (custom-set-faces!
-    `(org-cite-key :foreground ,(face-attribute 'org-formula :foreground)))
   (after! ox-hugo
     ;; Use json file when export to website
     (defadvice! hp/org-hugo-export-to-md-using-json ()

@@ -990,3 +990,16 @@ TODO abstract backend implementations."
   (setq graphviz-dot-indent-width 4))
 
 (use-package company-graphviz-dot)
+
+(use-package blamer
+  :defer 20
+  :config
+  ;; Formatter
+  (setq blamer-prettify-time-p t
+        blamer-datetime-formatter "[%s]")
+  ;; Custom face
+  (custom-set-faces!
+    `(blamer-face
+      :foreground ,(doom-color 'base5) :height 90 :background nil :italic t))
+  ;; Enable
+  (global-blamer-mode 1))

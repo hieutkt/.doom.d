@@ -48,3 +48,6 @@
 ;;Graphviz
 (package! graphviz-dot-mode
   :recipe (:host github :repo "ppareit/graphviz-dot-mode"))
+
+;; Git
+(package! blamer :recipe (:host github :repo "artawower/blamer.el"))

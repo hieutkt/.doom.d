@@ -996,6 +996,8 @@ TODO abstract backend implementations."
   :config
   ;; Formatter
   (setq blamer-prettify-time-p t
+        blamer-min-offset 0
+        blamer-author-formatter "······%s, "
         blamer-datetime-formatter "[%s]")
   ;; Custom face
   (custom-set-faces!

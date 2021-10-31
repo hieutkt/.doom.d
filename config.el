@@ -970,10 +970,6 @@ TODO abstract backend implementations."
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-(use-package! emojify
-  :config
-  (setq emojify-emoji-set "twemoji-v2"))
-
 (use-package! page-break-lines
   :config
   (add-hook 'prog-mode-hook (lambda () (page-break-lines-mode 1))))

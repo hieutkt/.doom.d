@@ -54,7 +54,7 @@
        ;;window-select                 ; visually switch windows
        workspaces                      ; tab emulation, persistence & separate workspaces
        zen                           ; distraction-free coding or writing
-       (emoji +unicode)
+       ;; (emoji +unicode)
 
        :editor
        (evil +everywhere)              ; come to the dark side, we have cookies
@@ -99,7 +99,7 @@
        (lookup +dictionary)            ; navigate your code and its documentation
        lsp
        ;;macos                         ; MacOS-specific commands
-       (magit +forge)                    ; a git porcelain for Emacs
+       magit                           ; a git porcelain for Emacs
        ;;make                          ; run make tasks from Emacs
        ;;pass                          ; password manager for nerds
        pdf                             ; pdf enhancements

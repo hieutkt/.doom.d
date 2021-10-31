@@ -993,11 +993,11 @@ TODO abstract backend implementations."
   ;; Formatter
   (setq blamer-prettify-time-p t
         blamer-min-offset 0
-        blamer-author-formatter "······%s, "
+        blamer-author-formatter "······%s"
         blamer-datetime-formatter "[%s]")
   ;; Custom face
   (custom-set-faces!
     `(blamer-face
-      :foreground ,(doom-color 'base5) :height 90 :background nil :italic t))
+      :foreground ,(doom-color 'base4) :background nil :italic t))
   ;; Enable
   (global-blamer-mode 1))

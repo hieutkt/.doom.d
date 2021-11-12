@@ -139,6 +139,12 @@
       :extend t)
     ))
 
+(use-package! lsp-ui
+  :init
+  (setq lsp-ui-doc-delay 2
+        lsp-ui-doc-position 'bottom)
+  (setq lsp-signature-function 'lsp-signature-posframe))
+
 (use-package! yasnippet
   :config
   ;; It will test whether it can expand, if yes, change cursor color

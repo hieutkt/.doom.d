@@ -140,9 +140,9 @@
     ))
 
 (use-package! lsp-ui
-  :init
+  :config
   (setq lsp-ui-doc-delay 2
-        lsp-ui-doc-position 'bottom)
+        lsp-ui-doc-max-width 80)
   (setq lsp-signature-function 'lsp-signature-posframe))
 
 (use-package! yasnippet

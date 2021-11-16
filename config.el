@@ -1010,4 +1010,4 @@ TODO abstract backend implementations."
     `(blamer-face
       :foreground ,(doom-color 'base4) :background nil :italic t))
   ;; Enable
-  (global-blamer-mode 1))
+  (add-hook 'prog-mode-hook 'blamer-mode))

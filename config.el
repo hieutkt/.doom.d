@@ -235,6 +235,14 @@
   (setq org-superstar-headline-bullets-list '("⁖")
         org-superstar-cycle-headline-bullets nil))
 
+(use-package! org-bars
+  :after org
+  :hook (org-mode . org-bars-mode)
+  :init
+  (setq-default org-bars-color-options '(:desaturate-level-faces 30
+                                         :darken-level-faces 30)
+                org-bars-extra-pixels-height 5))
+
 (use-package! org-fancy-priorities
   :config
   (setq org-fancy-priorities-list '("[!!]" "[-!]" "[--]")))

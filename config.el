@@ -577,6 +577,10 @@ TODO abstract backend implementations."
   :config
   (setq org-habit-show-all-today t))
 
+(use-package! org-timer
+  :config
+  (setq org-clock-sound (concat doom-private-dir "OOT_Secret.wav")))
+
 (use-package! org-super-agenda
   :after org-agenda
   :config

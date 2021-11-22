@@ -1011,13 +1011,13 @@ TODO abstract backend implementations."
   :config
   (add-to-list 'orderless-matching-styles 'char-fold-to-regexp))
 
-(use-package graphviz-dot-mode
+(use-package! graphviz-dot-mode
   :config
   (setq graphviz-dot-indent-width 4))
 
-(use-package company-graphviz-dot)
+(use-package! company-graphviz-dot)
 
-(use-package blamer
+(use-package! blamer
   :defer 20
   :config
   ;; Formatter

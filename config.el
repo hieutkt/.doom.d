@@ -269,32 +269,6 @@
    "<question")
   )
 
-(use-package! oc
-  :config
-  (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.bib"))
-        org-cite-export-processors '((latex biblatex)
-                                     (t csl)))
-  (after! ox-hugo
-    ;; Use json file when export to website
-    (defadvice! hp/org-hugo-export-to-md-using-json ()
-      :before #'org-hugo-export-to-md
-      (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.json"))))
-    (defadvice! hp/org-hugo-export-to-md-using-json-revert ()
-      :after #'org-hugo-export-to-md
-      (setq org-cite-global-bibliography (list (concat org-directory "/References/zotero.bib"))))
-  ))
-
-(use-package! oc-biblatex
-  :after oc
-  :config
-  (setq org-cite-biblatex-options "backend=biber,style=alphabetic,citestyle=authoryear"))
-
-(use-package! oc-csl
-  :after oc
-  ;; :init
-  ;; (setq org-cite-csl-styles-dir (concat dropbox-directory "Assets/CSL")
-  ;;       org-cite-csl-locales-dir org-cite-csl-styles-dir)
-  )
 
 (use-package! ox
   :config
@@ -611,78 +585,42 @@ TODO abstract backend implementations."
       :weight bold :foreground ,(doom-color 'blue)))
   )
 
-(use-package! bibtex-completion
-  :config
-  (setq
-   bibtex-dialect                    'biblatex
-   bibtex-completion-notes-extension "_notes.org"
-   bibtex-completion-bibliography    (concat org-directory "/References/zotero.bib")
-   ;; Template for generated note for each entry
-   bibtex-completion-notes-path      (concat org-directory "/Org-roam/")
-   bibtex-completion-notes-template-multiple-files
-   (string-join
-    '("${author-or-editor} (${year}): ${title}"
-      "#+filetags: literature"
-      "#+date: %U"
-      "#+startup: overview"
-      "#+startup: hideblocks"
-      "#+options: toc:2 num:t"
-      "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
-      "#+hugo_section: ./notes"
-      "#+hugo_paired_shortcodes: <notice notice"
-      "#+macro: sidenote {{< sidenote >}}%(string (char-from-name \"DOLLAR SIGN\"))1{{< /sidenote >}}"
-      "#+hugo_custom_front_matter: :exclude true :math true"
-      "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
-      "#+hugo_series: \"Reading notes\""
-      "#+hugo_tags:"
-      ""
-      "* What?"
-      "* Why?"
-      "* How?"
-      "* And?"
-      ) "\n")
-   ))
 
-(use-package! bibtex-actions
-  :bind (("C-c b" . org-cite-insert)
-         ("M-o" . org-open-at-point)
-         :map minibuffer-local-map
-         ("M-b" . bibtex-actions-insert-preset))
-  :init
-  (setq bibtex-actions-template-suffix '((t . "          ${=key=:15}    ${=type=:12}    ${keywords:*}")))
-  :config
-  (dolist (field '(url doi keywords))
-    (add-to-list 'bibtex-completion-additional-search-fields field))
-  (setq bibtex-actions-symbols
-        `((pdf . (,(all-the-icons-faicon "file-pdf-o" :v-adjust 0.02 :face 'all-the-icons-dred) .
-                  ,(all-the-icons-faicon "file-pdf-o" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))
-          (note . (,(all-the-icons-faicon "file-text-o" :v-adjust 0.02 :face 'all-the-icons-dblue) .
-                   ,(all-the-icons-faicon "file-text-o" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))
-          (link .
-                (,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'all-the-icons-dpurple) .
-                 ,(all-the-icons-faicon "external-link-square" :v-adjust 0.02 :face 'bibtex-actions-icon-dim)))))
-  ;; Here we define a face to dim non 'active' icons, but preserve alignment
-  (defface bibtex-actions-icon-dim
-    '((((background dark)) :foreground "#282c34")
-      (((background light)) :foreground "#fafafa"))
-    "Face for obscuring/dimming icons"
-    :group 'all-the-icons-faces)
-  ;; Bibtex-actions uses a cache to speed up library display.
-  ;; This is great for performance, but means the data can become stale if you modify it.
-  (file-notify-add-watch bibtex-completion-bibliography '(change) 'bibtex-actions-refresh)
-  ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
-  (after! embark
-   (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
-   (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))
-   (add-to-list 'embark-keymap-alist '(citation . bibtex-actions-map-buffer))
-   (setq bibtex-actions-at-point-function 'embark-act))
-  )
-
-
-(use-package! org-ref
-  :config
-  (setq
-   org-ref-default-bibliography (list (concat org-directory "/References/zotero.bib"))))
+(use-package! citar
+  :custom
+  (citar-bibliography (list (concat org-directory "/References/zotero.bib")))
+  (citar-notes-paths (list (concat org-directory "/Org-roam/literature")))
+  (citar-library-paths (list (concat org-directory "/Org-roam/")))
+  (citar-file-variable "file")
+  (citar-symbols
+   `((file ,(all-the-icons-faicon "file-pdf-o" :face 'all-the-icons-red :v-adjust -0.1) . " ")
+     (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+     (link ,(all-the-icons-material "link" :face 'all-the-icons-blue) . " ")))
+  (citar-symbol-separator "  ")
+  (citar-templates
+   `((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+     (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
+     (preview . "${author editor} (${year issued date}) ${title}, ${journal publisher container-title collection-title}.\n")
+     (note .
+           ,(string-join
+            '("#+title: ${author editor} (${year issued date}) ${title}"
+              "#+filetags: literature"
+              "#+startup: overview"
+              "#+startup: hideblocks"
+              "#+options: toc:2 num:t"
+              "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
+              "#+hugo_section: ./notes"
+              "#+hugo_paired_shortcodes: <notice notice"
+              "#+hugo_custom_front_matter: :exclude true :math true"
+              "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
+              "#+hugo_series: \"Reading notes\""
+              "#+hugo_tags:"
+              ""
+              "* What?"
+              "* Why?"
+              "* How?"
+              "* And?"
+              ) "\n")))))
 
 
 (use-package! org-roam

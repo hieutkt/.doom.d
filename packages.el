@@ -30,15 +30,15 @@
 (package! org-ol-tree
   :recipe (:host github :repo "Townk/org-ol-tree"))
 
+(package! org-bars
+  :recipe (:host github :repo "tonyaldon/org-bars"))
+
 (package! ess-stata-mode
   :recipe (:host github :repo "emacs-ess/ess-stata-mode"))
 
 (package! clip2org
   :recipe (:host github :repo "thamer/clip2org"))
 
-;; Citations
-(package! bibtex-actions
-  :recipe (:host github :repo "bdarcus/bibtex-actions"))
 
 ;;Org-roam
 (unpin! org-roam)

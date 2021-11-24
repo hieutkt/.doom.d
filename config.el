@@ -712,14 +712,14 @@ TODO abstract backend implementations."
                          (org-roam-node-id node)))))
       (if (> count 0)
           (concat (propertize "=has:backlinks=" 'display (all-the-icons-material "link" :face 'all-the-icons-blue)) (format "%d" count))
-        (concat (propertize "=not-backlinks=" 'display (all-the-icons-material "link" :face 'org-roam-dim))  " "))))
+        (concat (propertize "=not-backlinks=" 'display (all-the-icons-material "link" :face 'org-hide))  " "))))
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
         (concat
          (if (string= "journal/" dirs)
              (all-the-icons-material "edit" :face 'all-the-icons-dsilver)
-          (all-the-icons-material "folder" :face 'all-the-icons-dsilver))
+           (all-the-icons-material "folder" :face 'all-the-icons-dsilver))
          (propertize (string-join (f-split dirs) "/") 'face 'all-the-icons-dsilver) " ")
       ""))
 

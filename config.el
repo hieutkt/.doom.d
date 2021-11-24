@@ -620,7 +620,9 @@ TODO abstract backend implementations."
               "* Why?"
               "* How?"
               "* And?"
-              ) "\n")))))
+              ) "\n"))))
+  :config
+  (setq org-cite-global-bibliography citar-bibliography))
 
 
 (use-package! org-roam

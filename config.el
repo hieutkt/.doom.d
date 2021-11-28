@@ -196,7 +196,9 @@
       :height 1.5))
   ;; Custom keyword
   (font-lock-add-keywords 'org-mode
-                          '(("^\\(?:\"\\)?\\(?:\\[.*\\[|\\)?[[:upper:]]" . 'org-warning)))
+                          '((
+"^\\(?: *\\)?\\(?:\"\\)?\\(?:\\[.*\\[|\\)?\\(?:\\(\\+\\|-\\|[0-9]+\\(.\\|\\\\)\\)\\) \\)?[[:upper:]]"
+ . 'org-warning)))
   ;; Replace two consecutive hyphens with the em-dash
   (defun hp/org-mode-load-prettify-symbols ()
     (interactive)

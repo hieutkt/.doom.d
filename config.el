@@ -979,6 +979,7 @@ TODO abstract backend implementations."
   :hook (elfeed-search-mode . elfeed-update)
   :custom
   (rmh-elfeed-org-files (list (concat org-directory "/Feeds/elfeed.org")))
+  (elfeed-db-directory (concat org-directory "/Feeds/elfeed.db/"))
   (elfeed-goodies/wide-threshold 0.2)
   :bind ("<f10>" . #'elfeed)
   :config
@@ -986,7 +987,8 @@ TODO abstract backend implementations."
   ;;   (insert (format "%s" (elfeed-meta--plist entry))))
   (defun hp/elfeed-entry-line-draw (entry)
     "Print ENTRY to the buffer."
-    (let* ((title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
+    (let* ((date (elfeed-search-format-date (elfeed-entry-date entry)))
+           (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
            (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
            (feed (elfeed-entry-feed entry))
            (feed-title
@@ -1012,21 +1014,34 @@ TODO abstract backend implementations."
                                                   elfeed-goodies/feed-source-column-width
                                                   elfeed-goodies/feed-source-column-width)
                          :left))
-           (entry-score (elfeed-format-column (number-to-string (elfeed-score-scoring-get-score-from-entry entry)) 5 :left))
+           (entry-score (elfeed-format-column (number-to-string (elfeed-score-scoring-get-score-from-entry entry)) 6 :left))
+           ;; (entry-authors (concatenate-authors
+           ;;                 (elfeed-meta entry :authors)))
+           ;; (authors-column (elfeed-format-column entry-authors elfeed-goodies/tag-column-width :left))
            )
       (if (>= (window-width) (* (frame-width) elfeed-goodies/wide-threshold))
           (progn
             (insert (propertize entry-score 'face 'elfeed-search-feed-face) " ")
+            (insert (propertize date 'face 'elfeed-search-date-face) " ")
             (insert (propertize feed-column 'face 'elfeed-search-feed-face) " ")
             (insert (propertize tag-column 'face 'elfeed-search-tag-face) " ")
-            (insert (propertize title 'face title-faces 'kbd-help title)))
+            ;; (insert (propertize authors-column 'face 'elfeed-search-tag-face) " ")
+            (insert (propertize title 'face title-faces 'kbd-help title))
+            )
         (insert (propertize title 'face title-faces 'kbd-help title)))))
 
+  (defun concatenate-authors (authors-list)
+    "Given AUTHORS-LIST, list of plists; return string of all authors concatenated."
+    (if (> (length authors-list) 1)
+        (format "%s et al." (plist-get (nth 0 authors-list) :name))
+      (plist-get (nth 0 authors-list) :name)))
 
   (defun search-header/draw-wide (separator-left separator-right search-filter stats db-time)
     (let* ((update (format-time-string "%Y-%m-%d %H:%M:%S %z" db-time))
            (lhs (list
-                 (powerline-raw (-pad-string-to "Score" (- 5 5)) 'powerline-active2 'l)
+                 (powerline-raw (-pad-string-to "Score" (- 5 5)) 'powerline-active1 'l)
+                 (funcall separator-left 'powerline-active1 'powerline-active2)
+                 (powerline-raw (-pad-string-to "Date" (- 9 4)) 'powerline-active2 'l)
                  (funcall separator-left 'powerline-active2 'powerline-active1)
                  (powerline-raw (-pad-string-to "Feed" (- elfeed-goodies/feed-source-column-width 4)) 'powerline-active1 'l)
                  (funcall separator-left 'powerline-active1 'powerline-active2)
@@ -1034,7 +1049,6 @@ TODO abstract backend implementations."
                  (funcall separator-left 'powerline-active2 'mode-line)
                  (powerline-raw "Subject" 'mode-line 'l)))
            (rhs (search-header/rhs separator-left separator-right search-filter stats update)))
-
       (concat (powerline-render lhs)
               (powerline-fill 'mode-line (powerline-width rhs))
               (powerline-render rhs))))

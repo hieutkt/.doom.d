@@ -51,3 +51,7 @@
 
 ;; Git
 (package! blamer :recipe (:host github :repo "artawower/blamer.el"))
+
+;; RSS
+(package! elfeed-score
+  :recipe (:host github :repo "sp1ff/elfeed-score"))

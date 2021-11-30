@@ -1053,10 +1053,25 @@ TODO abstract backend implementations."
               (powerline-fill 'mode-line (powerline-width rhs))
               (powerline-render rhs))))
 
+  ;; Tag entry as read when open
+  (defadvice! hp/mark-read (&rest _)
+    :before 'elfeed-search-show-entry
+    (let* ((offset (- (line-number-at-pos) elfeed-search--offset))
+           (current-entry (nth offset elfeed-search-entries)))
+      (elfeed-tag-1 current-entry 'read)))
+
+  ;; Faces for diferent kinds of feeds
+  (defface hp/elfeed-blog
+    `((t :foreground ,(doom-color 'blue)))
+    "Marks a Elfeed blog.")
+  (push '(blog hp/elfeed-blog)
+        elfeed-search-face-alist)
+  (push '(read elfeed-search-title-face)
+        elfeed-search-face-alist)
+
+  ;; Variables
   (setq elfeed-search-print-entry-function 'hp/elfeed-entry-line-draw
-        elfeed-search-filter "@8-weeks-ago "
-        )
-  )
+        elfeed-search-filter "@8-weeks-ago "))
 
 (use-package! elfeed-score
   :after elfeed

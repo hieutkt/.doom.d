@@ -1056,6 +1056,7 @@ TODO abstract backend implementations."
   ;; Tag entry as read when open
   (defadvice! hp/mark-read (&rest _)
     :before 'elfeed-search-show-entry
+    :before 'elfeed-search-browse-url
     (let* ((offset (- (line-number-at-pos) elfeed-search--offset))
            (current-entry (nth offset elfeed-search-entries)))
       (elfeed-tag-1 current-entry 'read)))

@@ -587,6 +587,8 @@ TODO abstract backend implementations."
       :weight bold :foreground ,(doom-color 'blue)))
   )
 
+(use-package! ob-julia
+  :commands org-babel-execute:julia)
 
 (use-package! citar
   :custom
@@ -1072,7 +1074,7 @@ TODO abstract backend implementations."
 
   ;; Variables
   (setq elfeed-search-print-entry-function 'hp/elfeed-entry-line-draw
-        elfeed-search-filter "@8-weeks-ago "))
+        elfeed-search-filter "@8-weeks-ago -bury "))
 
 (use-package! elfeed-score
   :after elfeed

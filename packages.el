@@ -55,3 +55,6 @@
 ;; RSS
 (package! elfeed-score
   :recipe (:host github :repo "sp1ff/elfeed-score"))
+
+(package! ob-julia
+  :recipe (:host github :repo "nico202/ob-julia" :files ("*.el" "julia")))

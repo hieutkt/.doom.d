@@ -198,7 +198,7 @@
   (font-lock-add-keywords 'org-mode
                           '((
 "^\\(?: +\\)?\\(?:[ 	]*\\(\\(?:[-+]\\|\\(?:[0-9]+\\|[A-Za-z]\\)[.)]\\)\\(?:[ 	]+\\|$\\)\\)\\(?:\\[@\\(?:start:\\)?\\([0-9]+\\|[A-Za-z]\\)\\][ 	]*\\)?\\(?:\\(\\[[ X-]\\]\\)\\(?:[ 	]+\\|$\\)\\)?\\(?:\\(.*\\)[ 	]+::\\(?:[ 	]+\\|$\\)\\)?\\)?[[:upper:]]"
- . 'org-warning)))
+ . 'org-list-dt)))
   ;; Replace two consecutive hyphens with the em-dash
   (defun hp/org-mode-load-prettify-symbols ()
     (interactive)

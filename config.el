@@ -947,7 +947,8 @@ TODO abstract backend implementations."
   :config
   (use-package! tree-sitter-langs)
   (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  :hook (tree-sitter-hl-mode . rainbow-delimiters-mode))
 
 (use-package! page-break-lines
   :config

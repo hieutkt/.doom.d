@@ -11,7 +11,8 @@
       default-input-method 'vietnamese-telex
       +doom-dashboard-banner-dir doom-private-dir
       +doom-dashboard-banner-file "favicon-pixel.png"
-      +doom-dashboard-banner-padding '(0 . 2))
+      +doom-dashboard-banner-padding '(0 . 2)
+      pixel-scroll-precision-mode t)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:

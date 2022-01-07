@@ -196,9 +196,8 @@
       :height 1.5))
   ;; Custom keyword
   (font-lock-add-keywords 'org-mode
-                          '((
-"^\\(?: +\\)?\\(?:[ 	]*\\(\\(?:[-+]\\|\\(?:[0-9]+\\|[A-Za-z]\\)[.)]\\)\\(?:[ 	]+\\|$\\)\\)\\(?:\\[@\\(?:start:\\)?\\([0-9]+\\|[A-Za-z]\\)\\][ 	]*\\)?\\(?:\\(\\[[ X-]\\]\\)\\(?:[ 	]+\\|$\\)\\)?\\(?:\\(.*\\)[ 	]+::\\(?:[ 	]+\\|$\\)\\)?\\)?[[:upper:]]"
- . 'org-list-dt)))
+                          '(("^\\(?: +\\)?\\(?:[ 	]*\\(\\(?:[-+]\\|\\(?:[0-9]+\\|[A-Za-z]\\)[.)]\\)\\(?:[ 	]+\\|$\\)\\)\\(?:\\[@\\(?:start:\\)?\\([0-9]+\\|[A-Za-z]\\)\\][ 	]*\\)?\\(?:\\(\\[[ X-]\\]\\)\\(?:[ 	]+\\|$\\)\\)?\\(?:\\(.*\\)[ 	]+::\\(?:[ 	]+\\|$\\)\\)?\\)?[[:upper:]]"
+                             . 'org-list-dt)))
   ;; Replace two consecutive hyphens with the em-dash
   (defun hp/org-mode-load-prettify-symbols ()
     (interactive)
@@ -607,24 +606,24 @@ TODO abstract backend implementations."
      (preview . "${author editor} (${year issued date}) ${title}, ${journal publisher container-title collection-title}.\n")
      (note .
            ,(string-join
-            '("#+title: ${author editor} (${year issued date}) ${title}"
-              "#+filetags: literature"
-              "#+startup: overview"
-              "#+startup: hideblocks"
-              "#+options: toc:2 num:t"
-              "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
-              "#+hugo_section: ./notes"
-              "#+hugo_paired_shortcodes: <notice notice"
-              "#+hugo_custom_front_matter: :exclude true :math true"
-              "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
-              "#+hugo_series: \"Reading notes\""
-              "#+hugo_tags:"
-              ""
-              "* What?"
-              "* Why?"
-              "* How?"
-              "* And?"
-              ) "\n"))))
+             '("#+title: ${author editor} (${year issued date}) ${title}"
+               "#+filetags: literature"
+               "#+startup: overview"
+               "#+startup: hideblocks"
+               "#+options: toc:2 num:t"
+               "#+hugo_base_dir: ~/Dropbox/Blogs/hieutkt/"
+               "#+hugo_section: ./notes"
+               "#+hugo_paired_shortcodes: <notice notice"
+               "#+hugo_custom_front_matter: :exclude true :math true"
+               "#+hugo_custom_front_matter: :bibinfo '((doi .\"${doi}\") (isbn . \"${isbn}\") (url . \"${url}\") (year . \"${year}\") (month . \"${month}\") (date . \"${date}\") (author . \"${author}\") (journal . \"${journal}\"))"
+               "#+hugo_series: \"Reading notes\""
+               "#+hugo_tags:"
+               ""
+               "* What?"
+               "* Why?"
+               "* How?"
+               "* And?"
+               ) "\n"))))
   :config
   (setq org-cite-global-bibliography citar-bibliography))
 
@@ -774,10 +773,10 @@ TODO abstract backend implementations."
            (file+head "${slug}_%<%Y-%m-%d--%H-%M-%S>.org"
                       ,(string-join
                         '("#+title: ${title}"
-                         "#+created: %U"
-                         "#+filetags: %(completing-read \"Function tags: \" hp/org-roam-function-tags)"
-                         "#+startup: overview hideblocks"
-                         "") "\n"))
+                          "#+created: %U"
+                          "#+filetags: %(completing-read \"Function tags: \" hp/org-roam-function-tags)"
+                          "#+startup: overview hideblocks"
+                          "") "\n"))
            :unnarrowed t))))
 
 (use-package! org-roam-protocol
@@ -826,11 +825,11 @@ TODO abstract backend implementations."
          :desc "Yesterday"      "y" #'org-roam-dailies-goto-yesterday)))
 
 (use-package! websocket
-    :after org-roam)
+  :after org-roam)
 
 (use-package! org-roam-ui
-    :after org-roam
-    :commands (org-roam-ui-mode))
+  :after org-roam
+  :commands (org-roam-ui-mode))
 
 (use-package! org-noter
   :config

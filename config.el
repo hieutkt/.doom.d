@@ -26,9 +26,14 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :name "Sarasa Mono CL" :size 20)
-      doom-variable-pitch-font (font-spec :name "Alegreya" :size 22)
-      doom-unicode-font (font-spec :name "JuliaMono" :size 20))
+
+(when (doom-font-exists-p "Sarasa Mono CL")
+    (setq doom-font                (font-spec :name "Sarasa Mono CL" :size 20)))
+(when (doom-font-exists-p "Alegreya")
+    (setq doom-variable-pitch-font (font-spec :name "Alegreya" :size 22)))
+(when (doom-font-exists-p "JuliaMono")
+    (setq doom-unicode-font (font-spec :name "JuliaMono" :size 20)))
+
 
 (use-package! unicode-fonts
   :config
